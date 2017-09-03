@@ -1,0 +1,8 @@
+tpope/vim-surround
+tpope/vim-commentary
+editorconfig/editorconfig-vim
+pangloss/vim-javascript
+rakr/vim-one
+flowtype/vim-flow
+Shougo/denite.nvim
+
