@@ -6,15 +6,16 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'ajh17/VimCompletesMe'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'flowtype/vim-flow', { 'for': ['javascript', 'javascript.jsx'] }
-" Plug 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 Plug 'jaawerth/nrun.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'moll/vim-node', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'rakr/vim-one'
-Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': ['javascript', 'javascript.jsx'] }
-" Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -86,23 +87,13 @@ let g:deoplete#omni#input_patterns = {}
 let g:deoplete#omni#input_patterns['javascript'] = '\.'
 let g:deoplete#omni#input_patterns['javascript.jsx'] = '\.'
 
-call denite#custom#var('file_rec', 'command', ['ag', '-g', ''])
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
-call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
-
 " ALE ------------------------------------------------------------------------------------
 
 let g:ale_set_loclist = 1
 let g:ale_set_quickfix = 0
 let g:ale_lint_on_save = 1
-let g:ale_lint_on_enter = 1
-" let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
 let g:ale_linter_aliases = {'javascript.jsx': 'javascript'}
 let g:ale_fixers_aliases = {'javascript.jsx': 'javascript'}
 let g:ale_linters = {'javascript': []}
@@ -172,10 +163,10 @@ let mapleader = ' '
 nnoremap <leader>s :w<CR>
 nnoremap <silent> <leader>n :Explore<CR>
 
-nnoremap <silent> <leader>f :Denite file_rec<CR>
-nnoremap <silent> <leader>g :Denite grep<CR>
-nnoremap <silent> <leader>b :Denite buffer<CR>
-nnoremap <silent> <leader>h :Denite file_old<CR>
+nnoremap <leader>g :Ag 
+nnoremap <silent> <leader>f :FZF<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>h :History<CR>
 
 nnoremap <silent> <leader>c :call ToggleQfList()<CR>
 nnoremap <silent> <leader>l :call ToggleLocList()<CR>
@@ -184,9 +175,8 @@ nnoremap <silent> [[ :call PrevListItem()<CR>
 nnoremap <silent> ]] :call NextListItem()<CR>
 
 " UltiSnips ------------------------------------------------------------------------------
-" let g:UltiSnipsExpandTrigger = '<C-b>'
-" let g:UltiSnipsJumpForwardTrigger = '<C-b>'
-" let g:UltiSnipsSnippetDirectories = ['snips']
 
-
+let g:UltiSnipsExpandTrigger = '<C-b>'
+let g:UltiSnipsJumpForwardTrigger = '<C-b>'
+let g:UltiSnipsSnippetDirectories = ['snips']
 
