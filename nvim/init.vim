@@ -142,17 +142,17 @@ endfunction
 
 function PrevListItem()
   if (getqflist() != [])
-    :cp
+    :cprevious
   elseif (getloclist('.') != [])
-    :lp
+    :lprevious
   endif
 endfunction
 
 function NextListItem()
   if (getqflist() != [])
-    :cn
+    :cnext
   elseif (getloclist('.') != [])
-    :ln
+    :lnext
   endif
 endfunction
 
