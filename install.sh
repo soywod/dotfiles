@@ -4,6 +4,7 @@ mkdir -p ~/.config/nvim/snips
 
 if [ ! -d ~/.fzf ]; then
   git clone https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install --all
 fi
 
 if [ ! -f ~/.config/nvim/autoload/plug.vim ]; then
