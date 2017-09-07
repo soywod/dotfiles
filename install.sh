@@ -15,7 +15,7 @@ if [ ! -f ~/.config/nvim/autoload/plug.vim ]; then
 fi
 
 ln -f -s $(pwd)/nvim/init.vim ~/.config/nvim/init.vim
-ln -f -s $(pwd)/nvim/snips ~/.config/nvim/snips
+ln -F -s $(pwd)/nvim/snips ~/.config/nvim
 
 nvim +PlugInstall +qa
 
