@@ -164,7 +164,7 @@ nnoremap <leader>s :w<CR>
 nnoremap <silent> <leader>n :Explore<CR>
 
 nnoremap <leader>g :Ag 
-nnoremap <silent> <leader>f :FZF<CR>
+nnoremap <silent> <leader>f :GFiles<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>h :History<CR>
 
