@@ -5,6 +5,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'ajh17/VimCompletesMe'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'ElmCast/elm-vim', { 'for': ['elm'] }
 Plug 'flowtype/vim-flow', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'honza/vim-snippets'
 Plug 'jaawerth/nrun.vim'
@@ -55,8 +56,10 @@ hi clear FoldColumn
 hi clear SignColumn
 hi Normal guibg=white
 hi CursorLine guibg=#a626a4 guifg=white
-hi ALEErrorSign guifg=white guibg=#ca1243
-hi ALEWarningSign guifg=white guibg=#c18401
+hi ALEErrorSign guibg=#ca1243 guifg=white
+hi ALEWarningSign guibg=#c18401 guifg=white
+hi ALEStyleErrorSign guibg=white guifg=#ca1243
+hi ALEStyleWarningSign guibg=white guifg=#c18401
 
 " Flow ----------------------------------------------------------------------------------
 
@@ -66,13 +69,17 @@ let flow_is_active = (g:flow#flowpath != 'flow not found')
 
 " ESLint ---------------------------------------------------------------------------------
 
-let g:eslint_path = nrun#Which('eslint')
-let eslint_is_active = (g:eslint_path != 'eslint not found')
+let eslint_is_active = (nrun#Which('eslint') != 'eslint not found')
 
 " Prettier -------------------------------------------------------------------------------
 
-let g:prettier_path = nrun#Which('prettier')
-let prettier_is_active = (g:prettier_path != 'prettier not found')
+let prettier_is_active = (nrun#Which('prettier') != 'prettier not found')
+
+" Elm ------------------------------------------------------------------------------
+
+let elm_make_is_active = (nrun#Which('elm-make') != 'elm-make not found')
+let elm_format_is_active = (nrun#Which('elm-format') != 'elm-format not found')
+let g:elm_setup_keybindings = 0
 
 " JavaScript -----------------------------------------------------------------------------
 
@@ -83,36 +90,49 @@ let g:jsx_ext_required = 0
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
-let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns['javascript'] = '\.'
-let g:deoplete#omni#input_patterns['javascript.jsx'] = '\.'
+
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns['javascript'] = '[^. *\t]\.\w*'
+let g:deoplete#omni_patterns['javascript.jsx'] = '[^. *\t]\.\w*'
+let g:deoplete#omni_patterns['elm'] = '[^ \t]+'
 
 " ALE ------------------------------------------------------------------------------------
 
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '>>'
+let g:ale_sign_style_error  = '--'
+let g:ale_sign_style_warning  = '--'
+let g:ale_statusline_format = ['✗ %d', '⚠ %d', '✔ OK']
 let g:ale_set_loclist = 1
 let g:ale_set_quickfix = 0
 let g:ale_lint_on_save = 1
-let g:ale_lint_on_enter = 0
+let g:ale_lint_on_enter = 1
 let g:ale_lint_on_text_changed = 'never'
+
 let g:ale_linter_aliases = {'javascript.jsx': 'javascript'}
 let g:ale_fixers_aliases = {'javascript.jsx': 'javascript'}
-let g:ale_linters = {'javascript': []}
-let g:ale_fixers = {'javascript': []}
+let g:ale_linters = {'javascript': [], 'elm': []}
+let g:ale_fixers = {'javascript': [], 'elm': []}
 
-if (flow_is_active)
-  let g:ale_javascript_flow_executable = g:flow#flowpath
+if flow_is_active
   let g:ale_linters.javascript = g:ale_linters.javascript + ['flow']
 endif
 
-if (eslint_is_active)
-  let g:ale_javascript_eslint_executable = g:eslint_path
+if eslint_is_active
   let g:ale_linters.javascript = g:ale_linters.javascript + ['eslint']
 endif
 
-if (prettier_is_active)
-  let g:ale_javascript_prettier_executable = g:prettier_path
+if prettier_is_active
   let g:ale_javascript_prettier_options = '--single-quote --trailing-comma es5 --parser babylon'
   let g:ale_fixers.javascript = g:ale_fixers.javascript + ['prettier']
+endif
+
+if elm_make_is_active
+  let g:ale_linters.elm = g:ale_linters.elm + ['make']
+endif
+
+if elm_format_is_active
+  let g:ale_fixers.elm = g:ale_fixers.elm + ['format']
 endif
 
 " Auto commands --------------------------------------------------------------------------
@@ -164,7 +184,7 @@ nnoremap <leader>s :w<CR>
 nnoremap <silent> <leader>n :Explore<CR>
 
 nnoremap <leader>g :Ag 
-nnoremap <silent> <leader>f :GFiles<CR>
+nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>h :History<CR>
 
