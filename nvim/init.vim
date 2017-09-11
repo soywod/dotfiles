@@ -15,7 +15,6 @@ Plug 'moll/vim-node', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'rakr/vim-one'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins', 'for': ['javascript', 'javascript.jsx'] }
 Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -28,6 +27,7 @@ set background=light
 set backspace=indent,eol,start
 set breakindent
 set clipboard+=unnamedplus
+set completeopt=menu,preview
 set expandtab
 set foldcolumn=2
 set history=1000
@@ -85,16 +85,6 @@ let g:elm_setup_keybindings = 0
 
 let g:javascript_plugin_flow = 1
 let g:jsx_ext_required = 0
-
-" Deoplete -------------------------------------------------------------------------------
-
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-
-let g:deoplete#omni_patterns = {}
-let g:deoplete#omni_patterns['javascript'] = '[^. *\t]\.\w*'
-let g:deoplete#omni_patterns['javascript.jsx'] = '[^. *\t]\.\w*'
-let g:deoplete#omni_patterns['elm'] = '[^ \t]+'
 
 " ALE ------------------------------------------------------------------------------------
 
