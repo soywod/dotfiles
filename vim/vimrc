@@ -41,13 +41,13 @@ set noswapfile
 set ruler
 set scrolloff=3
 set shiftwidth=2
-set shortmess+=c
 set smartcase
 set softtabstop=2
 set splitright
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
+
 
 " Theme ---------------------------------------------------------------------------------
 
@@ -122,6 +122,8 @@ let prettier_is_active = (nrun#Which('prettier') != 'prettier not found')
 let elm_make_is_active = (nrun#Which('elm-make') != 'elm-make not found')
 let elm_format_is_active = (nrun#Which('elm-format') != 'elm-format not found')
 let g:elm_setup_keybindings = 0
+let g:elm_format_autosave = 0
+let g:elm_format_fail_silently = 1
 
 " JavaScript -----------------------------------------------------------------------------
 
