@@ -20,3 +20,5 @@ ln -sf -T $(pwd)/i3 ~/.i3
 
 vim +PlugInstall +qa
 
+~/.vim/plugged/YouCompleteMe/install.py
+
