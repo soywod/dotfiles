@@ -7,7 +7,7 @@ Plug 'ElmCast/elm-vim', { 'for': ['elm'] }
 Plug 'flowtype/vim-flow', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'honza/vim-snippets'
 Plug 'jaawerth/nrun.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'moll/vim-node', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
@@ -25,7 +25,7 @@ call plug#end()
 set background=light
 set backspace=indent,eol,start
 set breakindent
-set clipboard+=unnamedplus
+set clipboard+=unnamedplus,unnamed
 set completeopt+=menu
 set expandtab
 set foldcolumn=2
@@ -35,7 +35,6 @@ set ignorecase
 set incsearch
 set linebreak
 set nobackup
-set noshowmode
 set noswapfile
 set ruler
 set scrolloff=3
@@ -46,7 +45,7 @@ set splitright
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
-
+set t_Co=256
 
 " Theme ---------------------------------------------------------------------------------
 
