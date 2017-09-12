@@ -1,9 +1,8 @@
 syntax on
 filetype plugin indent on
 
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/.vim/plugged')
 
-Plug 'ajh17/VimCompletesMe'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'ElmCast/elm-vim', { 'for': ['elm'] }
 Plug 'flowtype/vim-flow', { 'for': ['javascript', 'javascript.jsx'] }
@@ -19,6 +18,7 @@ Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+Plug 'Valloric/YouCompleteMe'
 Plug 'w0rp/ale'
 
 call plug#end()
@@ -27,7 +27,7 @@ set background=light
 set backspace=indent,eol,start
 set breakindent
 set clipboard+=unnamedplus
-set completeopt=menu,preview
+set completeopt+=menu
 set expandtab
 set foldcolumn=2
 set history=1000
@@ -41,6 +41,7 @@ set noswapfile
 set ruler
 set scrolloff=3
 set shiftwidth=2
+set shortmess+=c
 set smartcase
 set softtabstop=2
 set splitright
@@ -60,6 +61,47 @@ hi ALEErrorSign guibg=#ca1243 guifg=white
 hi ALEWarningSign guibg=#c18401 guifg=white
 hi ALEStyleErrorSign guibg=white guifg=#ca1243
 hi ALEStyleWarningSign guibg=white guifg=#c18401
+
+" Functions ------------------------------------------------------------------------------
+
+function ToggleQfList()
+  if (filter(getwininfo(), 'v:val.quickfix') == [])
+    :copen
+  else
+    :cclose
+  endif
+endfunction
+
+function ToggleLocList()
+  if (getloclist('.') != [])
+    if (filter(getwininfo(), 'v:val.loclist') == [])
+      :lopen
+    else
+      :lclose
+    endif
+  endif
+endfunction
+
+function PrevListItem()
+  if (getqflist() != [])
+    :cprevious
+  elseif (getloclist('.') != [])
+    :lprevious
+  endif
+endfunction
+
+function NextListItem()
+  if (getqflist() != [])
+    :cnext
+  elseif (getloclist('.') != [])
+    :lnext
+  endif
+endfunction
+
+" Auto commands --------------------------------------------------------------------------
+
+au FileType qf wincmd J
+au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Flow ----------------------------------------------------------------------------------
 
@@ -125,46 +167,11 @@ if elm_format_is_active
   let g:ale_fixers.elm = g:ale_fixers.elm + ['format']
 endif
 
-" Auto commands --------------------------------------------------------------------------
+" UltiSnips ------------------------------------------------------------------------------
 
-au FileType qf wincmd J
-au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" Functions ------------------------------------------------------------------------------
-
-function ToggleQfList()
-  if (filter(getwininfo(), 'v:val.quickfix') == [])
-    :copen
-  else
-    :cclose
-  endif
-endfunction
-
-function ToggleLocList()
-  if (getloclist('.') != [])
-    if (filter(getwininfo(), 'v:val.loclist') == [])
-      :lopen
-    else
-      :lclose
-    endif
-  endif
-endfunction
-
-function PrevListItem()
-  if (getqflist() != [])
-    :cprevious
-  elseif (getloclist('.') != [])
-    :lprevious
-  endif
-endfunction
-
-function NextListItem()
-  if (getqflist() != [])
-    :cnext
-  elseif (getloclist('.') != [])
-    :lnext
-  endif
-endfunction
+let g:UltiSnipsExpandTrigger = '<C-b>'
+let g:UltiSnipsJumpForwardTrigger = '<C-b>'
+let g:UltiSnipsSnippetDirectories = ['snips']
 
 " Mapping --------------------------------------------------------------------------------
 
@@ -183,10 +190,4 @@ nnoremap <silent> <leader>l :call ToggleLocList()<CR>
 
 nnoremap <silent> [[ :call PrevListItem()<CR>
 nnoremap <silent> ]] :call NextListItem()<CR>
-
-" UltiSnips ------------------------------------------------------------------------------
-
-let g:UltiSnipsExpandTrigger = '<C-b>'
-let g:UltiSnipsJumpForwardTrigger = '<C-b>'
-let g:UltiSnipsSnippetDirectories = ['snips']
 
