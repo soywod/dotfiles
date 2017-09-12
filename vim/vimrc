@@ -3,7 +3,6 @@ filetype plugin indent on
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'editorconfig/editorconfig-vim'
 Plug 'ElmCast/elm-vim', { 'for': ['elm'] }
 Plug 'flowtype/vim-flow', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'honza/vim-snippets'
