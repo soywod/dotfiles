@@ -141,7 +141,7 @@ exec "setxkbmap -layout us,ru -variant 'dvorak-alt-intl', -option grp:shifts_tog
 focus_follows_mouse no
 
 # Networking
-exec --no-startup-id nm-applet
+#exec --no-startup-id nm-applet
 
 # Multi screen
 exec "xrandr | grep 'HDMI1 connected' && \

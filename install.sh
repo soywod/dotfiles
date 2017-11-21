@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir -p ~/.vim
+mkdir -p ~/.config/nvim
 mkdir -p ~/.config/fish/functions
 
 if [ ! -d ~/.fzf ]; then
@@ -13,19 +13,16 @@ if [ ! -d ~/.bash-git-prompt ]; then
   ln -s $(realpath ~)/.bash-git-prompt/gitprompt.fish ~/.config/fish/config.fish
 fi
 
-if [ ! -f ~/.vim/autoload/plug.vim ]; then
+if [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then
   curl \
-    -fLo ~/.vim/autoload/plug.vim \
+    -fLo ~/.local/share/nvim/site/autoload/plug.vim \
     --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
-ln -sf $(pwd)/vim/vimrc ~/.vimrc
-ln -sf -T $(pwd)/vim/snips ~/.vim/snips
+ln -sf $(pwd)/nvim/init.vim ~/.config/nvim/init.vim
+ln -sf -T $(pwd)/nvim/snips ~/.config/nvim/snips
 ln -sf -T $(pwd)/i3 ~/.i3
 ln -sf -T $(pwd)/fish/functions ~/.config/fish/functions
 
-vim +PlugInstall +qa
-
-~/.vim/plugged/YouCompleteMe/install.py
-
+nvim +PlugInstall +qa
