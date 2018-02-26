@@ -128,14 +128,17 @@ bar {
   status_command i3status --config ~/.i3/status
 }
 
-# Touchpad tapping
-exec xinput set-prop "DLL0665:01 06CB:76AD Touchpad" "libinput Tapping Enabled" 1
+# Touchpad natural scrolling
+exec xinput set-prop "DELL07E6:00 06CB:76AF Touchpad" "Synaptics Scrolling Distance" -27 -27
 
-# Touchpad natural srolling
-exec xinput set-prop "DLL0665:01 06CB:76AD Touchpad" "libinput Natural Scrolling Enabled" 1
+# Touchpad disable tap
+exec xinput set-prop "DELL07E6:00 06CB:76AF Touchpad" "Synaptics Tap Action" 0
 
 # Dvorak alternative international no dead keys + russian
 exec "setxkbmap -layout us,ru -variant 'dvorak-alt-intl', -option grp:shifts_toggle"
+
+# Key repeat rate
+exec "xset r rate 250 33"
 
 # No focus follow mouse
 focus_follows_mouse no
@@ -144,23 +147,17 @@ focus_follows_mouse no
 #exec --no-startup-id nm-applet
 
 # Multi screen
-exec "xrandr | grep 'HDMI1 connected' && \
+#exec "xrandr | grep 'HDMI1 connected' && \
 xrandr --output eDP1 --auto --output HDMI1 --auto --above eDP1"
 
-# Key repeat rate
-exec "xset r rate 250 33"
-
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
-
-# Touchpad controls
-bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
