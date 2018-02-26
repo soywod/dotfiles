@@ -9,82 +9,74 @@
 ###############################################################################
 
 general {
-    interval = 30
-    colors = true
-    color_good = '#88b090'
-    color_degraded = '#ccdc90'
-    color_bad = '#e89393'
+  interval = 30
+  colors = true
+  color_good = '#88b090'
+  color_degraded = '#ccdc90'
+  color_bad = '#e89393'
 }
 
-order += "disk /"
 order += "wireless wlp2s0"
-order += "ethernet enx9cebe82ffe35"
+order += "disk /"
 order += "cpu_temperature 0"
-order += "cpu_usage 0"
-order += "load"
 order += "battery 0"
+order += "volume"
 order += "tztime local"
 
 wireless wlp2s0 {
-    format_up = "%quality  %essid %ip"
-    format_down = ""
-}
-
-ethernet enx9cebe82ffe35 {
-    format_up = "%ip"
-    format_down = ""
+  format_up = " %quality"
+  format_down = ""
 }
 
 battery 0 {
-    format = "%status %percentage %remaining"
-    format_down = ""
-    last_full_capacity = true
-    integer_battery_capacity = true
-    low_threshold = 11
-    threshold_type = percentage
-    hide_seconds = true
-    status_chr = " "
-    status_bat = " "
-    status_unk = " "
-    status_full = " "
+  format = "%status %percentage"
+  format_down = ""
+  last_full_capacity = true
+  integer_battery_capacity = true
+  low_threshold = 11
+  threshold_type = percentage
+  hide_seconds = true
+  status_chr = " "
+  status_bat = " "
+  status_full = " "
 }
 
 run_watch DHCP {
-    pidfile = "/var/run/dhclient*.pid"
+  pidfile = "/var/run/dhclient*.pid"
 }
 
 run_watch VPN {
-    pidfile = "/var/run/vpnc/pid"
+  pidfile = "/var/run/vpnc/pid"
 }
 
 tztime local {
-    format = "  %e/%m (%A)    %H:%M"
+  format = "  %e/%m (%A)    %H:%M"
 }
 
 load {
-    format = " %1min"
+  format = " %1min"
 }
 
 cpu_usage {
-    format = " %usage"
+  format = " %usage"
 }
 
 cpu_temperature 0 {
-	format = " %degrees°C"
+  format = " %degrees°C"
 }
 
 disk "/" {
-	format = " %avail"
-	prefix_type	= custom
-	low_threshold = 20
-	threshold_type = percentage_avail
+  format = " %avail"
+  prefix_type = custom
+  low_threshold = 20
+  threshold_type = percentage_avail
 }
 
 volume master {
-    format = "%volume  "
-    format_muted = " "
-    device = "default"
-    mixer = "Master"
-    mixer_idx = 0
+  format = " %volume"
+  format_muted = ""
+  device = "default"
+  mixer = "Master"
+  mixer_idx = 0
 }
 
