@@ -16,6 +16,7 @@ general {
   color_bad = '#e89393'
 }
 
+order += "ethernet enx00e04c68157f"
 order += "wireless wlp2s0"
 order += "disk /"
 order += "cpu_temperature 0"
@@ -23,8 +24,13 @@ order += "battery 0"
 order += "volume"
 order += "tztime local"
 
+ethernet enx00e04c68157f {
+  format_up = " %ip"
+  format_down = ""
+}
+
 wireless wlp2s0 {
-  format_up = " %quality"
+  format_up = " %ip"
   format_down = ""
 }
 
@@ -36,9 +42,9 @@ battery 0 {
   low_threshold = 11
   threshold_type = percentage
   hide_seconds = true
-  status_chr = " "
-  status_bat = " "
-  status_full = " "
+  status_chr = ""
+  status_bat = ""
+  status_full = ""
 }
 
 run_watch DHCP {
@@ -50,7 +56,7 @@ run_watch VPN {
 }
 
 tztime local {
-  format = "  %e/%m (%A)    %H:%M"
+  format = " %A %e %b | %H\h%M"
 }
 
 load {

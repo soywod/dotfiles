@@ -4,7 +4,7 @@ filetype plugin indent on
 call plug#begin()
 
 " LSP Client
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', { 'do': 'bash install.sh' }
 
 " Completion
 Plug 'roxma/nvim-completion-manager'
@@ -80,8 +80,8 @@ au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_selectionUI = 'fzf'
 let g:LanguageClient_serverCommands = {
-  \ 'javascript': ['flow-language-server', '--stdio'],
-  \ 'javascript.jsx': ['flow-language-server', '--stdio'],
+  \ 'javascript': ['node_modules/.bin/javascript-typescript-stdio'],
+  \ 'javascript.jsx': ['node_modules/.bin/javascript-typescript-stdio'],
   \ 'typescript': ['javascript-typescript-stdio'],
   \ }
 
@@ -148,7 +148,7 @@ nnoremap <leader>s :call Save()<CR>
 nnoremap <silent> <leader>n :Explore<CR>
 
 nnoremap <leader>g :Ag 
-nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>f :GFiles<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>h :History<CR>
 
