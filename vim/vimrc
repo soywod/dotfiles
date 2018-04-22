@@ -16,7 +16,7 @@ Plug 'mattn/emmet-vim'
 Plug 'ervandew/supertab'
 
 " Theme
-Plug 'rakr/vim-one'
+Plug 'arcticicestudio/nord-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'mxw/vim-jsx'
@@ -25,7 +25,7 @@ Plug 'posva/vim-vue'
 
 call plug#end()
 
-set background=light
+set background=dark
 set backspace=indent,eol,start
 set breakindent
 set clipboard=unnamedplus
@@ -46,6 +46,8 @@ set splitright
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
+
+colorscheme nord
 
 " LanguageClient -------------------------------------------------------------------------
 
@@ -68,15 +70,6 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 
 let g:user_emmet_install_global = 1
 let g:user_emmet_leader_key = ','
-
-" Theme ---------------------------------------------------------------------------------
-
-colorscheme one
-
-hi clear FoldColumn
-hi clear SignColumn
-hi Normal guibg=white
-hi CursorLine guibg=#a626a4 guifg=white
 
 " Auto commands --------------------------------------------------------------------------
 
