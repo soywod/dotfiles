@@ -1,21 +1,14 @@
-syntax on
-filetype plugin indent on
-
 call plug#begin()
 
 " LSP Client
-Plug 'autozimu/LanguageClient-neovim', { 'do': 'bash install.sh' }
-
-" Completion
-Plug 'roxma/nvim-completion-manager'
+Plug 'natebosch/vim-lsc'
 
 " Fuzzy finder
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
 Plug 'junegunn/fzf.vim'
 
 " Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+Plug 'mattn/emmet-vim'
 
 " Theme
 Plug 'rakr/vim-one'
@@ -23,11 +16,13 @@ Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'mxw/vim-jsx'
 Plug 'moll/vim-node'
+Plug 'posva/vim-vue'
 
 " Utilities
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'maralla/completor.vim'
 Plug 'ervandew/supertab'
 
 call plug#end()
@@ -35,14 +30,10 @@ call plug#end()
 set background=light
 set backspace=indent,eol,start
 set breakindent
-set clipboard+=unnamedplus,unnamed
-set completeopt+=menu
-set expandtab
+set completeopt-=preview
 set foldcolumn=2
 set history=1000
-set hlsearch
-set ignorecase
-set incsearch
+set laststatus=2
 set linebreak
 set nobackup
 set noswapfile
@@ -55,7 +46,6 @@ set splitright
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
-set t_Co=256
 
 " Theme ---------------------------------------------------------------------------------
 
@@ -65,10 +55,10 @@ hi clear FoldColumn
 hi clear SignColumn
 hi Normal guibg=white
 hi CursorLine guibg=#a626a4 guifg=white
-hi ALEErrorSign guibg=white guifg=#ca1243
-hi ALEWarningSign guibg=white guifg=#c18401
-hi ALEStyleErrorSign guibg=#ca1243 guifg=white
-hi ALEStyleWarningSign guibg=#c18401 guifg=white
+" hi ALEErrorSign guibg=white guifg=#ca1243
+" hi ALEWarningSign guibg=white guifg=#c18401
+" hi ALEStyleErrorSign guibg=#ca1243 guifg=white
+" hi ALEStyleWarningSign guibg=#c18401 guifg=white
 
 " Auto commands --------------------------------------------------------------------------
 
@@ -77,28 +67,25 @@ au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " LanguageClient ------------------------------------------------------------------------
 
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_selectionUI = 'fzf'
-let g:LanguageClient_serverCommands = {
-  \ 'javascript': ['node_modules/.bin/javascript-typescript-stdio'],
-  \ 'javascript.jsx': ['node_modules/.bin/javascript-typescript-stdio'],
-  \ 'typescript': ['javascript-typescript-stdio'],
-  \ }
+let g:lsc_auto_map = v:true
+let g:lsc_preview_split_direction = 'below'
+let g:lsc_server_commands = {
+	\ 'javascript.jsx': 'node_modules/.bin/javascript-typescript-stdio'
+	\ }
 
 " JavaScript -----------------------------------------------------------------------------
 
 let g:jsx_ext_required = 0
-let g:javascript_plugin_flow = 1
+" let g:javascript_plugin_flow = 1
 
 " SuperTab -------------------------------------------------------------------------------
 
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
-" UltiSnips ------------------------------------------------------------------------------
+" Emmet ----------------------------------------------------------------------------------
 
-let g:UltiSnipsExpandTrigger = '<C-b>'
-let g:UltiSnipsJumpForwardTrigger = '<C-b>'
-let g:UltiSnipsSnippetDirectories = ['snips']
+let g:user_emmet_install_global = 1
+let g:user_emmet_leader_key = ','
 
 " Functions ------------------------------------------------------------------------------
 
@@ -120,45 +107,59 @@ function ToggleLocList()
   endif
 endfunction
 
-function PrevListItem()
-  if (getqflist() != [])
-    :cprevious
-  elseif (getloclist('.') != [])
-    :lprevious
-  endif
-endfunction
+" function TogglePreview()
+"   if (filter(getwininfo(), 'v:val.quickfix') == [])
+"     :copen
+"   else
+"     :cclose
+"   endif
+" endfunction
 
-function NextListItem()
-  if (getqflist() != [])
-    :cnext
-  elseif (getloclist('.') != [])
-    :lnext
-  endif
-endfunction
+" function PrevListItem()
+"   if (getqflist() != [])
+"     :cprevious
+"   elseif (getloclist('.') != [])
+"     :lprevious
+"   endif
+" endfunction
+
+" function NextListItem()
+"   if (getqflist() != [])
+"     :cnext
+"   elseif (getloclist('.') != [])
+"     :lnext
+"   endif
+" endfunction
 
 function Save()
   :w
+endfunction
+
+function SaveAndBuffers()
+  :w
+  :Buffers
 endfunction
 
 " Mapping --------------------------------------------------------------------------------
 
 let mapleader = ' '
 
-nnoremap <leader>s :call Save()<CR>
+nnoremap <silent> <leader>s :call Save()<CR>
 nnoremap <silent> <leader>n :Explore<CR>
 
 nnoremap <leader>g :Ag 
 nnoremap <silent> <leader>f :GFiles<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>b :call SaveAndBuffers()<CR>
 nnoremap <silent> <leader>h :History<CR>
 
-nnoremap <leader>v :call LanguageClient_textDocument_hover()<CR>
-nnoremap <leader>d :call LanguageClient_textDocument_definition()<CR>
-nnoremap <leader>r :call LanguageClient_textDocument_rename()<CR>
+" nnoremap <leader>v :call LanguageClient_textDocument_hover()<CR>
+" nnoremap <leader>d :LSClientGoToDefinition<CR>
+" nnoremap <leader>r :call LanguageClient_textDocument_rename()<CR>
 
 nnoremap <silent> <leader>c :call ToggleQfList()<CR>
 nnoremap <silent> <leader>l :call ToggleLocList()<CR>
+nnoremap <silent> <leader>p :pclose<CR>
 
-nnoremap <silent> [[ :call PrevListItem()<CR>
-nnoremap <silent> ]] :call NextListItem()<CR>
+" nnoremap <silent> [[ :call PrevListItem()<CR>
+" nnoremap <silent> ]] :call NextListItem()<CR>
 
