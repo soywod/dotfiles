@@ -1,7 +1,7 @@
 call plug#begin()
 
-" LSP Client
-Plug 'natebosch/vim-lsc'
+" LSC
+Plug 'natebosch/vim-lsc', {'branch': 'response_hooks'}
 
 " Fuzzy finder
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
@@ -11,27 +11,27 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'maralla/completor.vim'
 Plug 'mattn/emmet-vim'
+Plug 'Shougo/neocomplete.vim'
 Plug 'ervandew/supertab'
 
-" Theme
-Plug 'arcticicestudio/nord-vim'
+" Theme and syntax
+Plug 'rakr/vim-one'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
-Plug 'mxw/vim-jsx'
 Plug 'moll/vim-node'
-Plug 'posva/vim-vue'
+Plug 'soywod/vim-translate'
 
 call plug#end()
 
-set background=dark
+set background=light
 set backspace=indent,eol,start
 set breakindent
 set clipboard=unnamedplus
 set completeopt-=preview
 set expandtab
 set foldcolumn=2
+set hidden
 set history=1000
 set laststatus=2
 set linebreak
@@ -47,20 +47,36 @@ set tabstop=2
 set termguicolors
 set ttimeoutlen=50
 
-colorscheme nord
+colorscheme one
 
-" LanguageClient -------------------------------------------------------------------------
+hi clear FoldColumn
+hi clear SignColumn
+
+" LSC ------------------------------------------------------------------------------------
 
 let g:lsc_auto_map = v:true
 let g:lsc_preview_split_direction = 'below'
 let g:lsc_server_commands = {
-	\ 'javascript.jsx': 'node_modules/.bin/javascript-typescript-stdio'
-	\ }
+  \ 'javascript': 'node_modules/.bin/javascript-typescript-stdio',
+  \ 'javascript.jsx': 'node_modules/.bin/javascript-typescript-stdio',
+  \ 'typescript': 'node_modules/.bin/javascript-typescript-stdio',
+  \ 'typescript.tsx': 'node_modules/.bin/javascript-typescript-stdio'
+  \ }
+
+" let g:lsc_server_commands = {
+"   \ 'javascript': {
+"   \   'command': 'node_modules/.bin/javascript-typescript-stdio',
+"   \   'response_hooks': lsc#filterReferenceCalls({'exclude': ['node_modules/']})
+"   \   }
+"   \ }
+
+" Completion -----------------------------------------------------------------------------
+
+let g:neocomplete#enable_at_startup = 1
 
 " JavaScript -----------------------------------------------------------------------------
 
 let g:jsx_ext_required = 0
-" let g:javascript_plugin_flow = 1
 
 " SuperTab -------------------------------------------------------------------------------
 
