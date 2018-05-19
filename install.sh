@@ -13,6 +13,7 @@ if [ ! -d /opt/vim ]; then
 else
 	cd /opt/vim
 	git pull
+  git checkout 03998f6 # v8.0.1850
 fi
 
 ./configure \

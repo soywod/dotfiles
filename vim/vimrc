@@ -1,7 +1,7 @@
 call plug#begin()
 
 " LSC
-Plug 'natebosch/vim-lsc', {'branch': 'response_hooks'}
+Plug 'natebosch/vim-lsc' ", {'branch': 'response_hooks'}
 
 " Fuzzy finder
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
@@ -12,15 +12,17 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'mattn/emmet-vim'
-Plug 'Shougo/neocomplete.vim'
+Plug 'shougo/neocomplete.vim'
 Plug 'ervandew/supertab'
+Plug 'blindfs/vim-taskwarrior'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
+Plug 'maxmellon/vim-jsx-pretty'
 Plug 'moll/vim-node'
-Plug 'soywod/vim-translate'
+Plug 'soywod/vim-phonetics'
 
 call plug#end()
 
@@ -131,5 +133,5 @@ nnoremap <silent> <leader>h :History<CR>
 
 nnoremap <silent> <leader>c :call ToggleQfList()<CR>
 nnoremap <silent> <leader>l :call ToggleLocList()<CR>
-nnoremap <silent> <leader>p :pclose<CR>
+nnoremap <silent> <leader>p :PhoneticsPlay<CR>
 
