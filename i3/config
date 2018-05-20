@@ -1,4 +1,4 @@
-font pango:Hack 0
+font pango:Hack 10
 
 set $up    k
 set $down  j
@@ -6,8 +6,7 @@ set $left  h
 set $right l
 
 set $black  #444444
-set $white  #ffffff
-set $gray   #cccccc
+set $white  #fafafa
 
 # start a terminal
 bindsym Mod1+Return exec i3-sensible-terminal
@@ -109,15 +108,10 @@ bindsym Mod1+Shift+e exec "i3-msg exit"
 # resize window (you can also use the mouse for that)
 bindsym Mod1+r mode "resize"
 mode "resize" {
-  bindsym $left  resize shrink width 10 px or 10 ppt
-  bindsym $down  resize grow height 10 px or 10 ppt
-  bindsym $up    resize shrink height 10 px or 10 ppt
-  bindsym $right resize grow width 10 px or 10 ppt
-
-  bindsym Left   resize shrink width 10 px or 10 ppt
-  bindsym Down   resize grow height 10 px or 10 ppt
-  bindsym Up     resize shrink height 10 px or 10 ppt
-  bindsym Right  resize grow width 10 px or 10 ppt
+  bindsym $left  resize shrink width 1 px or 1 ppt
+  bindsym $down  resize grow height 1 px or 1 ppt
+  bindsym $up    resize shrink height 1 px or 1 ppt
+  bindsym $right resize grow width 1 px or 1 ppt
 
   bindsym Return mode "default"
   bindsym Escape mode "default"
@@ -126,17 +120,17 @@ mode "resize" {
 bar {
   font pango:FontAwesome 12
   position top
-  separator_symbol " \ "
+  separator_symbol " / "
   status_command i3status --config ~/.i3/status
 
   colors {
-    background $white
-    statusline $black
-    separator  $black
+    background $black
+    statusline $white
+    separator  $white
 
-    active_workspace   $white $black $white
-    focused_workspace  $white $black $white
-    inactive_workspace $white $white $black
+    active_workspace   $black $white $black
+    focused_workspace  $black $white $black
+    inactive_workspace $black $black $white
   }
 }
 
@@ -166,36 +160,30 @@ exec --no-startup-id redshift
 #xrandr --output eDP1 --auto --output HDMI1 --auto --above eDP1"
 
 # Pulse Audio controls
+bindsym XF86AudioMute exec "pactl set-sink-mute 0 toggle"
 bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume 0 +5%"
 bindsym XF86AudioLowerVolume exec "pactl set-sink-volume 0 -5%"
-bindsym XF86AudioMute exec "pactl set-sink-mute 0 toggle"
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec "xbacklight -inc 2"
+bindsym XF86MonBrightnessUp exec   "xbacklight -inc 2"
 bindsym XF86MonBrightnessDown exec "xbacklight -dec 2"
 
 # Media player controls
-bindsym XF86AudioPlay exec "playerctl play"
+bindsym XF86AudioPlay exec  "playerctl play"
 bindsym XF86AudioPause exec "playerctl pause"
-bindsym XF86AudioNext exec "playerctl next"
-bindsym XF86AudioPrev exec "playerctl previous"
+bindsym XF86AudioNext exec  "playerctl next"
+bindsym XF86AudioPrev exec  "playerctl previous"
 
 # Screenshots controls
 bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selection clipboard -t image/png -i $f'"
 
-# Compton
-exec --no-startup-id "compton --config ~/.dotfiles/compton/compton.conf -CGb"
-
 # Wallpaper
 exec --no-startup-id "feh --bg-fill ~/.dotfiles/images/avenged-sevenfold.jpg"
 
-gaps outer 15
-gaps inner 25
-default_border none
-default_floating_border none
+hide_edge_borders smart
 
-client.focused          $gray  $gray  $white
-client.unfocused        $white $white $black
-client.focused_inactive $white $white $black
+client.focused          $white $white $black
+client.unfocused        $black $black $black
+client.focused_inactive $black $black $black
 client.urgent           $white $white $black
 

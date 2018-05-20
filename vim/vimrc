@@ -53,7 +53,9 @@ colorscheme one
 
 hi clear FoldColumn
 hi clear SignColumn
-hi clear Normal
+" hi clear Normal
+hi StatusLineNC guifg=#ffffff guibg=#444444
+hi StatusLine guifg=#ffffff guibg=#444444
 
 " LSC ------------------------------------------------------------------------------------
 
