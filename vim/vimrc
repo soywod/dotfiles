@@ -53,6 +53,7 @@ colorscheme one
 
 hi clear FoldColumn
 hi clear SignColumn
+hi clear Normal
 
 " LSC ------------------------------------------------------------------------------------
 

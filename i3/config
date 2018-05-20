@@ -1,9 +1,13 @@
-font pango:Hack 10
+font pango:Hack 0
 
-set $up k
-set $down j
-set $left h
+set $up    k
+set $down  j
+set $left  h
 set $right l
+
+set $black  #444444
+set $white  #ffffff
+set $gray   #cccccc
 
 # start a terminal
 bindsym Mod1+Return exec i3-sensible-terminal
@@ -12,7 +16,7 @@ bindsym Mod1+Return exec i3-sensible-terminal
 bindsym Mod1+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym Mod1+d exec dmenu_run
+bindsym Mod1+d exec "dmenu_run -l 3 -fn Hack -nb '$white' -nf '$black' -sb '$black' -sf '$white'"
 
 # change focus
 bindsym Mod1+$left focus left
@@ -119,13 +123,21 @@ mode "resize" {
   bindsym Escape mode "default"
 }
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
 bar {
-  font pango:FontAwesome 10
+  font pango:FontAwesome 12
   position top
-  separator_symbol "  "
+  separator_symbol " \ "
   status_command i3status --config ~/.i3/status
+
+  colors {
+    background $white
+    statusline $black
+    separator  $black
+
+    active_workspace   $white $black $white
+    focused_workspace  $white $black $white
+    inactive_workspace $white $white $black
+  }
 }
 
 # Touchpad natural scrolling
@@ -151,7 +163,7 @@ exec --no-startup-id redshift
 
 # Multi screen
 #exec "xrandr | grep 'HDMI1 connected' && \
-xrandr --output eDP1 --auto --output HDMI1 --auto --above eDP1"
+#xrandr --output eDP1 --auto --output HDMI1 --auto --above eDP1"
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume 0 +5%"
@@ -170,4 +182,20 @@ bindsym XF86AudioPrev exec "playerctl previous"
 
 # Screenshots controls
 bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selection clipboard -t image/png -i $f'"
+
+# Compton
+exec --no-startup-id "compton --config ~/.dotfiles/compton/compton.conf -CGb"
+
+# Wallpaper
+exec --no-startup-id "feh --bg-fill ~/.dotfiles/images/avenged-sevenfold.jpg"
+
+gaps outer 15
+gaps inner 25
+default_border none
+default_floating_border none
+
+client.focused          $gray  $gray  $white
+client.unfocused        $white $white $black
+client.focused_inactive $white $white $black
+client.urgent           $white $white $black
 

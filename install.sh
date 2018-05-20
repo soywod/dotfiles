@@ -3,7 +3,7 @@
 DIRNAME=$PWD
 
 # Install deps
-sudo apt install -y git curl i3 xbacklight xclip scrot
+sudo apt install -y git curl i3 xbacklight xclip scrot compton feh
 
 # Build vim from sources
 if [ ! -d /opt/vim ]; then
