@@ -15,6 +15,7 @@ Plug 'mattn/emmet-vim'
 Plug 'shougo/neocomplete.vim'
 Plug 'ervandew/supertab'
 Plug 'blindfs/vim-taskwarrior'
+Plug 'soywod/vim-phonetics'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
@@ -22,9 +23,53 @@ Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'moll/vim-node'
-Plug 'soywod/vim-phonetics'
 
 call plug#end()
+
+" Functions ------------------------------------------------------------------------------
+
+function! ToggleQfList()
+  if (filter(getwininfo(), 'v:val.quickfix') == [])
+    :copen
+  else
+    :cclose
+  endif
+endfunction
+
+function! ToggleLocList()
+  if (getloclist('.') != [])
+    if (filter(getwininfo(), 'v:val.loclist') == [])
+      :lopen
+    else
+      :lclose
+    endif
+  endif
+endfunction
+
+function! InsertEnter()
+  :highlight StatusLine guibg=#4078f2
+endfunction
+
+function! BufWritePost()
+  :highlight StatusLine guibg=#444444
+endfunction
+
+function! UpdateStatusLine()
+  if &modified
+    highlight StatusLine guibg=#a626a4
+  else
+    highlight StatusLine guibg=#444444
+  endif
+endfunction
+
+function! PrintCounters()
+  let l:qflen = len(getqflist())
+  let l:loclen = len(getloclist('%'))
+
+  return ' | qf:' . l:qflen . ' | loc:' . l:loclen . ' '
+endfunction
+
+" Global settings ------------------------------------------------------------------------
 
 set background=light
 set backspace=indent,eol,start
@@ -33,11 +78,15 @@ set clipboard=unnamedplus
 set completeopt-=preview
 set expandtab
 set foldcolumn=2
+set foldlevelstart=99
+set foldmethod=syntax
+set foldtext=FoldText()
 set hidden
 set history=1000
 set laststatus=2
 set linebreak
 set nobackup
+set noshowmode
 set noswapfile
 set ruler
 set scrolloff=3
@@ -45,6 +94,8 @@ set shiftwidth=2
 set smartcase
 set softtabstop=2
 set splitright
+set statusline=\ \:%l\ (%P)%=%y\ %f
+set statusline+=%{PrintCounters()}
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
@@ -53,9 +104,10 @@ colorscheme one
 
 hi clear FoldColumn
 hi clear SignColumn
-" hi clear Normal
-hi StatusLineNC guifg=#ffffff guibg=#444444
+hi StatusLineNC cterm=NONE guifg=#494b53 guibg=#f0f0f0
 hi StatusLine guifg=#ffffff guibg=#444444
+hi FoldColumn guifg=#d3d3d3
+hi Folded guibg=#fafafa guifg=#d3d3d3
 
 " LSC ------------------------------------------------------------------------------------
 
@@ -94,44 +146,21 @@ let g:user_emmet_leader_key = ','
 
 " Auto commands --------------------------------------------------------------------------
 
-au FileType qf wincmd J
-au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+let mapleader = ' '
 
-" Functions ------------------------------------------------------------------------------
-
-function ToggleQfList()
-  if (filter(getwininfo(), 'v:val.quickfix') == [])
-    :copen
-  else
-    :cclose
-  endif
-endfunction
-
-function ToggleLocList()
-  if (getloclist('.') != [])
-    if (filter(getwininfo(), 'v:val.loclist') == [])
-      :lopen
-    else
-      :lclose
-    endif
-  endif
-endfunction
-
-function OpenBuffers()
-  :w
-  :Buffers
-endfunction
+autocmd FileType qf wincmd J
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+autocmd InsertEnter * call InsertEnter()
+autocmd BufWritePost * call BufWritePost()
+autocmd BufEnter,TextChanged,InsertLeave * call UpdateStatusLine()
 
 " Mapping --------------------------------------------------------------------------------
 
-let mapleader = ' '
-
-nnoremap <silent> <leader>s :w<CR>
 nnoremap <silent> <leader>n :Explore<CR>
 
 nnoremap <leader>g :Ag 
 nnoremap <silent> <leader>f :GFiles<CR>
-nnoremap <silent> <leader>b :call OpenBuffers()<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>h :History<CR>
 
 nnoremap <silent> <leader>c :call ToggleQfList()<CR>
