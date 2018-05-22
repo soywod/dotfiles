@@ -1,7 +1,7 @@
 call plug#begin()
 
 " LSC
-Plug 'natebosch/vim-lsc' ", {'branch': 'response_hooks'}
+Plug 'natebosch/vim-lsc'
 
 " Fuzzy finder
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
@@ -28,12 +28,29 @@ call plug#end()
 
 " Functions ------------------------------------------------------------------------------
 
-function! ToggleQfList()
-  if (filter(getwininfo(), 'v:val.quickfix') == [])
-    :copen
-  else
-    :cclose
-  endif
+function! FoldText()
+  return getline(v:foldstart) . ' '
+endfunction
+
+function! InsertEnter()
+  :highlight StatusLine guibg=#4078f2
+endfunction
+
+function! Save()
+  :write
+  :highlight StatusLine guibg=#444444
+endfunction
+
+function! StatusLineCounters()
+  let l:qflen = len(getqflist())
+  let l:loclen = len(getloclist('%'))
+
+  return ' | qf:' . l:qflen . ' | loc:' . l:loclen . ' '
+endfunction
+
+function! StatusLineLastTimeSave()
+  let l:diff = localtime() - getftime(expand('%:p'))
+  return ' [' . l:diff . 's]'
 endfunction
 
 function! ToggleLocList()
@@ -46,27 +63,12 @@ function! ToggleLocList()
   endif
 endfunction
 
-function! InsertEnter()
-  :highlight StatusLine guibg=#4078f2
-endfunction
-
-function! BufWritePost()
-  :highlight StatusLine guibg=#444444
-endfunction
-
-function! UpdateStatusLine()
-  if &modified
-    highlight StatusLine guibg=#a626a4
+function! ToggleQfList()
+  if (filter(getwininfo(), 'v:val.quickfix') == [])
+    :copen
   else
-    highlight StatusLine guibg=#444444
+    :cclose
   endif
-endfunction
-
-function! PrintCounters()
-  let l:qflen = len(getqflist())
-  let l:loclen = len(getloclist('%'))
-
-  return ' | qf:' . l:qflen . ' | loc:' . l:loclen . ' '
 endfunction
 
 " Global settings ------------------------------------------------------------------------
@@ -94,8 +96,10 @@ set shiftwidth=2
 set smartcase
 set softtabstop=2
 set splitright
-set statusline=\ \:%l\ (%P)%=%y\ %f
-set statusline+=%{PrintCounters()}
+set statusline=\ \:%l\ (%P)
+set statusline+=%{StatusLineLastTimeSave()}
+set statusline+=%=%y\ %f
+set statusline+=%{StatusLineCounters()}
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
@@ -120,13 +124,6 @@ let g:lsc_server_commands = {
   \ 'typescript.tsx': 'node_modules/.bin/javascript-typescript-stdio'
   \ }
 
-" let g:lsc_server_commands = {
-"   \ 'javascript': {
-"   \   'command': 'node_modules/.bin/javascript-typescript-stdio',
-"   \   'response_hooks': lsc#filterReferenceCalls({'exclude': ['node_modules/']})
-"   \   }
-"   \ }
-
 " Completion -----------------------------------------------------------------------------
 
 let g:neocomplete#enable_at_startup = 1
@@ -146,15 +143,14 @@ let g:user_emmet_leader_key = ','
 
 " Auto commands --------------------------------------------------------------------------
 
-let mapleader = ' '
-
 autocmd FileType qf wincmd J
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd InsertEnter * call InsertEnter()
-autocmd BufWritePost * call BufWritePost()
-autocmd BufEnter,TextChanged,InsertLeave * call UpdateStatusLine()
+autocmd InsertLeave,TextChanged * call Save()
 
 " Mapping --------------------------------------------------------------------------------
+
+let mapleader = ' '
 
 nnoremap <silent> <leader>n :Explore<CR>
 
