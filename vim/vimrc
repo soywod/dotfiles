@@ -8,14 +8,14 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
 Plug 'junegunn/fzf.vim'
 
 " Utilities
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
 Plug 'mattn/emmet-vim'
 Plug 'shougo/neocomplete.vim'
 Plug 'ervandew/supertab'
-Plug 'blindfs/vim-taskwarrior'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
 Plug 'soywod/vim-phonetics'
+Plug 'tpope/vim-surround'
+Plug 'blindfs/vim-taskwarrior'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
@@ -80,7 +80,6 @@ set foldcolumn=2
 set foldlevelstart=99
 set foldmethod=syntax
 set foldtext=FoldText()
-set hidden
 set history=1000
 set laststatus=2
 set linebreak
@@ -144,6 +143,7 @@ autocmd FileType qf wincmd J
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd InsertEnter * call InsertEnter()
 autocmd InsertLeave,TextChanged * call Save()
+autocmd VimLeave * call system('xsel -ib', getreg('+'))
 
 " Mapping --------------------------------------------------------------------------------
 
