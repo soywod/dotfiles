@@ -19,10 +19,7 @@ Plug 'soywod/vim-phonetics'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'moll/vim-node'
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
@@ -37,20 +34,20 @@ function! InsertEnter()
 endfunction
 
 function! Save()
-  :write
+  if &buftype != 'nofile' && &ro == 0 | :write | endif
   :highlight StatusLine guibg=#444444
 endfunction
 
 function! StatusLineCounters()
   let l:qflen = len(getqflist())
   let l:loclen = len(getloclist('%'))
-
   return ' | qf:' . l:qflen . ' | loc:' . l:loclen . ' '
 endfunction
 
 function! StatusLineLastTimeSave()
+  if &buftype == 'nofile' || &ro == 1 | return '' | endif
   let l:diff = localtime() - getftime(expand('%:p'))
-  return ' [' . l:diff . 's]'
+  return ' | ' . l:diff . 's'
 endfunction
 
 function! ToggleLocList()
@@ -96,9 +93,9 @@ set shiftwidth=2
 set smartcase
 set softtabstop=2
 set splitright
-set statusline=\ \:%l\ (%P)
+set statusline=\ \:%l\ \|\ %P
 set statusline+=%{StatusLineLastTimeSave()}
-set statusline+=%=%y\ %f
+set statusline+=%=%y\ %t
 set statusline+=%{StatusLineCounters()}
 set tabstop=2
 set termguicolors
