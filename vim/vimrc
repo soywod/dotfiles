@@ -1,5 +1,8 @@
 call plug#begin()
 
+" Plug 'vim-airline/vim-airline'
+" Plug 'itchyny/lightline.vim'
+
 " LSC
 Plug 'natebosch/vim-lsc'
 
@@ -9,13 +12,17 @@ Plug 'junegunn/fzf.vim'
 
 " Utilities
 Plug 'mattn/emmet-vim'
+Plug 'soywod/kronos.vim'
 Plug 'shougo/neocomplete.vim'
 Plug 'ervandew/supertab'
+Plug 'junegunn/vader.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'soywod/vim-keepeye'
 Plug 'soywod/vim-phonetics'
 Plug 'tpope/vim-surround'
 Plug 'blindfs/vim-taskwarrior'
+" Plug 'kopischke/vim-stay'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
@@ -30,12 +37,12 @@ function! FoldText()
 endfunction
 
 function! InsertEnter()
-  :highlight StatusLine guibg=#4078f2
+  highlight StatusLine guibg=#4078f2
 endfunction
 
 function! Save()
   if &buftype != 'nofile' && &ro == 0 | :write | endif
-  :highlight StatusLine guibg=#444444
+  highlight StatusLine guibg=#494B53
 endfunction
 
 function! StatusLineCounters()
@@ -53,18 +60,18 @@ endfunction
 function! ToggleLocList()
   if (getloclist('.') != [])
     if (filter(getwininfo(), 'v:val.loclist') == [])
-      :lopen
+      lopen
     else
-      :lclose
+      lclose
     endif
   endif
 endfunction
 
 function! ToggleQfList()
   if (filter(getwininfo(), 'v:val.quickfix') == [])
-    :copen
+    copen
   else
-    :cclose
+    cclose
   endif
 endfunction
 
@@ -92,22 +99,24 @@ set shiftwidth=2
 set smartcase
 set softtabstop=2
 set splitright
-set statusline=\ \:%l\ \|\ %P
+set statusline=\ \:%l,%c\ \|\ %P
 set statusline+=%{StatusLineLastTimeSave()}
 set statusline+=%=%y\ %t
 set statusline+=%{StatusLineCounters()}
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
+set viewoptions=cursor,folds,slash,unix
 
 colorscheme one
 
-hi clear FoldColumn
-hi clear SignColumn
-hi StatusLineNC cterm=NONE guifg=#494b53 guibg=#f0f0f0
-hi StatusLine guifg=#ffffff guibg=#444444
-hi FoldColumn guifg=#d3d3d3
-hi Folded guibg=#fafafa guifg=#d3d3d3
+highlight clear FoldColumn
+highlight clear SignColumn
+highlight StatusLineNC cterm=NONE guifg=#494B53 guibg=#f0f0f0
+highlight StatusLine guifg=#fafafa guibg=#494B53
+highlight FoldColumn guifg=#d3d3d3
+highlight Folded guibg=#fafafa guifg=#d3d3d3
+highlight User1 guibg=#e45649 guifg=#fafafa
 
 " LSC ------------------------------------------------------------------------------------
 
@@ -126,7 +135,7 @@ let g:neocomplete#enable_at_startup = 1
 
 " JavaScript -----------------------------------------------------------------------------
 
-let g:jsx_ext_required = 0
+let g:jsx_ext_required = 1
 
 " SuperTab -------------------------------------------------------------------------------
 
@@ -137,13 +146,19 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 let g:user_emmet_install_global = 1
 let g:user_emmet_leader_key = ','
 
+" KeepEye --------------------------------------------------------------------------------
+
+let g:keepeye_features = ['bell', 'statusline']
+let g:keepeye_message_hl_user = 1
+" let g:keepeye_timer = 2
+
 " Auto commands --------------------------------------------------------------------------
 
 autocmd FileType qf wincmd J
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd InsertEnter * call InsertEnter()
 autocmd InsertLeave,TextChanged * call Save()
-autocmd VimLeave * call system('xsel -ib', getreg('+'))
+autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
 
 " Mapping --------------------------------------------------------------------------------
 

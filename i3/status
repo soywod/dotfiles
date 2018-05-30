@@ -9,7 +9,7 @@
 ###############################################################################
 
 general {
-  interval = 30
+  interval = 1
   colors = true
   color_good = '#ffffff'
   color_degraded = '#f39c12'
@@ -19,9 +19,9 @@ general {
 order += "ethernet enx00e04c68157f"
 order += "wireless wlp2s0"
 order += "disk /"
-order += "cpu_temperature 0"
-order += "battery 0"
 order += "volume"
+order += "load"
+order += "battery 0"
 order += "tztime local"
 
 ethernet enx00e04c68157f {
@@ -56,7 +56,7 @@ run_watch VPN {
 }
 
 tztime local {
-  format = " %A %e %b / %H\h%M"
+  format = " %A %e %b /  %H\h%M"
 }
 
 load {
