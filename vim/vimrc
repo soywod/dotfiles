@@ -1,8 +1,5 @@
 call plug#begin()
 
-" Plug 'vim-airline/vim-airline'
-" Plug 'itchyny/lightline.vim'
-
 " LSC
 Plug 'natebosch/vim-lsc'
 
@@ -11,6 +8,7 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
 Plug 'junegunn/fzf.vim'
 
 " Utilities
+Plug 'ap/vim-buftabline'
 Plug 'mattn/emmet-vim'
 Plug 'soywod/kronos.vim'
 Plug 'shougo/neocomplete.vim'
@@ -19,13 +17,15 @@ Plug 'junegunn/vader.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'soywod/vim-keepeye'
-Plug 'soywod/vim-phonetics'
+" Plug 'soywod/vim-phonetics'
 Plug 'tpope/vim-surround'
 Plug 'blindfs/vim-taskwarrior'
-" Plug 'kopischke/vim-stay'
+Plug 'kopischke/vim-stay'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
+" Plug 'herringtondarkholme/yats.vim'
+" Plug 'pangloss/vim-javascript'
 Plug 'sheerun/vim-polyglot'
 
 call plug#end()
@@ -87,6 +87,7 @@ set foldcolumn=2
 set foldlevelstart=99
 set foldmethod=syntax
 set foldtext=FoldText()
+set hidden
 set history=1000
 set laststatus=2
 set linebreak
@@ -126,8 +127,9 @@ let g:lsc_server_commands = {
   \ 'javascript': 'node_modules/.bin/javascript-typescript-stdio',
   \ 'javascript.jsx': 'node_modules/.bin/javascript-typescript-stdio',
   \ 'typescript': 'node_modules/.bin/javascript-typescript-stdio',
-  \ 'typescript.tsx': 'node_modules/.bin/javascript-typescript-stdio'
-  \ }
+  \ 'typescript.tsx': 'node_modules/.bin/javascript-typescript-stdio',
+  \ 'typescriptreact': 'node_modules/.bin/javascript-typescript-stdio'
+\ }
 
 " Completion -----------------------------------------------------------------------------
 
@@ -149,8 +151,7 @@ let g:user_emmet_leader_key = ','
 " KeepEye --------------------------------------------------------------------------------
 
 let g:keepeye_features = ['bell', 'statusline']
-let g:keepeye_message_hl_user = 1
-" let g:keepeye_timer = 2
+let g:keepeye_timer = 1800
 
 " Auto commands --------------------------------------------------------------------------
 
@@ -158,7 +159,10 @@ autocmd FileType qf wincmd J
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd InsertEnter * call InsertEnter()
 autocmd InsertLeave,TextChanged * call Save()
-autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
+" autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
+
+command! -nargs=* Search call s:Search(<q-args>)
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" --glob "!.git/*" '.shellescape(<q-args>), 1, <bang>0)
 
 " Mapping --------------------------------------------------------------------------------
 
@@ -166,12 +170,14 @@ let mapleader = ' '
 
 nnoremap <silent> <leader>n :Explore<CR>
 
-nnoremap <leader>g :Ag 
-nnoremap <silent> <leader>f :GFiles<CR>
+nnoremap <silent> <c-l> :bnext<CR>
+nnoremap <silent> <c-h> :bprev<CR>
+
+nnoremap <leader>f :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>h :History<CR>
 
 nnoremap <silent> <leader>c :call ToggleQfList()<CR>
 nnoremap <silent> <leader>l :call ToggleLocList()<CR>
-nnoremap <silent> <leader>p :PhoneticsPlay<CR>
+" nnoremap <silent> <leader>p :PhoneticsPlay<CR>
 
