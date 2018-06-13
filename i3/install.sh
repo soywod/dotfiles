@@ -4,11 +4,10 @@ DIRNAME="$(cd "$(dirname "$0")";pwd -P)"
 
 # --------------------------------------------------------------------- # Deps #
 
-sudo pacman -S --needed --noconfirm i3-gaps feh scrot
+sudo pacman -S --needed --noconfirm feh i3-gaps scrot xclip
 
 # -------------------------------------------------------------------- # Links #
 
-mkdir -p ~/.i3
-ln -sf $DIRNAME/config ~/.i3
-ln -sf $DIRNAME/status ~/.i3
+mkdir -p $HOME/.i3
+ln -sf $DIRNAME/config $HOME/.i3
 

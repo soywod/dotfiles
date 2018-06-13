@@ -1,0 +1,155 @@
+[colors]
+background = #494B53
+background-alt = #494B53
+foreground = #fafafa
+foreground-alt = #fafafa
+primary = #4078f2
+secondary = #e60053
+alert = #bd2c40
+
+[bar/main]
+width = 100%
+height = 32
+radius = 0
+fixed-center = true
+background = ${colors.background}
+foreground = ${colors.foreground}
+line-size = 4
+line-color = #f00
+
+border-size = 0
+; border-color = #00000000
+
+padding-left = 0
+padding-right = 1
+
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = SpaceMonoNL:pixelsize=14;3
+font-1 = FontAwesome5FreeSolid:pixelsize=14;3
+modules-left = bspwm i3
+modules-center = 
+modules-right = wlan wired-network filesystem backlight alsa pulseaudio xkeyboard memory cpu battery temperature date powermenu
+tray-position = right
+tray-padding = 2
+cursor-click = pointer
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0  = num lock
+label-layout =  %layout%
+
+[module/filesystem]
+type = internal/fs
+interval = 60
+mount-0 = /
+label-mounted =  %free%
+
+[module/bspwm]
+type = internal/bspwm
+
+label-focused = %index%
+label-focused-background = ${colors.background-alt}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 1
+
+label-occupied = %index%
+label-occupied-padding = 1
+
+label-urgent = %index%!
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+label-empty = %index%
+label-empty-foreground = ${colors.foreground-alt}
+label-empty-padding = 1
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+label-mode-padding = 0
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-background = ${module/bspwm.label-focused-background}
+label-focused-underline = ${module/bspwm.label-focused-underline}
+label-focused-padding = ${module/bspwm.label-focused-padding}
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-padding = ${module/bspwm.label-occupied-padding}
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${module/bspwm.label-urgent-background}
+label-urgent-padding = ${module/bspwm.label-urgent-padding}
+
+[module/backlight]
+type = internal/backlight
+card = intel_backlight
+format = <label>
+label =  %percentage%%
+
+[module/alsa]
+type = internal/alsa
+label-volume =  %percentage%%
+label-muted  =   --%
+
+[module/memory]
+type = internal/memory
+interval = 5
+label =  %percentage_used%%
+
+[module/date]
+type = internal/date
+interval = 5
+date  = %a. %e
+time  = %Hh%M
+label =  %date%, %time%
+
+[module/battery]
+type = internal/battery
+adapter = AC
+battery = BAT0
+full-at = 99
+format-charging    =  <label-charging>
+format-discharging = <ramp-capacity> <label-discharging>
+label-charging     = %percentage%%
+label-discharging  = %percentage%%
+label-full         =  100%
+poll-interval = 1
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+[module/temperature]
+type = internal/temperature
+interval = 5
+label       =  %temperature-c%
+label-warn  =  %temperature-c%
+warn-temperature = 60
+
+[module/wired-network]
+type = internal/network
+interface = eth0
+interval = 1
+label-connected =   %local_ip% ( %downspeed%)
+format-disconnected =
+
+[module/cpu]
+type = internal/cpu
+interval = 5
+label =  %percentage%%
+
+; vim:ft=dosini

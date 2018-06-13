@@ -160,27 +160,26 @@ exec --no-startup-id redshift
 #exec "xrandr | grep 'HDMI1 connected' && \
 #xrandr --output eDP1 --auto --output HDMI1 --auto --above eDP1"
 
-# Alsa mixer controls
+# Alsa controls
 bindsym XF86AudioMute        exec "amixer set Master toggle"
 bindsym XF86AudioRaiseVolume exec "amixer set Master 5%+"
 bindsym XF86AudioLowerVolume exec "amixer set Master 5%-"
 
-# Sreen brightness controls
-bindsym XF86MonBrightnessUp exec   "xbacklight -inc 2"
-bindsym XF86MonBrightnessDown exec "xbacklight -dec 2"
+# Brightness controls
+bindsym XF86MonBrightnessUp   exec "light -A 5"
+bindsym XF86MonBrightnessDown exec "light -U 5"
 
 # Media player controls
-bindsym XF86AudioPlay exec  "playerctl play"
-bindsym XF86AudioPause exec "playerctl pause"
-bindsym XF86AudioNext exec  "playerctl next"
-bindsym XF86AudioPrev exec  "playerctl previous"
+# bindsym XF86AudioPlay exec  "playerctl play"
+# bindsym XF86AudioPause exec "playerctl pause"
+# bindsym XF86AudioNext exec  "playerctl next"
+# bindsym XF86AudioPrev exec  "playerctl previous"
 
 # Screenshots controls
 bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selection clipboard -t image/png -i $f'"
 
-# Wallpaper
-exec --no-startup-id "feh --bg-fill ~/.dotfiles/i3/background.jpg"
-exec --no-startup-id "xrandr --output eDP-1 --brightness .3"
+exec --no-startup-id "feh --bg-fill $HOME/.dotfiles/i3/background.jpg"
+exec --no-startup-id $HOME/.dotfiles/polybar/start.sh
 
 hide_edge_borders smart
 
