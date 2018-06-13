@@ -118,22 +118,22 @@ mode "resize" {
   bindsym Escape mode "default"
 }
 
-bar {
-  font pango:DroidSans 10
-  position bottom
-  separator_symbol " / "
-  status_command i3status --config ~/.i3/status
+# bar {
+#   font pango:DroidSans 10
+#   position bottom
+#   separator_symbol " / "
+#   status_command i3status --config ~/.i3/status
 
-  colors {
-    background $black
-    statusline $white
-    separator  $white
+#   colors {
+#     background $black
+#     statusline $white
+#     separator  $white
 
-    active_workspace   $white $white $white
-    focused_workspace  $black $white $black
-    inactive_workspace $black $black $white
-  }
-}
+#     active_workspace   $white $white $white
+#     focused_workspace  $black $white $black
+#     inactive_workspace $black $black $white
+#   }
+# }
 
 # Touchpad natural scrolling
 exec xinput set-prop "DELL07E6:00 06CB:76AF Touchpad" "Synaptics Scrolling Distance" -27 -27
@@ -160,10 +160,10 @@ exec --no-startup-id redshift
 #exec "xrandr | grep 'HDMI1 connected' && \
 #xrandr --output eDP1 --auto --output HDMI1 --auto --above eDP1"
 
-# Pulse Audio controls
-bindsym XF86AudioMute exec "pactl set-sink-mute 0 toggle"
-bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume 0 +5%"
-bindsym XF86AudioLowerVolume exec "pactl set-sink-volume 0 -5%"
+# Alsa mixer controls
+bindsym XF86AudioMute        exec "amixer set Master toggle"
+bindsym XF86AudioRaiseVolume exec "amixer set Master 5%+"
+bindsym XF86AudioLowerVolume exec "amixer set Master 5%-"
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec   "xbacklight -inc 2"
