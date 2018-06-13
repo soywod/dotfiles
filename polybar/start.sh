@@ -3,5 +3,5 @@
 killall -q polybar
 while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
-exec polybar main
+exec polybar main -r
 

@@ -1,4 +1,4 @@
-font pango:DroidSans 10
+font pango:SpaceMono 12
 
 set $up    k
 set $down  j
@@ -118,23 +118,6 @@ mode "resize" {
   bindsym Escape mode "default"
 }
 
-# bar {
-#   font pango:DroidSans 10
-#   position bottom
-#   separator_symbol " / "
-#   status_command i3status --config ~/.i3/status
-
-#   colors {
-#     background $black
-#     statusline $white
-#     separator  $white
-
-#     active_workspace   $white $white $white
-#     focused_workspace  $black $white $black
-#     inactive_workspace $black $black $white
-#   }
-# }
-
 # Touchpad natural scrolling
 exec xinput set-prop "DELL07E6:00 06CB:76AF Touchpad" "Synaptics Scrolling Distance" -27 -27
 
@@ -150,11 +133,8 @@ exec "xset r rate 250 33"
 # No focus follow mouse
 focus_follows_mouse no
 
-# Networking
-#exec --no-startup-id nm-applet
-
 # Redshift
-exec --no-startup-id redshift
+# exec --no-startup-id redshift
 
 # Multi screen
 #exec "xrandr | grep 'HDMI1 connected' && \
@@ -168,12 +148,6 @@ bindsym XF86AudioLowerVolume exec "amixer set Master 5%-"
 # Brightness controls
 bindsym XF86MonBrightnessUp   exec "light -A 5"
 bindsym XF86MonBrightnessDown exec "light -U 5"
-
-# Media player controls
-# bindsym XF86AudioPlay exec  "playerctl play"
-# bindsym XF86AudioPause exec "playerctl pause"
-# bindsym XF86AudioNext exec  "playerctl next"
-# bindsym XF86AudioPrev exec  "playerctl previous"
 
 # Screenshots controls
 bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selection clipboard -t image/png -i $f'"
