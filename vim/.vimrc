@@ -19,7 +19,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'soywod/vim-keepeye'
 " Plug 'soywod/vim-phonetics'
 Plug 'tpope/vim-surround'
-Plug 'blindfs/vim-taskwarrior'
+" Plug 'blindfs/vim-taskwarrior'
 Plug 'kopischke/vim-stay'
 
 " Theme and syntax
