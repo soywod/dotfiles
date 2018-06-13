@@ -1,4 +1,4 @@
-font pango:SpaceMono 11
+font pango:DroidSans 10
 
 set $up    k
 set $down  j
@@ -119,8 +119,8 @@ mode "resize" {
 }
 
 bar {
-  font pango:SpaceMono 11
-  position top
+  font pango:DroidSans 10
+  position bottom
   separator_symbol " / "
   status_command i3status --config ~/.i3/status
 
@@ -179,7 +179,8 @@ bindsym XF86AudioPrev exec  "playerctl previous"
 bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selection clipboard -t image/png -i $f'"
 
 # Wallpaper
-exec --no-startup-id "feh --bg-fill ~/.dotfiles/images/avenged-sevenfold.jpg"
+exec --no-startup-id "feh --bg-fill ~/.dotfiles/i3/background.jpg"
+exec --no-startup-id "xrandr --output eDP-1 --brightness .3"
 
 hide_edge_borders smart
 
