@@ -5,7 +5,7 @@ VIMPATH=/opt/vim
 
 # --------------------------------------------------------------------- # Deps #
 
-sudo pacman -S --needed --noconfirm curl gcc git make python3
+sudo pacman -S --needed --noconfirm curl gcc git lua make python3
 
 # -------------------------------------------------------------------- # Build #
 
