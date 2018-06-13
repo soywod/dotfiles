@@ -2,9 +2,11 @@
 
 DIRNAME="$(cd "$(dirname "$0")";pwd -P)"
 
-# --------------------------------------------------------------------- # Deps #
+# ---------------------------------------------------------- # Git bash prompt #
 
-# sudo pacman -S --needed --noconfirm curl gcc git make python3
+if [ ! -d ~/.bash-git-prompt ]; then
+  git clone https://github.com/magicmonty/bash-git-prompt.git ~/.bash-git-prompt
+fi
 
 # -------------------------------------------------------------------- # Links #
 
