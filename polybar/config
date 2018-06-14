@@ -4,7 +4,7 @@ grey  = #f0f0f0
 white = #fafafa
 
 [bar/main]
-height = 32
+height = 33
 radius = 0
 background = ${colors.white}
 foreground = ${colors.black}

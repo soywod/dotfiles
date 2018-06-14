@@ -12,7 +12,7 @@ set $white  #fafafa
 
 bindsym Mod1+Return exec i3-sensible-terminal
 bindsym Mod1+Shift+q kill
-bindsym Mod1+d exec "dmenu_run -b -fn SpaceMono-16 -nb '$white' -nf '$black' -sb '$blue' -sf '$white'"
+bindsym Mod1+d exec "dmenu_run -b -fn SpaceMonoNL-15 -nb '$white' -nf '$black' -sb '$grey' -sf '$black'"
 
 bindsym Mod1+$down  focus down
 bindsym Mod1+$left  focus left
