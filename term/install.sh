@@ -8,7 +8,7 @@ sudo pacman -S --needed --noconfirm kitty
 
 # --------------------------------------------------------------------- # Font #
 
-cp $DIRNAME/SpaceMono-Regular-NL.ttf ~/.local/share/fonts
+cp $DIRNAME/*.ttf $DIRNAME/*.otf ~/.local/share/fonts
 fc-cache
 
 # -------------------------------------------------------------------- # Links #
