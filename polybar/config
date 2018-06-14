@@ -1,24 +1,17 @@
 [colors]
-background = #494B53
-background-alt = #494B53
-foreground = #fafafa
-foreground-alt = #fafafa
-primary = #4078f2
-secondary = #e60053
-alert = #bd2c40
+black = #494B53
+grey  = #f0f0f0
+white = #fafafa
 
 [bar/main]
-width = 100%
 height = 32
 radius = 0
-fixed-center = true
-background = ${colors.background}
-foreground = ${colors.foreground}
-line-size = 4
-line-color = #f00
+background = ${colors.white}
+foreground = ${colors.black}
 bottom = true
-border-size = 0
-padding-left = 0
+border-top-size = 1
+border-top-color = ${colors.grey}
+padding-left = 1
 padding-right = 1
 module-margin-left = 1
 module-margin-right = 1
@@ -27,8 +20,6 @@ font-1 = FontAwesome5FreeSolid:pixelsize=12;3
 modules-left = battery memory cpu temperature filesystem backlight alsa
 modules-center = network-speed
 modules-right = wired-network xkeyboard date
-tray-position = right
-tray-padding = 2
 cursor-click = pointer
 
 [module/xkeyboard]

@@ -8,7 +8,7 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
 Plug 'junegunn/fzf.vim'
 
 " Utilities
-Plug 'ap/vim-buftabline'
+" Plug 'ap/vim-buftabline'
 Plug 'mattn/emmet-vim'
 Plug 'soywod/kronos.vim'
 Plug 'shougo/neocomplete.vim'
@@ -37,24 +37,18 @@ function! FoldText()
 endfunction
 
 function! InsertEnter()
-  highlight StatusLine guibg=#4078f2
+  highlight StatusLine guifg=#fafafa guibg=#4078f2
 endfunction
 
 function! Save()
   if &buftype != 'nofile' && &ro == 0 | :write | endif
-  highlight StatusLine guibg=#494B53
+  highlight StatusLine guifg=#494B53 guibg=#f0f0f0
 endfunction
 
 function! StatusLineCounters()
   let l:qflen = len(getqflist())
   let l:loclen = len(getloclist('%'))
   return ' | qf:' . l:qflen . ' | loc:' . l:loclen . ' '
-endfunction
-
-function! StatusLineLastTimeSave()
-  if &buftype == 'nofile' || &ro == 1 | return '' | endif
-  let l:diff = localtime() - getftime(expand('%:p'))
-  return ' | ' . l:diff . 's'
 endfunction
 
 function! ToggleLocList()
@@ -100,8 +94,7 @@ set shiftwidth=2
 set smartcase
 set softtabstop=2
 set splitright
-set statusline=\ \:%l,%c\ \|\ %P
-set statusline+=%{StatusLineLastTimeSave()}
+set statusline=\ \:%l,%c
 set statusline+=%=%y\ %t
 set statusline+=%{StatusLineCounters()}
 set tabstop=2
@@ -113,8 +106,8 @@ colorscheme one
 
 highlight clear FoldColumn
 highlight clear SignColumn
-highlight StatusLineNC cterm=NONE guifg=#494B53 guibg=#f0f0f0
-highlight StatusLine guifg=#fafafa guibg=#494B53
+highlight StatusLineNC guifg=#f0f0f0 guibg=#f0f0f0
+highlight StatusLine guifg=#494B53 guibg=#f0f0f0
 highlight FoldColumn guifg=#d3d3d3
 highlight Folded guibg=#fafafa guifg=#d3d3d3
 highlight User1 guibg=#e45649 guifg=#fafafa

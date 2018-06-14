@@ -1,81 +1,43 @@
-font pango:SpaceMono 12
+font pango:SpaceMonoNL 12
 
-set $up    k
 set $down  j
 set $left  h
 set $right l
+set $up    k
 
 set $black  #494B53
+set $blue   #4078f2
 set $grey   #f0f0f0
 set $white  #fafafa
 
-# start a terminal
 bindsym Mod1+Return exec i3-sensible-terminal
-
-# kill focused window
 bindsym Mod1+Shift+q kill
+bindsym Mod1+d exec "dmenu_run -b -fn SpaceMono-16 -nb '$white' -nf '$black' -sb '$blue' -sf '$white'"
 
-# start dmenu (a program launcher)
-bindsym Mod1+d exec "dmenu_run -fn SpaceMono -nb '$black' -nf '$white' -sb '$white' -sf '$black'"
-
-# change focus
-bindsym Mod1+$left focus left
-bindsym Mod1+$down focus down
-bindsym Mod1+$up focus up
+bindsym Mod1+$down  focus down
+bindsym Mod1+$left  focus left
 bindsym Mod1+$right focus right
+bindsym Mod1+$up    focus up
 
-# alternatively, you can use the cursor keys:
-bindsym Mod1+Left focus left
-bindsym Mod1+Down focus down
-bindsym Mod1+Up focus up
-bindsym Mod1+Right focus right
-
-# move focused window
-bindsym Mod1+Shift+$left move left
-bindsym Mod1+Shift+$down move down
-bindsym Mod1+Shift+$up move up
+bindsym Mod1+Shift+$down  move down
+bindsym Mod1+Shift+$left  move left
 bindsym Mod1+Shift+$right move right
+bindsym Mod1+Shift+$up    move up
 
-# alternatively, you can use the cursor keys:
-bindsym Mod1+Shift+Left move left
-bindsym Mod1+Shift+Down move down
-bindsym Mod1+Shift+Up move up
-bindsym Mod1+Shift+Right move right
-
-# split in horizontal orientation
 bindsym Mod1+Shift+v split h
+bindsym Mod1+v       split v
 
-# split in vertical orientation
-bindsym Mod1+v split v
-
-# enter fullscreen mode for the focused container
 bindsym Mod1+f fullscreen toggle
-
-# change container layout (stacked, tabbed, toggle split)
 bindsym Mod1+s layout stacking
 bindsym Mod1+w layout tabbed
 bindsym Mod1+e layout toggle split
 
-# toggle tiling / floating
 bindsym Mod1+Shift+space floating toggle
-
-# change focus between tiling / floating windows
 bindsym Mod1+space focus mode_toggle
-
-# focus the parent container
 bindsym Mod1+a focus parent
-
-# focus the child container
-#bindsym Mod1+d focus child
-
-# move the currently focused window to the scratchpad
 bindsym Mod1+Shift+minus move scratchpad
-
-# Show the next scratchpad window or hide the focused scratchpad window.
-# If there are multiple scratchpad windows, this command cycles through them.
 bindsym Mod1+minus scratchpad show
 
-# switch to workspace
 bindsym Mod1+1 workspace 1
 bindsym Mod1+2 workspace 2
 bindsym Mod1+3 workspace 3
@@ -87,7 +49,6 @@ bindsym Mod1+8 workspace 8
 bindsym Mod1+9 workspace 9
 bindsym Mod1+0 workspace 10
 
-# move focused container to workspace
 bindsym Mod1+Shift+1 move container to workspace 1
 bindsym Mod1+Shift+2 move container to workspace 2
 bindsym Mod1+Shift+3 move container to workspace 3
@@ -99,20 +60,17 @@ bindsym Mod1+Shift+8 move container to workspace 8
 bindsym Mod1+Shift+9 move container to workspace 9
 bindsym Mod1+Shift+0 move container to workspace 10
 
-# reload the configuration file
 bindsym Mod1+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym Mod1+Shift+r restart
-# exit i3 (logs you out of your X session)
 bindsym Mod1+Shift+e exec "i3-msg exit"
 
-# resize window (you can also use the mouse for that)
 bindsym Mod1+r mode "resize"
+
 mode "resize" {
-  bindsym $left  resize shrink width 1 px or 1 ppt
-  bindsym $down  resize grow height 1 px or 1 ppt
+  bindsym $down  resize grow   height 1 px or 1 ppt
+  bindsym $left  resize shrink width  1 px or 1 ppt
+  bindsym $right resize grow   width  1 px or 1 ppt
   bindsym $up    resize shrink height 1 px or 1 ppt
-  bindsym $right resize grow width 1 px or 1 ppt
 
   bindsym Return mode "default"
   bindsym Escape mode "default"
@@ -130,15 +88,8 @@ exec "setxkbmap -layout us,ru -variant 'dvorak-alt-intl', -option grp:shifts_tog
 # Key repeat rate
 exec "xset r rate 250 33"
 
-# No focus follow mouse
-focus_follows_mouse no
-
 # Redshift
 # exec --no-startup-id redshift
-
-# Multi screen
-#exec "xrandr | grep 'HDMI1 connected' && \
-#xrandr --output eDP1 --auto --output HDMI1 --auto --above eDP1"
 
 # Alsa controls
 bindsym XF86AudioMute        exec "amixer set Master toggle"
@@ -155,10 +106,17 @@ bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selecti
 exec --no-startup-id "feh --bg-fill $HOME/.dotfiles/i3/background.jpg"
 exec --no-startup-id $HOME/.dotfiles/polybar/start.sh
 
-hide_edge_borders smart
+hide_edge_borders   none
+workspace_layout    tabbed
+focus_follows_mouse no
 
-client.focused          $white $white $black
-client.unfocused        $grey  $grey  $grey
-client.focused_inactive $grey  $grey  $grey
-client.urgent           $white $white $black
+gaps inner 20
+
+default_border pixel 1
+
+# Client property       Border Backg. Text   Ind.   Child
+client.focused          $grey  $grey  $black $white $grey
+client.unfocused        $grey  $white $white $white $grey
+client.focused_inactive $grey  $white $black $white $grey
+client.urgent           $grey  $white $black $white $grey
 
