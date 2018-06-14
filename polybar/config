@@ -4,13 +4,12 @@ grey  = #f0f0f0
 white = #fafafa
 
 [bar/main]
-height = 33
+height = 32
 radius = 0
 background = ${colors.white}
 foreground = ${colors.black}
-bottom = true
-border-top-size = 1
-border-top-color = ${colors.grey}
+border-bottom-size = 1
+border-bottom-color = ${colors.grey}
 padding-left = 1
 padding-right = 1
 module-margin-left = 1
@@ -18,9 +17,14 @@ module-margin-right = 1
 font-0 = SpaceMonoNL:pixelsize=12;3
 font-1 = FontAwesome5FreeSolid:pixelsize=12;3
 modules-left = battery memory cpu temperature filesystem backlight alsa
-modules-center = network-speed
-modules-right = wired-network xkeyboard date
+modules-center = title
+modules-right = network-speed wired-network xkeyboard date
 cursor-click = pointer
+
+[module/title]
+type = internal/xwindow
+format-background = ${colors.white}
+format-foreground = ${colors.black}
 
 [module/xkeyboard]
 type = internal/xkeyboard
