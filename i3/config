@@ -106,7 +106,7 @@ bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selecti
 exec --no-startup-id "feh --bg-fill $HOME/.dotfiles/i3/background.jpg"
 exec --no-startup-id "compton --config $HOME/.dotfiles/compton/config"
 exec --no-startup-id $HOME/.dotfiles/polybar/start.sh
-exec --no-startup-id $HOME/.dotfiles/sound/jack.sh
+exec --no-startup-id $HOME/.dotfiles/jack/start.sh
 
 focus_follows_mouse no
 hide_edge_borders   none
@@ -122,3 +122,4 @@ client.focused_inactive $grey  $white $black $white $grey
 client.urgent           $grey  $white $black $white $grey
 
 # vim:ft=i3
+

@@ -16,11 +16,18 @@ module-margin-left = 1
 module-margin-right = 1
 font-0 = SpaceMonoNL:pixelsize=12;3
 font-1 = FontAwesome5FreeSolid:pixelsize=12;3
-modules-left = battery memory cpu temperature filesystem backlight alsa
+modules-left = battery memory cpu temperature filesystem backlight alsa mpd
 modules-center = title
 modules-right = network-speed wired-network xkeyboard date
 cursor-click = pointer
 
+[module/mpd]
+type = internal/mpd
+host = socket:/run/mpd/socket
+
+; Seconds to sleep between progressbar/song timer sync
+; Default: 1
+interval = 2
 [module/title]
 type = internal/xwindow
 format-background = ${colors.white}

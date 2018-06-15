@@ -22,3 +22,5 @@ pcm.jack {
   }
 }
 
+# vim:ft=config
+
