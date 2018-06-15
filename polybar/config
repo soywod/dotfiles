@@ -25,6 +25,7 @@ cursor-click = pointer
 type = internal/xwindow
 format-background = ${colors.white}
 format-foreground = ${colors.black}
+label-maxlen = 50
 
 [module/xkeyboard]
 type = internal/xkeyboard
