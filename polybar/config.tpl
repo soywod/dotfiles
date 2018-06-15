@@ -1,7 +1,10 @@
 [colors]
-black = #494B53
-grey  = #f0f0f0
-white = #fafafa
+black  = #494B53
+blue   = #4078f2
+grey   = #f0f0f0
+dgrey  = #d0d0d0
+white  = #fafafa
+yellow = #c18401
 
 [section/bar]
 background = ${colors.white}
@@ -36,12 +39,26 @@ modules-right = network-speed wired-network xkeyboard
 type = internal/mpd
 host = /run/user/$UID/mpd.sock
 interval = 1
-format-online = <icon-prev> <toggle> <icon-next> <icon-random> <label-time>  <label-song>
-icon-play = 
-icon-pause = ⏸
-icon-prev = 
-icon-next = 
-icon-random = 
+format-online = <icon-prev> <toggle> <icon-stop> <icon-next>  <icon-random> <icon-repeatone> <icon-repeat>  <label-time>  <label-song> 
+label-song = %artist% - %title%
+label-song-foreground = ${colors.black}
+label-time = %elapsed%/%total%
+label-time-foreground = ${colors.dgrey}
+icon-prev      = 
+icon-stop      = 
+icon-play      = 
+icon-pause     = 
+icon-next      = 
+icon-random    = 
+icon-repeatone = 
+icon-repeat    = 
+icon-prev-foreground  = ${colors.dgrey}
+icon-stop-foreground  = ${colors.dgrey}
+icon-play-foreground  = ${colors.dgrey}
+icon-pause-foreground = ${colors.blue}
+icon-next-foreground  = ${colors.dgrey}
+toggle-off-foreground = ${colors.dgrey}
+toggle-on-foreground  = ${colors.blue}
 
 [module/title]
 type = internal/xwindow
