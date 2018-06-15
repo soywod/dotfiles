@@ -40,7 +40,7 @@ db_file "~/.config/mpd/database"
 # for use of mpd --kill and some init scripts. This setting is disabled by
 # default and the pid file will not be stored.
 #
-pid_file "/run/mpd/pid"
+pid_file "/run/user/$UID/mpd/pid"
 #
 # This setting sets the location of the file which contains information about
 # most variables to get MPD back into the same general shape it was in before
@@ -82,7 +82,7 @@ sticker_file "~/.config/mpd/sticker.sql"
 # bind_to_address		"0.0.0.0"
 #
 # And for Unix Socket
-bind_to_address "/run/mpd/sock"
+bind_to_address "/run/user/$UID/mpd/sock"
 #
 # This setting is the TCP port that is desired for the daemon to get assigned
 # to.
