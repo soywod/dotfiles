@@ -106,12 +106,12 @@ bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selecti
 exec --no-startup-id "feh --bg-fill $HOME/.dotfiles/i3/background.jpg"
 exec --no-startup-id "compton --config $HOME/.dotfiles/compton/config"
 exec --no-startup-id $HOME/.dotfiles/polybar/start.sh
+exec --no-startup-id $HOME/.dotfiles/sound/jack.sh
 
-hide_edge_borders   none
 focus_follows_mouse no
+hide_edge_borders   none
 
 gaps inner 20
-# gaps outer 52
 
 default_border pixel 1
 
