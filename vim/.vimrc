@@ -69,6 +69,36 @@ function! ToggleQfList()
   endif
 endfunction
 
+function! Ranger()
+    let temp = tempname()
+    " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
+    " with ranger 1.4.2 through 1.5.0 instead.
+    "exec 'silent !ranger --choosefile=' . shellescape(temp)
+    if has("gui_running")
+        exec 'silent !xterm -e ranger --choosefiles=' . shellescape(temp)
+    else
+        exec 'silent !ranger --choosefiles=' . shellescape(temp)
+    endif
+    if !filereadable(temp)
+        redraw!
+        " Nothing to read.
+        return
+    endif
+    let names = readfile(temp)
+    if empty(names)
+        redraw!
+        " Nothing to open.
+        return
+    endif
+    " Edit the first item.
+    exec 'edit ' . fnameescape(names[0])
+    " Add any remaning items to the arg list/buffer list.
+    for name in names[1:]
+        exec 'argadd ' . fnameescape(name)
+    endfor
+    redraw!
+endfunction
+
 " Global settings ------------------------------------------------------------------------
 
 set background=light
@@ -154,6 +184,7 @@ autocmd InsertEnter * call InsertEnter()
 autocmd InsertLeave,TextChanged * call Save()
 " autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
 
+command! -bar Ranger call Ranger()
 command! -nargs=* Search call s:Search(<q-args>)
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" --glob "!.git/*" '.shellescape(<q-args>), 1, <bang>0)
 
@@ -162,15 +193,16 @@ command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-h
 let mapleader = ' '
 
 nnoremap <silent> <leader>n :Explore<CR>
+nnoremap <silent> <leader>r :<c-u>Ranger<cr>
 
-nnoremap <silent> <c-l> :bnext<CR>
-nnoremap <silent> <c-h> :bprev<CR>
+nnoremap <silent> <c-l> :bnext<cr>
+nnoremap <silent> <c-h> :bprev<cr>
 
-nnoremap <leader>f :Files<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>h :History<CR>
+nnoremap <leader>f :Files<cr>
+nnoremap <silent> <leader>b :Buffers<cr>
+nnoremap <silent> <leader>h :History<cr>
 
-nnoremap <silent> <leader>c :call ToggleQfList()<CR>
-nnoremap <silent> <leader>l :call ToggleLocList()<CR>
-" nnoremap <silent> <leader>p :PhoneticsPlay<CR>
+nnoremap <silent> <leader>c :call ToggleQfList()<cr>
+nnoremap <silent> <leader>l :call ToggleLocList()<cr>
+" nnoremap <silent> <leader>p :PhoneticsPlay<cr>
 
