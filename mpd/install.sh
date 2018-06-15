@@ -8,11 +8,10 @@ sudo pacman -S --needed --noconfirm mpd
 
 # -------------------------------------------------------------------- # Links #
 
-mkdir -p /run/user/$UID/mpd
 mkdir -p $HOME/.config/mpd/playlist
 
-cp config.tpl config.out
-sed -i s/\$UID/$UID/g config.out
+cp $DIRNAME/config.tpl $DIRNAME/config.out
+sed -i s/\$UID/$UID/g $DIRNAME/config.out
 
 ln -sf $DIRNAME/config.out $HOME/.config/mpd/mpd.conf
 

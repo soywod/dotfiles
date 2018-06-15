@@ -3,31 +3,46 @@ black = #494B53
 grey  = #f0f0f0
 white = #fafafa
 
-[bar/main]
-height = 32
-radius = 0
+[section/bar]
 background = ${colors.white}
-foreground = ${colors.black}
-border-bottom-size = 1
-border-bottom-color = ${colors.grey}
-padding-left = 1
-padding-right = 1
-module-margin-left = 1
-module-margin-right = 1
+cursor-click = pointer
 font-0 = SpaceMonoNL:pixelsize=12;3
 font-1 = FontAwesome5FreeSolid:pixelsize=12;3
-modules-left = battery memory cpu temperature filesystem backlight alsa mpd
+foreground = ${colors.black}
+height = 32
+module-margin-left = 1
+module-margin-right = 1
+padding-left = 1
+padding-right = 1
+radius = 0
+
+[bar/top]
+inherit = section/bar
+border-bottom-size = 1
+border-bottom-color = ${colors.grey}
+modules-left = mpd
+modules-right = date
+
+[bar/bottom]
+inherit = section/bar
+bottom = true
+border-top-size = 1
+border-top-color = ${colors.grey}
+modules-left = battery memory cpu temperature filesystem backlight alsa
 modules-center = title
-modules-right = network-speed wired-network xkeyboard date
-cursor-click = pointer
+modules-right = network-speed wired-network xkeyboard
 
 [module/mpd]
 type = internal/mpd
-host = socket:/run/mpd/socket
+host = /run/user/$UID/mpd.sock
+interval = 1
+format-online = <icon-prev> <toggle> <icon-next> <icon-random> <label-time>  <label-song>
+icon-play = 
+icon-pause = ⏸
+icon-prev = 
+icon-next = 
+icon-random = 
 
-; Seconds to sleep between progressbar/song timer sync
-; Default: 1
-interval = 2
 [module/title]
 type = internal/xwindow
 format-background = ${colors.white}
@@ -112,3 +127,4 @@ interval = 5
 label =  %percentage%%
 
 ; vim:ft=dosini
+
