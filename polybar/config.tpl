@@ -31,7 +31,7 @@ inherit = section/bar
 bottom = true
 border-top-size = 1
 border-top-color = ${colors.grey}
-modules-left = battery memory cpu temperature filesystem backlight alsa
+modules-left = battery memory cpu temperature filesystem volume
 modules-center = title
 modules-right = network-speed wired-network xkeyboard
 
@@ -77,16 +77,11 @@ interval = 60
 mount-0 = /
 label-mounted =  %free%
 
-[module/backlight]
-type = internal/backlight
-card = intel_backlight
-format = <label>
-label =  %percentage%%
-
-[module/alsa]
-type = internal/alsa
-label-volume =  %percentage%%
-label-muted  =   --%
+[module/volume]
+type = internal/volume
+format-volume = <label-volume> 
+label-volume = %percentage:3%%
+label-muted = ---% 
 
 [module/memory]
 type = internal/memory

@@ -97,8 +97,8 @@ bindsym XF86AudioRaiseVolume exec "amixer set Master 3%+"
 bindsym XF86AudioLowerVolume exec "amixer set Master 3%-"
 
 # Brightness controls
-bindsym XF86MonBrightnessUp   exec "light -A 3"
-bindsym XF86MonBrightnessDown exec "light -U 3"
+bindsym XF86MonBrightnessUp   exec "light -A 2"
+bindsym XF86MonBrightnessDown exec "light -S 1"
 
 # Screenshots controls
 bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selection clipboard -t image/png -i $f'"
