@@ -14,9 +14,9 @@ yellow = #c18401
 ; ------------------------------------------------------------- # Bar (common) #
 
 [section/bar]
-font-0 = SpaceMonoNL:pixelsize=12;3
-font-1 = FontAwesome5FreeSolid:pixelsize=12;3
-font-2 = SpaceMonoNL:pixelsize=17;4
+font-0 = SpaceMonoNL:pixelsize=12;2
+font-1 = FontAwesome5FreeSolid:pixelsize=12;2
+font-2 = DEATH_DEFY:pixelsize=20;5
 
 background = ${colors.white}
 foreground = ${colors.black}
@@ -93,9 +93,17 @@ time = %H:%M
 date-alt = %A %B %e
 time-alt =
 
-label = - %date%%time% -
+label = %date%%time%
 label-font = 3
 label-foreground = ${colors.greya}
+
+format-prefix = "- "
+format-prefix-font = 3
+format-prefix-foreground = ${colors.greyd}
+
+format-suffix = " -"
+format-suffix-font = 3
+format-suffix-foreground = ${colors.greyd}
 
 ; ------------------------------------------------------------------- # GitHub #
 
