@@ -4,7 +4,7 @@ DIRNAME="$(cd "$(dirname "$0")";pwd -P)"
 
 # --------------------------------------------------------------------- # Deps #
 
-sudo pacman -S --needed --noconfirm mpd
+sudo pacman -S --needed --noconfirm libmpdclient mpd
 
 # -------------------------------------------------------------------- # Links #
 

@@ -14,8 +14,8 @@ yellow = #c18401
 ; ------------------------------------------------------------- # Bar (common) #
 
 [section/bar]
-font-0 = SpaceMonoNL:pixelsize=12;2
-font-1 = FontAwesome5FreeSolid:pixelsize=12;2
+font-0 = SpaceMonoNL:pixelsize=12;3
+font-1 = FontAwesome5FreeSolid:pixelsize=12;3
 font-2 = DEATH_DEFY:pixelsize=20;5
 
 background = ${colors.white}
@@ -51,7 +51,7 @@ border-top-size = 1
 border-top-color = ${colors.greyf}
 modules-left = battery memory cpu temperature filesystem volume xkeyboard
 modules-center = title
-modules-right = eth-down-speed eth-up-speed wired-network
+modules-right = eth-down eth-up eth wlan-down wlan-up wlan-signal wlan
 
 ; ---------------------------------------------------------------------- # MPD #
 
@@ -250,46 +250,74 @@ type = internal/xwindow
 label-maxlen = 50
 label-foreground = ${colors.black}
 
-; ----------------------------------------------------------- # Download speed #
+; ------------------------------------------------------------------ # Network #
 
-[module/eth-down-speed]
+[section/network]
 type = internal/network
-interface = eth0
+interval = 5
+unknown-as-up = true
 accumulate-stats = true
+
+label-connected-foreground = ${colors.greya}
+format-connected-suffix-foreground = ${colors.black}
+format-disconnected =
+
+[module/eth]
+inherit = section/network
+interface = eth0
+
+label-connected = %local_ip%
+format-connected-suffix = " "
+
+[module/eth-down]
+inherit = section/network
+interface = eth0
 interval = 1
 
 label-connected = %downspeed%
 label-connected-foreground = ${colors.green}
 format-connected-suffix = " "
-format-connected-suffix-foreground = ${colors.black}
 
-format-disconnected =
-
-; ------------------------------------------------------------- # Upload speed #
-
-[module/eth-up-speed]
-type = internal/network
+[module/eth-up]
+inherit = section/network
 interface = eth0
 interval = 1
 
 label-connected = %upspeed%
 label-connected-foreground = ${colors.red}
 format-connected-suffix = " "
-format-connected-suffix-foreground = ${colors.black}
-format-disconnected =
 
-; ----------------------------------------------------------------- # Ethernet #
-
-[module/wired-network]
-type = internal/network
-interface = eth0
-interval = 5
+[module/wlan]
+inherit = section/network
+interface = wlan0
 
 label-connected = %local_ip%
-label-connected-foreground = ${colors.greya}
-format-connected-suffix = " "
-format-connected-suffix-foreground = ${colors.black}
-format-disconnected =
+format-connected-suffix = " "
+
+[module/wlan-down]
+inherit = section/network
+interface = wlan0
+interval = 1
+
+label-connected = %downspeed%
+label-connected-foreground = ${colors.green}
+format-connected-suffix = " "
+
+[module/wlan-up]
+inherit = section/network
+interface = wlan0
+interval = 1
+
+label-connected = %upspeed%
+label-connected-foreground = ${colors.red}
+format-connected-suffix = " "
+
+[module/wlan-signal]
+inherit = section/network
+interface = wlan0
+
+label-connected = (%essid%) %signal:2%%
+format-connected-suffix = " "
 
 ; vim:ft=dosini
 
