@@ -1,8 +1,9 @@
 [colors]
 black  = #494B53
 blue   = #4078f2
-grey   = #f0f0f0
-dgrey  = #d0d0d0
+greyf  = #f0f0f0
+greyd  = #d0d0d0
+greya  = #a0a1a7
 white  = #fafafa
 yellow = #c18401
 
@@ -22,7 +23,7 @@ radius = 0
 [bar/top]
 inherit = section/bar
 border-bottom-size = 1
-border-bottom-color = ${colors.grey}
+border-bottom-color = ${colors.greyf}
 modules-left = mpd
 modules-right = date
 
@@ -30,7 +31,7 @@ modules-right = date
 inherit = section/bar
 bottom = true
 border-top-size = 1
-border-top-color = ${colors.grey}
+border-top-color = ${colors.greyf}
 modules-left = battery memory cpu temperature filesystem volume
 modules-center = title
 modules-right = torrent network-speed wired-network xkeyboard
@@ -48,11 +49,9 @@ label = %output:3%
 type = internal/mpd
 host = /run/user/$UID/mpd.sock
 interval = 1
-format-online = <icon-prev> <toggle> <icon-stop> <icon-next>  <icon-random> <icon-repeatone> <icon-repeat>  <label-time>  <label-song> 
-label-song = %artist% - %title%
-label-song-foreground = ${colors.black}
-label-time = %elapsed%/%total%
-label-time-foreground = ${colors.dgrey}
+format-online = <icon-prev> <toggle> <icon-stop> <icon-next>  <icon-random> <icon-repeatone> <icon-repeat> <label-song> 
+label-song = / %artist% / %title:0:50%
+label-song-foreground = ${colors.greya}
 icon-prev      = 
 icon-stop      = 
 icon-play      = 
@@ -61,13 +60,13 @@ icon-next      = 
 icon-random    = 
 icon-repeatone = 
 icon-repeat    = 
-icon-prev-foreground  = ${colors.dgrey}
-icon-stop-foreground  = ${colors.dgrey}
-icon-play-foreground  = ${colors.dgrey}
+icon-prev-foreground  = ${colors.greyd}
+icon-stop-foreground  = ${colors.greyd}
+icon-play-foreground  = ${colors.greyd}
 icon-pause-foreground = ${colors.blue}
-icon-next-foreground  = ${colors.dgrey}
-toggle-off-foreground = ${colors.dgrey}
-toggle-on-foreground  = ${colors.blue}
+icon-next-foreground  = ${colors.greyd}
+toggle-off-foreground = ${colors.greyd}
+toggle-on-foreground  = ${colors.greya}
 
 [module/title]
 type = internal/xwindow
