@@ -41,9 +41,9 @@ type = custom/script
 exec = sed -e 's/\ */\n/g' /tmp/transmission | sed -ne 's/^Progress: \([0-9]*\)\.[0-9]*\%.*$/\1%/gw /dev/stdout' | tail -n 1
 exec-if = [ -f /tmp/transmission ]
 tail = true
-format = <label> 
+format =  <label>
 format-foreground = ${colors.blue}
-label = %output:3%
+label = %output:0:3%
 
 [module/mpd]
 type = internal/mpd
