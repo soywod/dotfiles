@@ -33,7 +33,16 @@ border-top-size = 1
 border-top-color = ${colors.grey}
 modules-left = battery memory cpu temperature filesystem volume
 modules-center = title
-modules-right = network-speed wired-network xkeyboard
+modules-right = torrent network-speed wired-network xkeyboard
+
+[module/torrent]
+type = custom/script
+exec = sed -e 's/\ */\n/g' /tmp/transmission | sed -ne 's/^Progress: \([0-9]*\)\.[0-9]*\%.*$/\1%/gw /dev/stdout' | tail -n 1
+exec-if = [ -f /tmp/transmission ]
+tail = true
+format = <label> 
+format-foreground = ${colors.blue}
+label = %output:3%
 
 [module/mpd]
 type = internal/mpd

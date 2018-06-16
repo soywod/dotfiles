@@ -1,5 +1,7 @@
 alias dc='docker-compose'
 
+alias dl='~/.dotfiles/transmission/start.sh'
+
 alias ga='git add'
 alias gcam='git commit --amend --no-edit'
 alias gcm='git commit -m'
@@ -17,4 +19,5 @@ alias ll='ls -alF'
 alias vi='vim'
 alias vimb='vim ~/.bashrc'
 alias vimc='vim ~/.dotfiles/vim/.vimrc'
+
 
