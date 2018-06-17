@@ -7,7 +7,7 @@ function usePCH {
 }
 
 function useUSB {
-  jackd -d alsa -d hw:USB -r 48000 -n 3 -p 64
+  jackd -d alsa -d hw:USB -r 48000 -n 3 -p 32
 }
 
 while sleep 1; do
