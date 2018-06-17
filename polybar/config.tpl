@@ -17,12 +17,9 @@ yellow = #c18401
 font-0 = SpaceMonoNL:pixelsize=12;3
 font-1 = FontAwesome5FreeSolid:pixelsize=12;3
 font-2 = DEATH_DEFY:pixelsize=20;5
-
 background = ${colors.white}
 foreground = ${colors.black}
-
 cursor-click = pointer
-
 height = 32
 module-margin-left  = 1
 module-margin-right = 1
@@ -34,10 +31,8 @@ radius = 0
 
 [bar/top]
 inherit = section/bar
-
 border-bottom-color = ${colors.greyf}
 border-bottom-size  = 1
-
 modules-left    = mpd
 modules-center  = date
 modules-right   = github transmission
@@ -59,10 +54,8 @@ modules-right = eth-down eth-up eth wlan-down wlan-up wlan-signal wlan
 type = internal/mpd
 host = /run/user/$UID/mpd.sock
 interval = 1
-
 label-song = / %artist% / %title:0:50%
 format-online = <icon-prev> <toggle> <icon-stop> <icon-next>  <icon-random> <icon-repeatone> <icon-repeat> <label-song> 
-
 icon-prev      = 
 icon-stop      = 
 icon-play      = 
@@ -71,7 +64,6 @@ icon-next      = 
 icon-random    = 
 icon-repeatone = 
 icon-repeat    = 
-
 icon-prev-foreground  = ${colors.greyd}
 icon-stop-foreground  = ${colors.greyd}
 icon-play-foreground  = ${colors.greyd}
@@ -79,28 +71,23 @@ icon-pause-foreground = ${colors.blue}
 icon-next-foreground  = ${colors.greyd}
 label-song-foreground = ${colors.greya}
 toggle-off-foreground = ${colors.greyd}
-toggle-on-foreground  = ${colors.greya}
+toggle-on-foreground  = ${colors.black}
 
 ; ----------------------------------------------------------------- # Datetime #
 
 [module/date]
 type = internal/date
 interval = 5
-
 date =
 time = %H:%M
-
 date-alt = %A %B %e
 time-alt =
-
 label = %date%%time%
 label-font = 3
-label-foreground = ${colors.greya}
-
+label-foreground = ${colors.black}
 format-prefix = "- "
 format-prefix-font = 3
 format-prefix-foreground = ${colors.greyd}
-
 format-suffix = " -"
 format-suffix-font = 3
 format-suffix-foreground = ${colors.greyd}
@@ -112,7 +99,6 @@ type = internal/github
 token = ${file:~/.github.token}
 empty-notifications = false
 interval = 10
-
 label  = %notifications:2% 
 format = <label>
 format-foreground = ${colors.blue}
@@ -124,7 +110,6 @@ type = custom/script
 exec = sed -e 's/\ */\n/g' /tmp/transmission | sed -ne 's/^Progress: \([0-9]*\)\.[0-9]*\%.*$/\1%/gw /dev/stdout' | tail -n 1
 exec-if = [ -f /tmp/transmission ]
 tail = true
-
 label  = %output:3% 
 format = <label>
 format-foreground = ${colors.blue}
@@ -137,23 +122,12 @@ adapter = AC
 battery = BAT0
 full-at = 99
 poll-interval = 1
-
-label-full  = Full
-format-full = <label-full>
-format-full-foreground = ${colors.greya}
-format-full-suffix = " "
-format-full-suffix-foreground = ${colors.black}
-
-label-charging  = %percentage:3%%
-format-charging = <label-charging> 
+label-full =
+label-charging  = %percentage:3%% 
 format-charging-foreground = ${colors.yellow}
-format-charging-suffix = " "
-format-charging-suffix-foreground = ${colors.black}
-
 label-discharging  = %percentage:3%%
 format-discharging = <label-discharging> <ramp-capacity>
-format-discharging-foreground = ${colors.greya}
-
+format-discharging-foreground = ${colors.black}
 ramp-capacity-0 = 
 ramp-capacity-1 = 
 ramp-capacity-2 = 
@@ -166,21 +140,16 @@ ramp-capacity-foreground = ${colors.black}
 [module/memory]
 type = internal/memory
 interval = 5
-
-label = %percentage_used:2%%
-label-foreground = ${colors.greya}
-format-suffix = " "
-format-suffix-foreground = ${colors.black}
+label = %percentage_used:2%% 
+label-foreground = ${colors.black}
 
 ; ---------------------------------------------------------------------- # CPU #
 
 [module/cpu]
 type = internal/cpu
 interval = 5
-label = %percentage:2%%
-label-foreground = ${colors.greya}
-format-suffix = " "
-format-suffix-foreground = ${colors.black}
+label = %percentage:2%% 
+label-foreground = ${colors.black}
 
 ; -------------------------------------------------------------- # Temperature #
 
@@ -189,15 +158,12 @@ type = internal/temperature
 interval = 5
 thermal-zone = 10
 warn-temperature = 60
-
 label = %temperature-c:5%
 format = <label> <ramp>
-format-foreground = ${colors.greya}
-
+format-foreground = ${colors.black}
 label-warn = %temperature-c:5%
 format-warn = <label-warn> <ramp>
 format-warn-foreground = ${colors.red}
-
 ramp-0 = 
 ramp-1 = 
 ramp-2 = 
@@ -211,37 +177,25 @@ ramp-foreground = ${colors.black}
 type = internal/fs
 interval = 60
 mount-0 = /
-
-label-mounted = %free:0:7%
-label-mounted-foreground = ${colors.greya}
-format-mounted-suffix = " "
-format-mounted-suffix-foreground = ${colors.black}
+label-mounted = %free:0:7% 
+label-mounted-foreground = ${colors.black}
 
 ; -------------------------------------------------------------------- # Audio #
 
 [module/volume]
 type = internal/volume
-
-label-volume  = %percentage:0:3%%
+label-volume  = %percentage:0:3%% 
 label-volume-foreground = ${colors.greya}
-format-volume-suffix = " "
-format-volume-suffix-foreground = ${colors.black}
-
-label-muted   = Full "
+label-muted   = " --- "
 label-muted-foreground = ${colors.greya}
-format-muted-suffix = " "
-format-muted-suffix-foreground = ${colors.black}
 
 ; ---------------------------------------------------------- # Keyboard layout #
 
 [module/xkeyboard]
 type = internal/xkeyboard
 blacklist-0  = caps lock
-
-label-layout = %layout:2%
+label-layout = %layout:2% 
 label-layout-foreground = ${colors.greya}
-format-suffix = " "
-format-suffix-foreground = ${colors.black}
 
 ; ------------------------------------------------------------- # Window title #
 
@@ -257,67 +211,51 @@ type = internal/network
 interval = 5
 unknown-as-up = true
 accumulate-stats = true
-
-label-connected-foreground = ${colors.greya}
-format-connected-suffix-foreground = ${colors.black}
 format-disconnected =
+label-connected-foreground = ${colors.black}
 
 [module/eth]
 inherit = section/network
 interface = eth0
-
-label-connected = %local_ip%
-format-connected-suffix = " "
+label-connected = %local_ip% 
 
 [module/eth-down]
 inherit = section/network
 interface = eth0
 interval = 1
-
-label-connected = %downspeed%
-label-connected-foreground = ${colors.green}
-format-connected-suffix = " "
+label-connected = %downspeed% 
+label-connected-foreground = ${colors.blue}
 
 [module/eth-up]
 inherit = section/network
 interface = eth0
 interval = 1
-
-label-connected = %upspeed%
-label-connected-foreground = ${colors.red}
-format-connected-suffix = " "
+label-connected = %upspeed% 
+label-connected-foreground = ${colors.greya}
 
 [module/wlan]
 inherit = section/network
 interface = wlan0
-
-label-connected = %local_ip%
-format-connected-suffix = " "
+label-connected = %local_ip% 
 
 [module/wlan-down]
 inherit = section/network
 interface = wlan0
 interval = 1
-
-label-connected = %downspeed%
-label-connected-foreground = ${colors.green}
-format-connected-suffix = " "
+label-connected = %downspeed% 
+label-connected-foreground = ${colors.blue}
 
 [module/wlan-up]
 inherit = section/network
 interface = wlan0
 interval = 1
-
-label-connected = %upspeed%
-label-connected-foreground = ${colors.red}
-format-connected-suffix = " "
+label-connected = %upspeed% 
+label-connected-foreground = ${colors.greya}
 
 [module/wlan-signal]
 inherit = section/network
 interface = wlan0
-
-label-connected = (%essid%) %signal:2%%
-format-connected-suffix = " "
+label-connected = (%essid%) %signal:2%% 
 
 ; vim:ft=dosini
 
