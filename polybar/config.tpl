@@ -44,7 +44,7 @@ inherit = section/bar
 bottom = true
 border-top-size = 1
 border-top-color = ${colors.greyf}
-modules-left = battery memory cpu temperature filesystem volume xkeyboard
+modules-left = battery cpu memory temperature filesystem volume xkeyboard
 modules-center = title
 modules-right = eth-down eth-up eth wlan-down wlan-up wlan-signal wlan
 
