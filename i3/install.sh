@@ -4,7 +4,7 @@ DIRNAME="$(cd "$(dirname "$0")";pwd -P)"
 
 # --------------------------------------------------------------------- # Deps #
 
-sudo pacman -S --needed --noconfirm feh i3-gaps scrot xclip
+sudo pacman -S --needed --noconfirm feh i3-gaps i3lock scrot xclip
 
 # -------------------------------------------------------------------- # Links #
 
