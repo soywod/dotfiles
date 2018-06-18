@@ -1,0 +1,30 @@
+shopt -s autocd
+shopt -s checkjobs
+shopt -s checkwinsize
+shopt -s cdspell
+
+stty -ixon
+
+export GIT_PROMPT_START="\[\e[36m\]\w\[\e[m\]"
+export GIT_PROMPT_END=" \[\e[31m\]➜\[\e[m\] "
+
+export HISTCONTROL=ignoreboth:erasedups
+export HISTFILE=~/.bash_eternal_history
+export HISTFILESIZE=-1
+export HISTSIZE=-1
+export HISTTIMEFORMAT="[%F %T] "
+
+if [ -f ~/.bash-git-prompt/gitprompt.sh ]; then
+	source ~/.bash-git-prompt/gitprompt.sh
+fi
+
+if [ -f ~/.bash_aliases ]; then
+	source ~/.bash_aliases
+fi
+
+if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+  exec startx
+fi
+
+# vim:ft=sh
+

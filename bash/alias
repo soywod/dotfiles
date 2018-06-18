@@ -1,3 +1,12 @@
+if [ -x /usr/bin/dircolors ]; then
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
+
 alias dc='docker-compose'
 
 alias dl='~/.dotfiles/transmission/start.sh'
@@ -20,4 +29,10 @@ alias vi='vim'
 alias vimb='vim ~/.bashrc'
 alias vimc='vim ~/.dotfiles/vim/.vimrc'
 
+alias s='source ~/.bashrc'
+
+alias xcopy='xclip -selection clipboard'
+alias xpaste='xclip -selection clipboard -o'
+
+# vim:ft=sh
 
