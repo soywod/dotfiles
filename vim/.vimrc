@@ -1,3 +1,5 @@
+" ------------------------------------------------------------------- # Plugin #
+
 call plug#begin()
 
 " LSC
@@ -8,29 +10,28 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
 Plug 'junegunn/fzf.vim'
 
 " Utilities
-" Plug 'ap/vim-buftabline'
 Plug 'mattn/emmet-vim'
-Plug 'soywod/kronos.vim'
 Plug 'shougo/neocomplete.vim'
 Plug 'ervandew/supertab'
 Plug 'junegunn/vader.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-" Plug 'soywod/vim-keepeye'
-" Plug 'soywod/vim-phonetics'
 Plug 'tpope/vim-surround'
-" Plug 'blindfs/vim-taskwarrior'
 Plug 'kopischke/vim-stay'
+Plug 'soywod/kronos.vim'
+Plug 'soywod/mpc.vim'
+Plug 'soywod/vim-phonetics'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
+Plug 'sheerun/vim-polyglot'
 " Plug 'herringtondarkholme/yats.vim'
 " Plug 'pangloss/vim-javascript'
-Plug 'sheerun/vim-polyglot'
+
 
 call plug#end()
 
-" Functions ------------------------------------------------------------------------------
+" ----------------------------------------------------------------- # Function #
 
 function! FoldText()
   return getline(v:foldstart) . ' '
@@ -69,7 +70,7 @@ function! ToggleQfList()
   endif
 endfunction
 
-" Global settings ------------------------------------------------------------------------
+" ------------------------------------------------------------------ # Setting #
 
 set background=light
 set backspace=indent,eol,start
@@ -102,57 +103,54 @@ set termguicolors
 set ttimeoutlen=50
 set viewoptions=cursor,folds,slash,unix
 
+" -------------------------------------------------------------------- # Theme #
+
 colorscheme one
 
 highlight clear FoldColumn
 highlight clear SignColumn
+highlight FoldColumn   guifg=#d3d3d3
+highlight Folded       guibg=#fafafa guifg=#d3d3d3
 highlight StatusLineNC guifg=#f0f0f0 guibg=#f0f0f0
-highlight StatusLine guifg=#494B53 guibg=#f0f0f0
-highlight FoldColumn guifg=#d3d3d3
-highlight Folded guibg=#fafafa guifg=#d3d3d3
-highlight User1 guibg=#e45649 guifg=#fafafa
+highlight StatusLine   guifg=#494B53 guibg=#f0f0f0
+highlight User1        guibg=#e45649 guifg=#fafafa
 
-" LSC ------------------------------------------------------------------------------------
+" -------------------------------------------------------------- # Plugin conf #
+
+let g:jsx_ext_required = 1
 
 let g:lsc_auto_map = v:true
 let g:lsc_preview_split_direction = 'below'
 let g:lsc_server_commands = {
-  \ 'javascript': 'node_modules/.bin/javascript-typescript-stdio',
-  \ 'javascript.jsx': 'node_modules/.bin/javascript-typescript-stdio',
-  \ 'typescript': 'node_modules/.bin/javascript-typescript-stdio',
-  \ 'typescript.tsx': 'node_modules/.bin/javascript-typescript-stdio',
-  \ 'typescriptreact': 'node_modules/.bin/javascript-typescript-stdio'
-\ }
+  \'javascript':      'node_modules/.bin/javascript-typescript-stdio',
+  \'javascript.jsx':  'node_modules/.bin/javascript-typescript-stdio',
+  \'typescript':      'node_modules/.bin/javascript-typescript-stdio',
+  \'typescript.tsx':  'node_modules/.bin/javascript-typescript-stdio',
+  \'typescriptreact': 'node_modules/.bin/javascript-typescript-stdio',
+\}
 
-" Completion -----------------------------------------------------------------------------
-
+let g:mpc_host = '/run/user/$UID/mpd.sock'
 let g:neocomplete#enable_at_startup = 1
-
-" JavaScript -----------------------------------------------------------------------------
-
-let g:jsx_ext_required = 1
-
-" SuperTab -------------------------------------------------------------------------------
-
 let g:SuperTabDefaultCompletionType = '<C-n>'
-
-" Emmet ----------------------------------------------------------------------------------
 
 let g:user_emmet_install_global = 1
 let g:user_emmet_leader_key = ','
 
-" Auto commands --------------------------------------------------------------------------
+" ------------------------------------------------------------------ # Command #
 
 autocmd FileType qf wincmd J
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd InsertEnter * call InsertEnter()
 autocmd InsertLeave,TextChanged * call Save()
-" autocmd BufNewFile,BufRead *.tsx set filetype=javascript.jsx
 
 command! -nargs=* Search call s:Search(<q-args>)
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" --glob "!.git/*" '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find call fzf#vim#grep(
+  \'rg --column --line-number --no-heading --fixed-strings --ignore-case ' .
+  \'--hidden --follow --color "always" --glob "!.git/*" ' .
+  \shellescape(<q-args>), 1, <bang>0
+\)
 
-" Mapping --------------------------------------------------------------------------------
+" ------------------------------------------------------------------ # Mapping #
 
 let mapleader = ' '
 
