@@ -95,6 +95,10 @@ exec "xset r rate 250 33"
 bindsym XF86AudioMute        exec "amixer set Master toggle"
 bindsym XF86AudioRaiseVolume exec "amixer set Master 3%+"
 bindsym XF86AudioLowerVolume exec "amixer set Master 3%-"
+bindsym XF86AudioPause       exec "mpc -h /run/user/$UID/mpd.sock toggle"
+bindsym XF86AudioPlay        exec "mpc -h /run/user/$UID/mpd.sock toggle"
+bindsym XF86AudioPrev        exec "mpc -h /run/user/$UID/mpd.sock prev"
+bindsym XF86AudioNext        exec "mpc -h /run/user/$UID/mpd.sock next"
 
 # Brightness controls
 bindsym XF86MonBrightnessUp   exec "light -A 2"
