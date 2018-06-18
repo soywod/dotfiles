@@ -1,25 +1,74 @@
+# -------------------------------------------------------- # Playback loopback #
+
+pcm.amix {
+  type dmix
+  ipc_key 219345
+  # slave.pcm "hw:USB"
+  slave.pcm "hw:Loopback,0,0"
+}
+
+pcm.asoftvol {
+  type softvol
+  slave.pcm "amix"
+
+  control {
+    name PCM
+  }
+
+  min_dB -51.0
+  max_dB   0.0
+}
+
+pcm.cloop {
+  type dsnoop
+  ipc_key 219348
+  slave.pcm "hw:Loopback,1,0"
+}
+
+# --------------------------------------------------------- # Capture loopback #
+
+pcm.asnoop {
+  type dsnoop
+  ipc_key 219346
+  slave.pcm "hw:Loopback,0,1"
+}
+
+pcm.ploop {
+  type plug
+  ipc_key 219347
+  slave.pcm "hw:Loopback,1,1"
+}
+
+# ---------------------------------------------------------- # Duplex loopback #
+
+pcm.aduplex {
+  type asym
+  playback.pcm "asoftvol"
+  capture.pcm "asnoop"
+}
+
+# ----------------------------------------------------------- # Default device #
+
+defaults.pcm.rate_converter "samplerate_best"
+
 pcm.!default {
   type plug
-  slave {
-    pcm "jack"
+  slave.pcm "aduplex"
+
+  hint {
+    show on
+    description "Duplex Loopback"
   }
 }
 
-# ctl.mixer0 {
-#   type hw
-#   card 5
-# }
+ctl.!default {
+  type hw
+  card "PCH"
+}
 
-pcm.jack {
-  type jack
-  playback_ports {
-    0 system:playback_1
-    1 system:playback_2
-  }
-  capture_ports {
-    0 system:capture_1
-    1 system:capture_2
-  }
+pcm.card0 {
+  type plug
+  slave.pcm "aduplex"
 }
 
 # vim:ft=config

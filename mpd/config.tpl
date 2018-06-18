@@ -64,14 +64,14 @@ sticker_file "~/.config/mpd/sticker.sql"
 # initialization. This setting is disabled by default and MPD is run as the
 # current user.
 #
-# user "nobody"
+user "soywod"
 #
 # This setting specifies the group that MPD will run as. If not specified
 # primary group of user specified with "user" setting will be used (if set).
 # This is useful if MPD needs to be a member of group such as "audio" to
 # have permission to use sound card.
 #
-# user "nobody"
+# group "soywod"
 #
 # This setting sets the address for the daemon to listen on. Careful attention
 # should be paid if this is assigned to anything other then the default, any.
@@ -343,6 +343,12 @@ input {
 #	mixer_type      "none"			# optional
 #}
 #
+
+audio_output {
+  type "jack"
+  name "JACK Device"
+}
+
 ###############################################################################
 
 
