@@ -6,8 +6,9 @@ call plug#begin()
 Plug 'natebosch/vim-lsc'
 
 " Fuzzy finder
-Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
+" Plug 'junegunn/fzf.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 
 " Utilities
 Plug 'mattn/emmet-vim'
@@ -33,16 +34,16 @@ call plug#end()
 
 " ----------------------------------------------------------------- # Function #
 
-function! FoldText()
+function! s:FoldText()
   return getline(v:foldstart) . ' '
 endfunction
 
-function! InsertEnter()
+function! s:InsertEnter()
   highlight StatusLine guifg=#fafafa guibg=#4078f2
 endfunction
 
-function! Save()
-  if &buftype != 'nofile' && &ro == 0 | :write | endif
+function! s:Save()
+  if &buftype != 'nofile' && ! &ro && ! empty(@%) | :write | endif
   highlight StatusLine guifg=#494B53 guibg=#f0f0f0
 endfunction
 
@@ -52,22 +53,39 @@ function! StatusLineCounters()
   return ' | qf:' . l:qflen . ' | loc:' . l:loclen . ' '
 endfunction
 
-function! ToggleLocList()
-  if (getloclist('.') != [])
-    if (filter(getwininfo(), 'v:val.loclist') == [])
-      lopen
-    else
-      lclose
-    endif
-  endif
+function! s:Find(opts)
+  let cmd = 'find ' . a:opts
+  let output = map(systemlist(cmd), 's:FindLine(v:val)')
+
+  call setqflist(output)
+  copen
 endfunction
 
-function! ToggleQfList()
-  if (filter(getwininfo(), 'v:val.quickfix') == [])
-    copen
-  else
-    cclose
-  endif
+function! s:FindLine(filename)
+  let text = fnamemodify(a:filename, ':t')
+
+  return {
+    \'filename': a:filename,
+    \'text': text,
+  \}
+endfunction
+
+function! s:Grep(opts)
+  let cmd = 'grep ' . a:opts
+  let output = map(systemlist(cmd), 's:GrepLine(v:val)')
+
+  call setqflist(output)
+  copen
+endfunction
+
+function! s:GrepLine(line)
+  let [filename, lnum; text] = split(a:line, ':')
+
+  return {
+    \'filename': filename,
+    \'lnum': lnum,
+    \'text': join(text, ':'),
+  \}
 endfunction
 
 " ------------------------------------------------------------------ # Setting #
@@ -81,7 +99,7 @@ set expandtab
 set foldcolumn=2
 set foldlevelstart=99
 set foldmethod=syntax
-set foldtext=FoldText()
+set foldtext=s:FoldText()
 set hidden
 set history=1000
 set laststatus=2
@@ -140,15 +158,11 @@ let g:user_emmet_leader_key = ','
 
 autocmd FileType qf wincmd J
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-autocmd InsertEnter * call InsertEnter()
-autocmd InsertLeave,TextChanged * call Save()
+autocmd InsertEnter * call s:InsertEnter()
+autocmd InsertLeave,TextChanged * call s:Save()
 
-command! -nargs=* Search call s:Search(<q-args>)
-command! -bang -nargs=* Find call fzf#vim#grep(
-  \'rg --column --line-number --no-heading --fixed-strings --ignore-case ' .
-  \'--hidden --follow --color "always" --glob "!.git/*" ' .
-  \shellescape(<q-args>), 1, <bang>0
-\)
+command! -nargs=* Grep call s:Grep(<q-args>)
+command! -nargs=* Find call s:Find(<q-args>)
 
 " ------------------------------------------------------------------ # Mapping #
 
@@ -158,11 +172,11 @@ nnoremap <silent> <leader>n :Explore<CR>
 
 nnoremap <silent> <c-l> :bnext<cr>
 nnoremap <silent> <c-h> :bprev<cr>
+nnoremap <silent> <c-c> :bdelete<cr>
 
-nnoremap <leader>f :Files<cr>
-nnoremap <silent> <leader>b :Buffers<cr>
-nnoremap <silent> <leader>h :History<cr>
+nnoremap <silent> <c-p> :cprev<cr>
+nnoremap <silent> <c-n> :cnext<cr>
 
-nnoremap <silent> <leader>c :call ToggleQfList()<cr>
-nnoremap <silent> <leader>l :call ToggleLocList()<cr>
+nnoremap <leader>f :Find -iname 
+nnoremap <leader>g :Grep -Inri 
 
