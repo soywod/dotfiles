@@ -54,11 +54,12 @@ function! StatusLineCounters()
 endfunction
 
 function! s:Find(opts)
-  let cmd = 'find ' . a:opts
+  let opts = substitute(a:opts, ' \{1,}', '.*', 'g')
+  let cmd = 'find -regextype sed -iregex ".*' . opts . '.*"'
   let output = map(systemlist(cmd), 's:FindLine(v:val)')
 
   call setqflist(output)
-  copen
+  if ! empty(getqflist()) | cfirst | endif
 endfunction
 
 function! s:FindLine(filename)
@@ -71,11 +72,11 @@ function! s:FindLine(filename)
 endfunction
 
 function! s:Grep(opts)
-  let cmd = 'grep ' . a:opts
+  let cmd = 'grep -Inri ' . a:opts
   let output = map(systemlist(cmd), 's:GrepLine(v:val)')
 
   call setqflist(output)
-  copen
+  if ! empty(getqflist()) | cfirst | endif
 endfunction
 
 function! s:GrepLine(line)
@@ -86,6 +87,19 @@ function! s:GrepLine(line)
     \'lnum': lnum,
     \'text': join(text, ':'),
   \}
+endfunction
+
+function! ToggleLocList()
+  let locempty = empty(getloclist('.'))
+  if  locempty | call setloclist(0, []) | endif
+
+  let locopen  = filter(getwininfo(), 'v:val.loclist') == []
+  if  locopen  | lopen | else | lclose  | endif
+endfunction
+
+function! ToggleQfList()
+  let qfopen = filter(getwininfo(), 'v:val.quickfix') == []
+  if  qfopen | copen | else | cclose | endif
 endfunction
 
 " ------------------------------------------------------------------ # Setting #
@@ -161,22 +175,23 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd InsertEnter * call s:InsertEnter()
 autocmd InsertLeave,TextChanged * call s:Save()
 
-command! -nargs=* Grep call s:Grep(<q-args>)
 command! -nargs=* Find call s:Find(<q-args>)
+command! -nargs=* Grep call s:Grep(<q-args>)
 
 " ------------------------------------------------------------------ # Mapping #
 
-let mapleader = ' '
+nnoremap <silent> n :Explore<CR>
 
-nnoremap <silent> <leader>n :Explore<CR>
+nnoremap <silent> <C-l> :bnext<CR>
+nnoremap <silent> <C-h> :bprev<CR>
+nnoremap <silent> <C-c> :bdelete<CR>
 
-nnoremap <silent> <c-l> :bnext<cr>
-nnoremap <silent> <c-h> :bprev<cr>
-nnoremap <silent> <c-c> :bdelete<cr>
+nnoremap <silent> <C-p> :cprev<CR>
+nnoremap <silent> <C-n> :cnext<CR>
 
-nnoremap <silent> <c-p> :cprev<cr>
-nnoremap <silent> <c-n> :cnext<cr>
+nnoremap <silent> l :call ToggleLocList()<CR>
+nnoremap <silent> c :call ToggleQfList()<CR>
 
-nnoremap <leader>f :Find -iname 
-nnoremap <leader>g :Grep -Inri 
+nnoremap f :Find 
+nnoremap g :Grep 
 
