@@ -15,4 +15,5 @@ fi
 
 ln -sf $DIRNAME/alias ~/.bash_aliases
 ln -sf $DIRNAME/config ~/.bashrc
+ln -sf $DIRNAME/config ~/.bash_profile
 
