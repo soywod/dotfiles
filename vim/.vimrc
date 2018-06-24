@@ -54,10 +54,15 @@ function! StatusLineCounters()
   return ' | qf:' . l:qflen . ' | loc:' . l:loclen . ' '
 endfunction
 
-function! s:Find(opts)
-  let opts = substitute(a:opts, ' \{1,}', '.*', 'g')
-  let cmd = 'find -regextype sed -iregex ".*' . opts . '.*"'
-  let output = map(systemlist(cmd), 's:FindLine(v:val)')
+function! s:Find(pattern)
+  let gexclude = map(s:GitIgnoreFiles(), '"-path \"" . v:val . "\" -prune -o"')
+  let dexclude = ['node_modules', '.git']
+  call map(dexclude, '"-path \"./" . v:val . "\" -prune -o"')
+
+  let pattern = '.*' . substitute(a:pattern, ' \+', '.*', 'g') . '.*'
+  let exclude = join(gexclude + dexclude, ' ')
+  let cmd     = join(['find', exclude, '-iregex', pattern, '-print'], ' ')
+  let output  = map(systemlist(cmd), 's:FindLine(v:val)')
 
   call setqflist(output)
   if ! empty(getqflist()) | cfirst | endif
@@ -72,12 +77,34 @@ function! s:FindLine(filename)
   \}
 endfunction
 
-function! s:Grep(opts)
-  let cmd = 'grep -Inri ' . a:opts
-  let output = map(systemlist(cmd), 's:GrepLine(v:val)')
+function! s:GitIgnoreFiles()
+  try
+    let files = readfile('.gitignore')
+    call filter(files, 'v:val !~? "^ *#" && v:val !~? "^ *$"')
+  catch
+    let files = []
+  endtry
+
+  return files
+endfunction
+
+function! s:Grep(pattern)
+  let gexclude = map(s:GitIgnoreFiles(), '"--exclude=" . v:val')
+  let dexclude = ['node_modules', '.git']
+  call map(dexclude, '"--exclude-dir=" . v:val')
+
+  let exclude = join(gexclude + dexclude, ' ')
+  let cmd     = join(['grep', '-Inri', exclude, a:pattern], ' ')
+  let output  = map(systemlist(cmd), 's:GrepLine(v:val)')
 
   call setqflist(output)
-  if ! empty(getqflist()) | cfirst | endif
+
+  if ! empty(getqflist())
+    cfirst
+    setlocal hlsearch
+    call search(a:pattern)
+    call matchadd('Search', a:pattern)
+  endif
 endfunction
 
 function! s:GrepLine(line)
