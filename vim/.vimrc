@@ -25,10 +25,11 @@ Plug 'soywod/vim-phonetics'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
-Plug 'sheerun/vim-polyglot'
+Plug 'soywod/typescript.vim'
+" Plug 'sheerun/vim-polyglot'
 " Plug 'herringtondarkholme/yats.vim'
-" Plug 'pangloss/vim-javascript'
-
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 
 call plug#end()
 
@@ -141,11 +142,14 @@ colorscheme one
 
 highlight clear FoldColumn
 highlight clear SignColumn
-highlight FoldColumn   guifg=#d3d3d3
-highlight Folded       guibg=#fafafa guifg=#d3d3d3
-highlight StatusLineNC guifg=#f0f0f0 guibg=#f0f0f0
-highlight StatusLine   guifg=#494B53 guibg=#f0f0f0
-highlight User1        guibg=#e45649 guifg=#fafafa
+highlight FoldColumn    guifg=#d3d3d3
+highlight Folded        guibg=#fafafa guifg=#d3d3d3
+highlight StatusLineNC  guifg=#f0f0f0 guibg=#f0f0f0
+highlight StatusLine    guifg=#494B53 guibg=#f0f0f0
+highlight User1         guibg=#e45649 guifg=#fafafa
+highlight xmlTag        guifg=#494B53
+highlight xmlEndTag     guifg=#d3d3d3
+highlight xmlAttrib     guifg=#0184bc
 
 " -------------------------------------------------------------- # Plugin conf #
 
@@ -180,18 +184,20 @@ command! -nargs=* Grep call s:Grep(<q-args>)
 
 " ------------------------------------------------------------------ # Mapping #
 
-nnoremap <silent> n :Explore<CR>
+nnoremap <silent> n :Explore<cr>
 
-nnoremap <silent> <C-l> :bnext<CR>
-nnoremap <silent> <C-h> :bprev<CR>
-nnoremap <silent> <C-c> :bdelete<CR>
+nnoremap <silent> <c-l> :bnext<cr>
+nnoremap <silent> <c-h> :bprev<cr>
+nnoremap <silent> <c-c> :bdelete<cr>
 
-nnoremap <silent> <C-p> :cprev<CR>
-nnoremap <silent> <C-n> :cnext<CR>
+nnoremap <silent> <c-p> :cprev<cr>
+nnoremap <silent> <c-n> :cnext<cr>
 
-nnoremap <silent> l :call ToggleLocList()<CR>
-nnoremap <silent> c :call ToggleQfList()<CR>
+nnoremap <silent> l :call ToggleLocList()<cr>
+nnoremap <silent> c :call ToggleQfList()<cr>
 
 nnoremap f :Find 
 nnoremap g :Grep 
+
+nnoremap s :echo synIDattr(synID(line('.'), col('.'), 0), 'name')<cr>
 
