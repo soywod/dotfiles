@@ -1,0 +1,61 @@
+macro index,pager i1 '<sync-mailbox><enter-command>source /home/soywod/.config/mutt/accounts/main.muttrc<enter><change-folder>!<enter>'
+source /home/soywod/.config/mutt/accounts/main.muttrc
+macro index,pager i2 '<sync-mailbox><enter-command>source /home/soywod/.config/mutt/accounts/strategy-partner.muttrc<enter><change-folder>!<enter>'
+
+# color indicator color23 color251
+
+color   normal            default         default
+color   index_number      red             default
+color   index_collapsed   red             default
+color   index_flags       color254        default        .
+color   index_flags       brightblue      default        ~N
+color   index_date        green           default
+color   index_author      cyan            default        .
+color   index_subject     default         default        .
+color   index             brightdefault   default        ~N
+color   index_size        yellow          default
+# color   index             green           default        ~N
+# color   index             green           default        ~v~(~N)
+# color   index             red             default        ~F
+# color   index             cyan            default        ~T
+# color   index             blue            default        ~D
+# color   index_label       brightred       default
+# color   index_tags        red             default
+# color   index_tag         brightgreen     default        "signed"
+# color   index_tag         yellow          default        "attachment"
+color   body              brightblue      default        ([a-zA-Z\+]+)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+ # urls
+color   body              brightblue      default        [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+ # mail addresses
+color   attachment        yellow          default
+color   signature         green           default
+# color   search            brightred       black
+
+color   indicator         brightdefault   color254
+color   error             brightred       default
+color   status            black           default
+color   tree              brightcyan      default
+color   tilde             cyan            default
+color   progress          white           red
+
+color  sidebar_indicator  brightdefault   default
+color  sidebar_highlight  cyan            brightblack
+color  sidebar_divider    color254        default
+color  sidebar_flagged    red             default
+color  sidebar_new        brightblue      default
+
+color   hdrdefault        color81         default
+color   header            green           default        "^Subject: .*"
+color   header            yellow          default        "^Date: .*"
+color   header            red             default        "^Tags: .*"
+
+color   quoted            color60         default
+color   quoted1           yellow          default
+
+color   body              brightgreen     default        "Good signature from.*"
+color   body              green           default        "Fingerprint:( [A-Z0-9]{4}){5} ( [A-Z0-9]{4}){5}"
+color   body              brightred       default        "Bad signature from.*"
+color   body              brightred       default        "Note: This key has expired!"
+color   body              brightmagenta   default        "Problem signature from.*"
+color   body              brightmagenta   default        "WARNING: .*"
+
+# vim:ft=neomuttrc
+
