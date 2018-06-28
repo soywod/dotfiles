@@ -109,11 +109,11 @@ bindsym XF86MonBrightnessDown exec "light -S 1"
 # Screenshots controls
 bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selection clipboard -t image/png -i $f'"
 
+exec --no-startup-id "dunst"
 exec --no-startup-id "feh --bg-fill $HOME/.dotfiles/i3/wallpaper.png"
 exec --no-startup-id "compton --config $HOME/.dotfiles/compton/config"
 exec --no-startup-id $HOME/.dotfiles/polybar/start.sh
 exec --no-startup-id $HOME/.dotfiles/jack/start.sh
-exec --no-startup-id "dunst -config $HOME/.dotfiles/dunst/config"
 
 focus_follows_mouse no
 hide_edge_borders   none
