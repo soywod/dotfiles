@@ -9,5 +9,6 @@ sudo pacman -S --needed --noconfirm libnotify dunst
 # --------------------------------------------------------------------- # Link #
 
 mkdir -p ~/.config/dunst
-ln -sf $DIRNAME/config ~/.config/dunst/dunstrc
+ln -sf $DIRNAME/dunst.conf ~/.config/dunst/dunstrc
+ln -sf $DIRNAME/notify.* ~/.config/dunst/
 
