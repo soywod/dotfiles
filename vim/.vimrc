@@ -19,15 +19,16 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'kopischke/vim-stay'
-Plug 'soywod/kronos.vim'
+Plug 'soywod/phonetics.vim'
+Plug 'soywod/keepeye.vim'
 Plug 'soywod/mpc.vim'
-Plug 'soywod/vim-phonetics'
+Plug 'soywod/kronos.vim'
+Plug 'soywod/hermes.vim'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
 Plug 'soywod/typescript.vim'
 " Plug 'sheerun/vim-polyglot'
-" Plug 'herringtondarkholme/yats.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 
@@ -189,15 +190,19 @@ let g:lsc_server_commands = {
   \'javascript.jsx':  'node_modules/.bin/javascript-typescript-stdio',
   \'typescript':      'node_modules/.bin/javascript-typescript-stdio',
   \'typescript.tsx':  'node_modules/.bin/javascript-typescript-stdio',
-  \'typescriptreact': 'node_modules/.bin/javascript-typescript-stdio',
 \}
 
 let g:mpc_host = '/run/user/$UID/mpd.sock'
 let g:neocomplete#enable_at_startup = 1
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
-let g:user_emmet_install_global = 1
+let g:emmet_html5 = 0
+let g:user_emmet_mode = 'i'
 let g:user_emmet_leader_key = ','
+
+let g:keepeye_features = ['notification']
+
+let g:kronos_gist_sync = 1
 
 " ------------------------------------------------------------------ # Command #
 
@@ -211,7 +216,9 @@ command! -nargs=* Grep call s:Grep(<q-args>)
 
 " ------------------------------------------------------------------ # Mapping #
 
-nnoremap <silent> n :Explore<cr>
+let mapleader = ' '
+
+nnoremap <silent> <leader>n :Explore<cr>
 
 nnoremap <silent> <c-l> :bnext<cr>
 nnoremap <silent> <c-h> :bprev<cr>
@@ -220,11 +227,13 @@ nnoremap <silent> <c-c> :bdelete<cr>
 nnoremap <silent> <c-p> :cprev<cr>
 nnoremap <silent> <c-n> :cnext<cr>
 
-nnoremap <silent> l :call ToggleLocList()<cr>
-nnoremap <silent> c :call ToggleQfList()<cr>
+nnoremap <silent> <leader>l :call ToggleLocList()<cr>
+nnoremap <silent> <leader>c :call ToggleQfList()<cr>
+nnoremap <silent> <leader>t :Kronos<cr>
+nnoremap <silent> <leader>p :PhoneticsPlay<cr>
 
-nnoremap f :Find 
-nnoremap g :Grep 
+nnoremap <leader>f :Find 
+nnoremap <leader>g :Grep 
 
-nnoremap s :echo synIDattr(synID(line('.'), col('.'), 0), 'name')<cr>
+nnoremap <leader>s :echo synIDattr(synID(line('.'), col('.'), 0), 'name')<cr>
 
