@@ -1,0 +1,35 @@
+# vim: filetype=neomuttrc
+# muttrc file for account ovh
+set realname = "Clément DOUIN"
+set from = "contact@clementdouin.ovh"
+set smtp_url = "smtp://contact@mail.clementdouin.ovh:25/"
+set sendmail = "/usr/bin/msmtp -a ovh"
+set folder = "~/.mail/ovh"
+set header_cache = ~/.config/mutt/accounts/ovh/cache/headers
+set message_cachedir = ~/.config/mutt/accounts/ovh/cache/bodies
+set certificate_file = ~/.config/mutt/accounts/ovh/certificates
+source "~/.config/mutt/credentials/getmuttpass ovh |"
+
+alias me Clément DOUIN <contact@clementdouin.ovh>
+
+set mbox_type = Maildir
+set ssl_starttls = yes
+set ssl_force_tls = yes
+set spoolfile = "+INBOX"
+set record = "+Sent"
+set postponed = "+Drafts"
+set trash = "+Trash"
+
+bind index,pager gg noop
+bind index,pager g noop
+bind index gg first-entry
+
+unmailboxes *
+macro index,pager 1 "<change-folder>=INBOX<enter>" "Go to inbox."
+macro index,pager 2 "<change-folder>=Sent<enter>" "Go to sent."
+macro index,pager 3 "<change-folder>=Drafts<enter>" "Go to drafts."
+macro index,pager 4 "<change-folder>=Junk<enter>" "Go to spams."
+macro index,pager 5 "<change-folder>=Trash<enter>" "Go to trash."
+
+mailboxes =ovh =------------------- "=INBOX" "=Sent" "=Drafts" "=Junk" "=Trash"
+
