@@ -27,11 +27,22 @@ pcm.cloop {
 
 # --------------------------------------------------------- # Capture loopback #
 
-pcm.asnoop {
+pcm.pch {
+  type hw
+  card "PCH"
+}
+
+pcm.isnoop {
   type dsnoop
   ipc_key 219346
-  slave.pcm "hw:Loopback,0,1"
+  slave.pcm "pch"
 }
+
+# pcm.asnoop {
+#   type dsnoop
+#   ipc_key 219346
+#   slave.pcm "hw:Loopback,0,1"
+# }
 
 pcm.ploop {
   type plug
@@ -44,7 +55,7 @@ pcm.ploop {
 pcm.aduplex {
   type asym
   playback.pcm "asoftvol"
-  capture.pcm "asnoop"
+  capture.pcm "pch"
 }
 
 # ----------------------------------------------------------- # Default device #
