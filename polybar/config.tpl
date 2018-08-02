@@ -155,9 +155,9 @@ label-foreground = ${colors.black}
 
 [module/temperature]
 type = internal/temperature
-interval = 5
+interval = 1
 thermal-zone = 10
-warn-temperature = 60
+warn-temperature = 80
 label = %temperature-c:5%
 format = <label> <ramp>
 format-foreground = ${colors.black}
