@@ -114,7 +114,8 @@ exec --no-startup-id "feh --bg-fill $HOME/.dotfiles/i3/wallpaper.png"
 exec --no-startup-id "compton --config $HOME/.dotfiles/compton/config"
 exec --no-startup-id "$HOME/.dotfiles/polybar/start.sh"
 exec --no-startup-id "$HOME/.dotfiles/jack/start.sh"
-exec --no-startup-id "xrandr | grep '^DP-1 c' && xrandr --output eDP-1 --auto --output DP-1 --auto --same-as eDP-1"
+#exec --no-startup-id "xrandr | grep '^DP-1 c' && xrandr --output eDP-1 --auto --output DP-1 --auto --same-as eDP-1"
+exec --no-startup-id "xrandr | grep '^DP-1 c' && xrandr --output eDP-1 --off --output DP-1 --auto"
 exec --no-startup-id "redshift"
 
 focus_follows_mouse no
