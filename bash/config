@@ -14,6 +14,7 @@ export ANDROID_HOME=/opt/android/sdk
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:/opt/android-studio/gradle/gradle-4.4/bin
 
 export GIT_PROMPT_START="\[\e[36m\]\w\[\e[m\]"
 export GIT_PROMPT_END=" \[\e[31m\]➜\[\e[m\] "
@@ -23,6 +24,9 @@ export HISTFILE=~/.bash_eternal_history
 export HISTFILESIZE=-1
 export HISTSIZE=-1
 export HISTTIMEFORMAT="[%F %T] "
+
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_OPTS='--color fg:#494B53,bg:#fafafa,hl:#50a14f,fg+:#494B53,bg+:#f0f0f0,hl+:#50a14f,pointer:#f0f0f0,info:#4078f2,spinner:#4078f2,header:#4078f2,prompt:#a626a4'
 
 if [ -f ~/.bash-git-prompt/gitprompt.sh ]; then
 	source ~/.bash-git-prompt/gitprompt.sh

@@ -6,9 +6,8 @@ call plug#begin()
 Plug 'natebosch/vim-lsc'
 
 " Fuzzy finder
-" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin'}
-" Plug 'junegunn/fzf.vim'
-" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 
 " Utilities
 Plug 'mattn/emmet-vim'
@@ -24,6 +23,7 @@ Plug 'soywod/keepeye.vim'
 Plug 'soywod/mpc.vim'
 Plug 'soywod/kronos.vim'
 Plug 'soywod/hermes.vim'
+Plug 'vim-vdebug/vdebug'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
@@ -201,8 +201,25 @@ let g:user_emmet_mode = 'i'
 let g:user_emmet_leader_key = ','
 
 let g:keepeye_features = ['notification']
+let g:keepeye_message = "Va t'étirer, gros sac !"
 
 let g:kronos_gist_sync = 1
+
+let g:vdebug_options = {
+  \'port' : 9000,
+  \'server' : '0.0.0.0',
+  \'timeout' : 20,
+  \'on_close' : 'detach',
+  \'break_on_open' : 0,
+  \'ide_key' : 'VIM',
+  \'path_maps' : {
+    \'/var/www/html/': '/home/soywod/Code/javottes/',
+  \},
+  \'debug_window_level' : 0,
+  \'debug_file_level' : 0,
+  \'debug_file' : '',
+  \'watch_window_style' : 'expanded',
+\}
 
 " ------------------------------------------------------------------ # Command #
 
@@ -213,6 +230,8 @@ autocmd InsertLeave,TextChanged * call s:Save()
 
 command! -nargs=* Find call s:Find(<q-args>)
 command! -nargs=* Grep call s:Grep(<q-args>)
+
+command! -bang -nargs=* Grep call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" --glob "!.git/*" ' . shellescape(<q-args>), 1, <bang>0)
 
 " ------------------------------------------------------------------ # Mapping #
 
@@ -232,7 +251,7 @@ nnoremap <silent> <leader>c :call ToggleQfList()<cr>
 nnoremap <silent> <leader>t :Kronos<cr>
 nnoremap <silent> <leader>p :PhoneticsPlay<cr>
 
-nnoremap <leader>f :Find 
+nnoremap <leader>f :Files<cr>
 nnoremap <leader>g :Grep 
 
 nnoremap <leader>s :echo synIDattr(synID(line('.'), col('.'), 0), 'name')<cr>
