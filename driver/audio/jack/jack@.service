@@ -1,0 +1,14 @@
+[Unit]
+Description=JACK interface service
+; Requires=After=network.target
+
+[Service]
+ExecStart=/bin/bash start-interface.sh %i
+ExecStartPost=/bin/bash connect.sh
+ExecStopPost=/bin/bash stop-interface.sh
+WorkingDirectory=%h/.dotfiles/driver/audio/jack
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

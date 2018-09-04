@@ -1,0 +1,13 @@
+[Unit]
+Description=JACK service
+; Requires=After=network.target
+
+[Service]
+ExecStart=/bin/bash start.sh
+ExecStopPost=/bin/bash stop.sh
+WorkingDirectory=%h/.dotfiles/driver/audio/jack
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

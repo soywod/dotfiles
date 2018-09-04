@@ -1,28 +1,13 @@
 #!/bin/bash
 
-function usePCH {
-  jackd -d alsa -d hw:PCH -n 2 &
-}
+old_card=
 
-function useUSB {
-  jackd -d alsa -d hw:USB -n 3 -p 256 &
-}
+while sleep 2; do
+  [[ -d /proc/asound/USB ]] && new_card=usb || new_card=pch
+  [[ "$old_card" == "$new_card" ]] && continue
 
-card=
+  systemctl --user stop jack@${old_card:-pch}
+  systemctl --user start jack@$new_card
 
-while sleep 1; do
-  [[ -d /proc/asound/USB ]] && newcard=USB || newcard=PCH
-  [[ $card == $newcard ]] && continue
-
-  card=$newcard
-
-  killall -q -9 jackd
-  while pgrep -u $UID -x jackd >/dev/null; do sleep 1; done
-
-  use$card
-  alsa_in -j cloop -dcloop -q 1 &
-
-  sleep 2
-  jack_connect cloop:capture_1 system:playback_1
-  jack_connect cloop:capture_2 system:playback_2
+  old_card=$new_card
 done
