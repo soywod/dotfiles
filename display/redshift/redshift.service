@@ -1,9 +1,9 @@
 [Unit]
-Description=Polybar service
+Description=Redshift service
 
 [Service]
-ExecStart=/bin/bash start.sh
-WorkingDirectory=%h/.dotfiles/display/polybar
+ExecStart=/usr/bin/redshift
+WorkingDirectory=%h/.dotfiles/display/redshift
 Environment=DISPLAY=:0
 Restart=always
 RestartSec=1

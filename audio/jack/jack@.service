@@ -1,6 +1,5 @@
 [Unit]
 Description=JACK interface service
-; Requires=After=network.target
 
 [Service]
 ExecStart=/bin/bash start-interface.sh %i

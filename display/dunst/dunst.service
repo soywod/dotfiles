@@ -1,7 +1,5 @@
 [Unit]
 Description=Dunst service
-After=dbus.service
-Requires=dbus.service
 
 [Service]
 ExecStart=/usr/bin/dunst

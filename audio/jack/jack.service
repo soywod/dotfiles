@@ -1,6 +1,5 @@
 [Unit]
 Description=JACK service
-; Requires=After=network.target
 
 [Service]
 ExecStart=/bin/bash start.sh

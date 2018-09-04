@@ -12,5 +12,4 @@ ln -sf $DIRNAME/config ~/.config/polybar/
 ln -sf $DIRNAME/polybar.service ~/.config/systemd/user/
 
 systemctl --user daemon-reload
-systemctl --user enable polybar.service
 systemctl --user start polybar.service
