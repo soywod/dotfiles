@@ -5,7 +5,7 @@ function usePCH {
 }
 
 function useUSB {
-  jackd -d alsa -d hw:USB -n 3 &
+  jackd -d alsa -d hw:USB -n 3 -p 256 &
 }
 
 card=

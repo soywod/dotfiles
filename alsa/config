@@ -72,10 +72,10 @@ pcm.!default {
   }
 }
 
-# ctl.!default {
-#   type hw
-#   card "PCH"
-# }
+ctl.!default {
+  type hw
+  card "PCH"
+}
 
 pcm.card0 {
   type plug
