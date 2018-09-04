@@ -2,8 +2,7 @@
 Description=Redshift service
 
 [Service]
-ExecStart=/usr/bin/redshift
-WorkingDirectory=%h/.dotfiles/display/redshift
+ExecStart=/usr/bin/redshift -l 48.80565:2.18864
 Environment=DISPLAY=:0
 Restart=always
 RestartSec=1
