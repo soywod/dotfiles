@@ -64,7 +64,7 @@ bindsym $mod+Shift+0 move container to workspace 10
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec "i3lock -i ~/.dotfiles/desktop/i3/background-lock.png"
+bindsym $mod+Shift+e exec "i3lock -i ~/.dotfiles/display/i3/background-lock.png"
 
 bindsym $mod+r mode "resize"
 
