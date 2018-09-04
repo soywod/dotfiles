@@ -5,7 +5,7 @@ Description=JACK interface service
 ExecStart=/bin/bash start-interface.sh %i
 ExecStartPost=/bin/bash connect.sh
 ExecStopPost=/bin/bash stop-interface.sh
-WorkingDirectory=%h/.dotfiles/driver/audio/jack
+WorkingDirectory=%h/.dotfiles/audio/jack
 Restart=always
 RestartSec=1
 

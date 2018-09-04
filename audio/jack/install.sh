@@ -14,5 +14,4 @@ ln -sf $DIRNAME/jack@.service ~/.config/systemd/user/
 ln -sf $DIRNAME/jack.service ~/.config/systemd/user/
 
 systemctl --user daemon-reload
-systemctl --user enable jack.service
 systemctl --user start jack.service

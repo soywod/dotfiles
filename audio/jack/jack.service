@@ -4,7 +4,7 @@ Description=JACK service
 [Service]
 ExecStart=/bin/bash start.sh
 ExecStopPost=/bin/bash stop.sh
-WorkingDirectory=%h/.dotfiles/driver/audio/jack
+WorkingDirectory=%h/.dotfiles/audio/jack
 Restart=always
 RestartSec=1
 
