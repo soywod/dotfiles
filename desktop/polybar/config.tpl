@@ -258,4 +258,3 @@ interface = wlan0
 label-connected = (%essid%) %signal:2%% 
 
 ; vim:ft=dosini
-

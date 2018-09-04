@@ -92,4 +92,3 @@ color   body              brightred       default        "Bad signature from.*"
 color   body              brightred       default        "Note: This key has expired!"
 color   body              brightmagenta   default        "Problem signature from.*"
 color   body              brightmagenta   default        "WARNING: .*"
-

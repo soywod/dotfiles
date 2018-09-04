@@ -288,4 +288,3 @@
 [sound]
   summary = *
   script = ~/.config/dunst/notify.sh
-

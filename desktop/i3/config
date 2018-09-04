@@ -132,4 +132,3 @@ client.focused_inactive $grey  $white $black $white $grey
 client.urgent           $grey  $white $black $white $grey
 
 # vim:ft=i3
-

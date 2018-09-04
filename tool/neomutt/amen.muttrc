@@ -32,4 +32,3 @@ macro index,pager 4 "<change-folder>=INBOX.Pourriel<enter>" "Go to spam."
 macro index,pager 5 "<change-folder>=INBOX.Corbeille<enter>" "Go to trash."
 
 mailboxes =amen =------------------- "=INBOX" "=INBOX.Objets envoy&AOk-s" "=INBOX.Brouillons" "=INBOX.Pourriel" "=INBOX.Corbeille"
-

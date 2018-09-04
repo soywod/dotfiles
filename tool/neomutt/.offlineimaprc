@@ -57,4 +57,3 @@ sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 [Repository ovh-local]
 type = Maildir
 localfolders = ~/.mail/ovh
-

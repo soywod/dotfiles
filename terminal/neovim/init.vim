@@ -195,4 +195,3 @@ nnoremap <a-g> :Grep
 nnoremap <a-h> :History<cr>
 
 " nnoremap <a-s> :echo synIDattr(synID(line('.'), col('.'), 0), 'name')<cr>
-

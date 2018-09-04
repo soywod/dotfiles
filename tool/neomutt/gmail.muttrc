@@ -32,4 +32,3 @@ macro index,pager 4 "<change-folder>=[Gmail].Spam<enter>" "Go to spam."
 macro index,pager 5 "<change-folder>=[Gmail].Bin<enter>" "Go to trash."
 
 mailboxes =gmail =------------------- "=INBOX" "=[Gmail].Sent Mail" "=[Gmail].Drafts" "=[Gmail].Spam" "=[Gmail].Bin"
-
