@@ -55,14 +55,14 @@ type = internal/mpd
 host = /run/user/$UID/mpd.sock
 interval = 1
 label-song = / %artist% / %title:0:50%
-format-online = <icon-prev> <toggle> <icon-stop> <icon-next>  <icon-random> <icon-repeatone> <icon-repeat> <label-song> 
+format-online = <icon-prev> <toggle> <icon-stop> <icon-next>  <icon-random> <icon-single> <icon-repeat> <label-song> 
 icon-prev      = 
 icon-stop      = 
 icon-play      = 
 icon-pause     = 
 icon-next      = 
 icon-random    = 
-icon-repeatone = 
+icon-single = 
 icon-repeat    = 
 icon-prev-foreground  = ${colors.greyd}
 icon-stop-foreground  = ${colors.greyd}
@@ -183,7 +183,7 @@ label-mounted-foreground = ${colors.black}
 ; -------------------------------------------------------------------- # Audio #
 
 [module/volume]
-type = internal/volume
+type = internal/alsa
 label-volume  = %percentage:0:3%% 
 label-volume-foreground = ${colors.greya}
 label-muted   = " --- "
