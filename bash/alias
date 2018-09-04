@@ -26,9 +26,10 @@ alias la='ls -A'
 alias ll='ls -alF'
 
 alias mpc='mpc -h /run/user/$UID/mpd.sock'
-alias vi='vim'
-alias vimb='vim ~/.bashrc'
-alias vimc='vim ~/.dotfiles/vim/.vimrc'
+alias vi='nvim'
+alias vim='nvim'
+alias vimb='nvim ~/.bashrc'
+alias vimc='nvim ~/.dotfiles/editor/init.vim'
 
 alias s='source ~/.bashrc'
 
