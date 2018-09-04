@@ -5,7 +5,7 @@ Requires=dbus.service
 
 [Service]
 ExecStart=/bin/bash start.sh
-WorkingDirectory=%h/.dotfiles/desktop/polybar
+WorkingDirectory=%h/.dotfiles/display/polybar
 Environment=DISPLAY=:0
 ; Restart=always
 ; RestartSec=1

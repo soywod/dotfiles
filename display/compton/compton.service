@@ -5,7 +5,7 @@ Requires=dbus.service
 
 [Service]
 ExecStart=/usr/bin/compton --config config
-WorkingDirectory=%h/.dotfiles/desktop/compton
+WorkingDirectory=%h/.dotfiles/display/compton
 Environment=DISPLAY=:0
 Restart=always
 RestartSec=1
