@@ -111,7 +111,6 @@ bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selecti
 
 exec --no-startup-id "dunst"
 exec --no-startup-id "feh --bg-fill $HOME/.dotfiles/desktop/i3/wallpaper.png"
-exec --no-startup-id "compton --config $HOME/.dotfiles/desktop/compton/config"
 exec --no-startup-id "$HOME/.dotfiles/desktop/polybar/start.sh"
 #exec --no-startup-id "xrandr | grep '^DP-1 c' && xrandr --output eDP-1 --auto --output DP-1 --auto --same-as eDP-1"
 exec --no-startup-id "xrandr | grep '^DP-1 c' && xrandr --output eDP-1 --off --output DP-1 --auto"
