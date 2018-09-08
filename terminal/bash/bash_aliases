@@ -9,7 +9,7 @@ fi
 
 alias dc='docker-compose'
 
-alias dl='~/.dotfiles/transmission/start.sh'
+alias dl='~/.dotfiles/network/transmission/start.sh'
 
 alias ga='git add'
 alias gcam='git commit --amend --no-edit'
@@ -19,6 +19,7 @@ alias gd='git diff'
 alias glog='git log --oneline --decorate --graph'
 alias gpull='git pull'
 alias gpush='git push'
+alias gfpush='git push --force'
 alias gss='git status'
 
 alias l='ls -CF'
@@ -29,7 +30,7 @@ alias mpc='mpc -h /run/user/$UID/mpd.sock'
 alias vi='nvim'
 alias vim='nvim'
 alias vimb='nvim ~/.bashrc'
-alias vimc='nvim ~/.dotfiles/editor/init.vim'
+alias vimc='nvim ~/.dotfiles/terminal/neovim/init.vim'
 
 alias s='source ~/.bashrc'
 
