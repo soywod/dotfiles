@@ -18,8 +18,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'kopischke/vim-stay'
 Plug 'soywod/phonetics.vim'
-Plug 'soywod/keepeye.vim'
-" Plug 'soywod/kronos.vim'
+Plug 'soywod/kronos.vim'
 
 " Theme and syntax
 Plug 'sheerun/vim-polyglot'
@@ -95,54 +94,54 @@ set viewoptions=cursor,folds,slash,unix
 
 " -------------------------------------------------------------------- # Theme #
 
-highlight Normal       guibg=#fafafa  guifg=#494b53  gui=None
-highlight Visual       guibg=#e0e0e0  guifg=None     gui=None
-highlight WildMenu     guibg=#e0e0e0  guifg=None     gui=None
-highlight Comment      guibg=None     guifg=#a0a1a7  gui=None
-highlight Constant     guibg=None     guifg=#0184bc  gui=None
-highlight Boolean      guibg=None     guifg=#c18401  gui=None
-highlight String       guibg=None     guifg=#50a14f  gui=None
-highlight Character    guibg=None     guifg=#50a14f  gui=None
-highlight Identifier   guibg=None     guifg=#e45649  gui=None
-highlight Number       guibg=None     guifg=#e45649  gui=None
-highlight Keyword      guibg=None     guifg=None     gui=None
-highlight Statement    guibg=None     guifg=None     gui=None
-highlight PreProc      guibg=None     guifg=#c18401  gui=None
-highlight Type         guibg=None     guifg=#c18401  gui=None
-highlight NonText      guibg=None     guifg=#d3d3d3  gui=None
-highlight Error        guibg=#e45649  guifg=#fafafa  gui=None
-highlight ErrorMsg     guibg=None     guifg=#e45649  gui=Bold
-highlight Warning      guibg=#c18401  guifg=#fafafa  gui=None
-highlight WarningMsg   guibg=None     guifg=#c18401  gui=Bold
-highlight CursorLine   guibg=#f4f4f4  guifg=None     gui=None
-highlight Underlined   guibg=None     guifg=None     gui=Underline
-highlight Ignore       guibg=None     guifg=None     gui=None
+highlight Normal       guibg=#fafafa  guifg=#494b53  gui=NONE
+highlight Visual       guibg=#e0e0e0  guifg=NONE     gui=NONE
+highlight WildMenu     guibg=#e0e0e0  guifg=NONE     gui=NONE
+highlight Comment      guibg=NONE     guifg=#a0a1a7  gui=NONE
+highlight Constant     guibg=NONE     guifg=#0184bc  gui=NONE
+highlight Boolean      guibg=NONE     guifg=#c18401  gui=NONE
+highlight String       guibg=NONE     guifg=#50a14f  gui=NONE
+highlight Character    guibg=NONE     guifg=#50a14f  gui=NONE
+highlight Identifier   guibg=NONE     guifg=#e45649  gui=NONE
+highlight Number       guibg=NONE     guifg=#e45649  gui=NONE
+highlight Keyword      guibg=NONE     guifg=NONE     gui=NONE
+highlight Statement    guibg=NONE     guifg=NONE     gui=NONE
+highlight PreProc      guibg=NONE     guifg=#c18401  gui=NONE
+highlight Type         guibg=NONE     guifg=#c18401  gui=NONE
+highlight NonText      guibg=NONE     guifg=#d3d3d3  gui=NONE
+highlight Error        guibg=#e45649  guifg=#fafafa  gui=NONE
+highlight ErrorMsg     guibg=NONE     guifg=#e45649  gui=Bold
+highlight Warning      guibg=#c18401  guifg=#fafafa  gui=NONE
+highlight WarningMsg   guibg=NONE     guifg=#c18401  gui=Bold
+highlight CursorLine   guibg=#f4f4f4  guifg=NONE     gui=NONE
+highlight Underlined   guibg=NONE     guifg=NONE     gui=Underline
+highlight Ignore       guibg=NONE     guifg=NONE     gui=NONE
 highlight Todo         guibg=#0184bc  guifg=#fafafa  gui=Bold
-highlight Special      guibg=None     guifg=#0184bc  gui=None
-highlight SpecialKey   guibg=None     guifg=#4078f2  gui=None
-highlight Directory    guibg=None     guifg=#4078f2  gui=None
-highlight Folded       guibg=None     guifg=#d3d3d3  gui=None
-highlight FoldColumn   guibg=None     guifg=#e0e0e0  gui=None
-highlight SignColumn   guibg=None     guifg=#e0e0e0  gui=None
-highlight StatusLine   guibg=#494b53  guifg=#fafafa  gui=None
-highlight StatusLineNC guibg=#e0e0e0  guifg=#494B53  gui=None
+highlight Special      guibg=NONE     guifg=#0184bc  gui=NONE
+highlight SpecialKey   guibg=NONE     guifg=#4078f2  gui=NONE
+highlight Directory    guibg=NONE     guifg=#4078f2  gui=NONE
+highlight Folded       guibg=NONE     guifg=#d3d3d3  gui=NONE
+highlight FoldColumn   guibg=NONE     guifg=#e0e0e0  gui=NONE
+highlight SignColumn   guibg=NONE     guifg=#e0e0e0  gui=NONE
+highlight StatusLine   guibg=#494b53  guifg=#fafafa  gui=NONE
+highlight StatusLineNC guibg=#e0e0e0  guifg=#494B53  gui=NONE
 highlight IncSearch    guibg=#986801  guifg=#fafafa  gui=Bold
 highlight Search       guibg=#986801  guifg=#fafafa  gui=Bold
-highlight VertSplit    guibg=None     guifg=#f0f0f0  gui=None
-highlight Pmenu        guibg=#e0e0e0  guifg=None     gui=None
-highlight PmenuSel     guibg=#494b53  guifg=#fafafa  gui=None
-highlight SpellBad     guibg=None     guifg=#e45649  gui=Underline
-highlight SpellCap     guibg=None     guifg=#c18401  gui=Underline
+highlight VertSplit    guibg=NONE     guifg=#f0f0f0  gui=NONE
+highlight Pmenu        guibg=#e0e0e0  guifg=NONE     gui=NONE
+highlight PmenuSel     guibg=#494b53  guifg=#fafafa  gui=NONE
+highlight SpellBad     guibg=NONE     guifg=#e45649  gui=Underline
+highlight SpellCap     guibg=NONE     guifg=#c18401  gui=Underline
 highlight User1        guibg=#e45649  guifg=#fafafa  gui=Bold
-highlight LineNr       guibg=None     guifg=#e0e0e0  gui=None
-highlight Function     guibg=None     guifg=#4078f2  gui=None
+highlight LineNr       guibg=NONE     guifg=#e0e0e0  gui=NONE
+highlight Function     guibg=NONE     guifg=#4078f2  gui=NONE
 
 highlight link jsFuncCall     Function
 highlight link jsStorageClass Statement
 
-highlight link xmlAttrib      None
+highlight link xmlAttrib      NONE
 highlight link xmlEndTag      Identifier
-highlight link xmlTag         None
+highlight link xmlTag         NONE
 highlight link xmlTagName     Identifier
 
 " -------------------------------------------------------------- # Plugin conf #
@@ -169,26 +168,7 @@ let g:emmet_html5 = 0
 let g:user_emmet_mode = 'i'
 let g:user_emmet_leader_key = ','
 
-let g:keepeye_features = ['notification']
-let g:keepeye_message = "Va t'étirer, gros sac !"
-
-let g:kronos_gist_sync = 1
-
-let g:vdebug_options = {
-  \'port' : 9000,
-  \'server' : '0.0.0.0',
-  \'timeout' : 20,
-  \'on_close' : 'detach',
-  \'break_on_open' : 0,
-  \'ide_key' : 'VIM',
-  \'path_maps' : {
-    \'/var/www/html/': '/home/soywod/Code/javottes/',
-  \},
-  \'debug_window_level' : 0,
-  \'debug_file_level' : 0,
-  \'debug_file' : '',
-  \'watch_window_style' : 'expanded',
-\}
+let g:kronos_sync = 1
 
 " ------------------------------------------------------------------ # Command #
 
@@ -215,7 +195,7 @@ nnoremap <silent> <c-n> :cnext<cr>
 
 nnoremap <silent> <a-l> :call ToggleLocList()<cr>
 nnoremap <silent> <a-c> :call ToggleQfList()<cr>
-" nnoremap <silent> <a-t> :Kronos<cr>
+nnoremap <silent> <a-t> :Kronos<cr>
 nnoremap <silent> <a-p> :PhoneticsPlay<cr>
 nnoremap <silent> <a-/> :noh<cr>
 
