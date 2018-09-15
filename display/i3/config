@@ -116,8 +116,7 @@ exec --no-startup-id "systemctl --user start jack"
 exec --no-startup-id "systemctl --user start polybar"
 exec --no-startup-id "systemctl --user start redshift"
 
-exec --no-startup-id "xrandr | grep '^DP-1 c' && xrandr --output eDP-1 --off --output DP-1 --auto"
-#exec --no-startup-id "xrandr | grep '^DP-1 c' && xrandr --output eDP-1 --auto --output DP-1 --auto --same-as eDP-1"
+exec --no-startup-id "xrandr | grep '^DP-1 c' && xrandr --output eDP-1 --primary --output DP-1 --auto --above eDP-1"
 
 focus_follows_mouse no
 hide_edge_borders   none

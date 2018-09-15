@@ -1,3 +1,3 @@
-desktop/polybar/config
-tool/mpd/mpd.conf
-tool/transmission/settings.json
+/display/polybar/config
+/tool/mpd/mpd.conf
+/tool/transmission/settings.json

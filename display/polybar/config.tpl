@@ -26,6 +26,7 @@ module-margin-right = 1
 padding-left  = 1
 padding-right = 1
 radius = 0
+monitor = eDP-1
 
 ; ---------------------------------------------------------------- # Bar (top) #
 
@@ -36,6 +37,7 @@ border-bottom-size  = 1
 modules-left    = mpd
 modules-center  = date
 modules-right   = github transmission
+monitor = eDP-1
 
 ; ------------------------------------------------------------- # Bar (bottom) #
 
