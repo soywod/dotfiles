@@ -2,38 +2,42 @@
 
 call plug#begin()
 
-" Language Server Protocol
-Plug 'natebosch/vim-lsc'
+" LSP & completion
+Plug 'roxma/nvim-yarp'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'ncm2/ncm2'
+Plug 'ncm2/ncm2-vim-lsp'
 
 " Fuzzy finder
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
 " Utilities
-Plug 'mattn/emmet-vim'
-Plug 'shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
-Plug 'ervandew/supertab'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'kopischke/vim-stay'
 Plug 'soywod/phonetics.vim'
 Plug 'soywod/kronos.vim'
+Plug 'soywod/iris.vim'
 
 " Theme and syntax
-Plug 'sheerun/vim-polyglot'
 Plug 'soywod/typescript.vim'
+Plug 'iloginow/vim-stylus'
+Plug 'digitaltoad/vim-pug'
+Plug 'kchmck/vim-coffee-script'
 
 call plug#end()
 
 " ----------------------------------------------------------------- # Function #
 
-function! s:InsertEnter()
+function! s:insert_enter()
   highlight StatusLine guibg=#4078f2 guifg=#fafafa gui=None
 endfunction
 
-function! s:Save()
-  if &buftype != 'nofile' && ! &ro && ! empty(@%) | :write | endif
+function! s:insert_leave()
+  if &buftype != 'nofile' && ! &ro && ! &diff && ! empty(@%) | :write | endif
   highlight StatusLine guibg=#494b53 guifg=#fafafa gui=None
 endfunction
 
@@ -56,6 +60,16 @@ function! ToggleQfList()
   if  qfopen | copen | else | cclose | endif
 endfunction
 
+function! s:preview_opened()
+  for buffer in range(1, winnr('$'))
+    if getwinvar(buffer, "&previewwindow") == 1
+      return 1
+    endif  
+  endfor
+
+  return 0
+endfunction
+
 " ------------------------------------------------------------------ # Setting #
 
 set background=light
@@ -63,7 +77,7 @@ set backspace=indent,eol,start
 set backupcopy=yes
 set breakindent
 set clipboard=unnamedplus
-set completeopt-=preview
+set completeopt=noinsert,menuone,noselect
 set cursorline
 set expandtab
 set foldcolumn=2
@@ -78,9 +92,11 @@ set nobackup
 set noshowmode
 set noswapfile
 set nowritebackup
+set omnifunc=syntaxcomplete#Complete
 set ruler
 set scrolloff=3
 set shiftwidth=2
+set shortmess+=c
 set smartcase
 set softtabstop=2
 set splitright
@@ -146,39 +162,45 @@ highlight link xmlTagName     Identifier
 
 " -------------------------------------------------------------- # Plugin conf #
 
-let g:deoplete#enable_at_startup = 1
-let g:jsx_ext_required = 1
-
-let g:lsc_auto_map = v:true
-let g:lsc_preview_split_direction = 'below'
-let g:lsc_server_commands = {
-  \'javascript':      'node_modules/.bin/javascript-typescript-stdio',
-  \'javascript.jsx':  'node_modules/.bin/javascript-typescript-stdio',
-  \'typescript':      'node_modules/.bin/javascript-typescript-stdio',
-  \'typescript.tsx':  'node_modules/.bin/javascript-typescript-stdio',
-\}
-
-let g:polyglot_disabled = ['typescript']
-
-let g:mpc_host = '/run/user/$UID/mpd.sock'
-let g:neocomplete#enable_at_startup = 1
-let g:SuperTabDefaultCompletionType = '<C-n>'
-
-let g:emmet_html5 = 0
-let g:user_emmet_mode = 'i'
-let g:user_emmet_leader_key = ','
+let g:lsp_signs_enabled = 1
+let g:lsp_preview_position = 'below'
+let g:lsp_preview_auto_resize = 1
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_signs_error = {'text': 'E>'}
+let g:lsp_signs_warning = {'text': 'W>'}
+let g:lsp_signs_hint = {'text': 'H>'}
 
 let g:kronos_sync = 1
 
+let g:iris_host = 'imap.gmail.com'
+let g:iris_email = 'clement.douin@gmail.com'
+
 " ------------------------------------------------------------------ # Command #
+
+autocmd User lsp_setup call lsp#register_server({
+  \'name': 'typescript-language-server',
+  \'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+  \'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+  \'whitelist': ['typescript', 'typescript.tsx'],
+\})
+
+autocmd User Ncm2Plugin call ncm2#register_source({
+  \'name' : 'stylus',
+  \'scope': ['styl'],
+  \'priority': 2, 
+  \'subscope_enable': 1,
+  \'mark': 'stylus',
+  \'word_pattern': '[\w\-]+',
+  \'complete_pattern': '\.',
+  \'on_complete': ['ncm2#on_complete#omni', 'stylcomplete#CompleteStyl'],
+\})
+
+autocmd BufEnter * call ncm2#enable_for_buffer()
 
 autocmd FileType qf wincmd J
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-autocmd InsertEnter * call s:InsertEnter()
-autocmd InsertLeave,TextChanged * call s:Save()
-
-command! -nargs=* Find call s:Find(<q-args>)
-command! -nargs=* Grep call s:Grep(<q-args>)
+autocmd InsertEnter * call s:insert_enter()
+autocmd InsertLeave,TextChanged * call s:insert_leave()
 
 command! -bang -nargs=* Grep call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" --glob "!.git/*" ' . shellescape(<q-args>), 1, <bang>0)
 
@@ -199,8 +221,17 @@ nnoremap <silent> <a-t> :Kronos<cr>
 nnoremap <silent> <a-p> :PhoneticsPlay<cr>
 nnoremap <silent> <a-/> :noh<cr>
 
-nnoremap <c-space> :Files<cr>
+nnoremap <silent> <a-/> :noh<cr>
+
+nnoremap <a-f> :Files<cr>
 nnoremap <a-g> :Grep 
 nnoremap <a-h> :History<cr>
+nnoremap <a-d> :LspDefinition<cr>
+nnoremap <a-r> :LspReferences<cr>
+nnoremap <s-a-r> :LspRename<cr>
+
+inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+nnoremap <silent> <expr> <s-h> <sid>preview_opened() ? ":pclose\<cr>" : ":LspHover\<cr>"
 
 nnoremap <a-s> :echo synIDattr(synID(line('.'), col('.'), 0), 'name')<cr>
