@@ -37,7 +37,6 @@ border-bottom-size  = 1
 modules-left    = mpd
 modules-center  = date
 modules-right   = github transmission
-monitor = eDP-1
 
 ; ------------------------------------------------------------- # Bar (bottom) #
 
