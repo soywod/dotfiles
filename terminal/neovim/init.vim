@@ -8,6 +8,7 @@ Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'ncm2/ncm2'
 Plug 'ncm2/ncm2-vim-lsp'
+Plug 'w0rp/ale'
 
 " Fuzzy finder
 Plug 'junegunn/fzf'
@@ -20,10 +21,13 @@ Plug 'tpope/vim-surround'
 Plug 'kopischke/vim-stay'
 Plug 'soywod/phonetics.vim'
 Plug 'soywod/kronos.vim'
-Plug 'soywod/iris.vim'
+" Plug 'soywod/iris.vim'
+Plug 'junegunn/vader.vim'
 
 " Theme and syntax
 Plug 'soywod/typescript.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 Plug 'iloginow/vim-stylus'
 Plug 'digitaltoad/vim-pug'
 Plug 'kchmck/vim-coffee-script'
@@ -169,8 +173,15 @@ let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_signs_error = {'text': 'E>'}
 let g:lsp_signs_warning = {'text': 'W>'}
 let g:lsp_signs_hint = {'text': 'H>'}
+let g:ale_sign_error = 'E>'
+let g:ale_sign_warning = 'W>'
 
-let g:kronos_sync = 1
+let g:ale_fixers = {
+  \'javascript': ['prettier_eslint'],
+  \'javascript.jsx': ['prettier_eslint'],
+\}
+
+" let g:kronos_sync = 1
 
 let g:iris_host = 'imap.gmail.com'
 let g:iris_email = 'clement.douin@gmail.com'
@@ -181,12 +192,27 @@ autocmd User lsp_setup call lsp#register_server({
   \'name': 'typescript-language-server',
   \'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
   \'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-  \'whitelist': ['typescript', 'typescript.tsx'],
+  \'whitelist': ['javascript.jsx', 'typescript', 'typescript.tsx'],
+\})
+
+autocmd User lsp_setup call lsp#register_server({
+  \'name': 'javascript-language-server',
+  \'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+  \'whitelist': ['javascript', 'javascript.jsx'],
+\})
+
+autocmd User Ncm2Plugin call ncm2#register_source({
+  \'name' : 'coffee',
+  \'priority': 2, 
+  \'subscope_enable': 1,
+  \'mark': 'coffee',
+  \'word_pattern': '\w+',
+  \'complete_pattern': ['\.'],
+  \'on_complete': ['ncm2#on_complete#omni', 'javascriptcomplete#CompleteJS'],
 \})
 
 autocmd User Ncm2Plugin call ncm2#register_source({
   \'name' : 'stylus',
-  \'scope': ['styl'],
   \'priority': 2, 
   \'subscope_enable': 1,
   \'mark': 'stylus',
