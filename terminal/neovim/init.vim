@@ -7,6 +7,7 @@ Plug 'roxma/nvim-yarp'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'ncm2/ncm2'
+Plug 'ncm2/ncm2-ultisnips'
 Plug 'ncm2/ncm2-vim-lsp'
 Plug 'w0rp/ale'
 
@@ -21,8 +22,8 @@ Plug 'tpope/vim-surround'
 Plug 'kopischke/vim-stay'
 Plug 'soywod/phonetics.vim'
 Plug 'soywod/kronos.vim'
+Plug 'sirver/ultisnips'
 " Plug 'soywod/iris.vim'
-Plug 'junegunn/vader.vim'
 
 " Theme and syntax
 Plug 'soywod/typescript.vim'
@@ -104,8 +105,8 @@ set shortmess+=c
 set smartcase
 set softtabstop=2
 set splitright
-set statusline=\ \:%l,%c
-set statusline+=%=%y\ %t
+set statusline=\ \:%-3p\ %-3{strwidth(getline('.'))}\ %l
+set statusline+=%=%y\ %f
 set statusline+=%{StatusLineCounters()}
 set tabstop=2
 set termguicolors
@@ -176,15 +177,22 @@ let g:lsp_signs_hint = {'text': 'H>'}
 let g:ale_sign_error = 'E>'
 let g:ale_sign_warning = 'W>'
 
-let g:ale_fixers = {
-  \'javascript': ['prettier_eslint'],
-  \'javascript.jsx': ['prettier_eslint'],
+let g:ale_pattern_options = {
+  \'.*node_modules/.*$': {'ale_enabled': 0},
 \}
 
-" let g:kronos_sync = 1
+let g:ale_fixers = {
+  \'javascript': ['prettier'],
+  \'javascript.jsx': ['prettier'],
+\}
+
+let g:kronos_sync = 1
 
 let g:iris_host = 'imap.gmail.com'
 let g:iris_email = 'clement.douin@gmail.com'
+
+let g:UltiSnipsExpandTrigger = '<a-s>'
+let g:UltiSnipsJumpForwardTrigger  = '<a-s>'
 
 " ------------------------------------------------------------------ # Command #
 

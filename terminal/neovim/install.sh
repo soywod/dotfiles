@@ -20,6 +20,7 @@ fi
 mkdir -p ~/.config/nvim
 
 ln -sf $DIRNAME/init.vim ~/.config/nvim/
+ln -sfn $DIRNAME/snippets ~/.config/nvim/UltiSnips
 sudo ln -sf $DIRNAME/editor.sh /etc/profile.d
 
 nvim +PlugInstall +qa

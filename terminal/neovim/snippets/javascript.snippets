@@ -1,0 +1,174 @@
+snippet fun "function"
+function ${1:name}(${2:params}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet afun "Async function"
+async function ${1:name}(${2:params}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet c=> "Arrow function"
+const ${1:name} = (${2:params}) => {
+	${0:${VISUAL}}
+}
+endsnippet
+
+
+snippet //* "Doc comment"
+/**
+ * ${0:description}
+ */
+endsnippet
+
+snippet ed "Export default"
+export default ${0}
+endsnippet
+
+
+snippet desc "Describe test"
+describe('${1}', () => {
+	test('${2}', () => {
+		${3}
+	})
+})
+endsnippet
+
+snippet givenwhen "Given When Then"
+// given
+${1}
+// when
+${2}
+// then
+${0}
+endsnippet
+
+snippet test "Test case"
+test('${1:description}', () => {
+	$0
+})
+endsnippet
+
+
+snippet ttodo "Throw todo"
+// TODO: ${0}
+throw new Error('TODO: $0')
+endsnippet
+
+snippet cl "Console log"
+console.log(${0})
+endsnippet
+
+snippet cls "Console stringifiy"
+console.log('${1} = ', JSON.stringify($1, null, 5))
+endsnippet
+
+
+snippet logi "Log info"
+logger.info(`${1}`)
+endsnippet
+
+snippet switchf "Flow switch"
+switch (${1}) {
+	case '${2}':
+	default: {
+		// eslint-disable-next-line no-unused-vars
+		const typeCheck: '${3}' = $1;
+	}
+}
+endsnippet
+
+snippet switche "Exhaustive switch"
+switch (${1}) {
+	case '${2}':
+	default:
+		return assertNever($1)
+}
+endsnippet
+
+snippet eslintnl "eslint-disable-next-line"
+// eslint-disable-next-line $0
+endsnippet
+
+
+snippet < "XML tag"
+<${1:tag}>
+	${0:${VISUAL}}
+</$1>
+endsnippet
+
+
+snippet dob "Destructure object"
+const { ${2} } = ${1}
+endsnippet
+
+snippet dar "Destructure array"
+const [${2}] = ${1}
+endsnippet
+
+
+#################################
+# import/export
+#################################
+
+snippet im "Import default"
+import ${1} from '${0:$1}'
+endsnippet
+
+snippet imm "Import destructuring"
+import { ${0} } from '${1}'
+endsnippet
+
+snippet re "Require module"
+const ${1} = require('${2:$1}')
+endsnippet
+
+snippet dre "Destructure require"
+const { $0 } = require('${1}')
+endsnippet
+
+
+#################################
+# React
+#################################
+
+snippet sst "setState"
+this.setState({
+	${1}: ${2}
+})
+endsnippet
+
+snippet ssf "setState functional"
+this.setState(state => ${1})
+endsnippet
+
+snippet rcon "React constructor"
+constructor(props) {
+	super(props)
+
+	this.state = {
+		${1}: ${0},
+	}
+}
+endsnippet
+
+
+snippet rcc "React class component"
+class ${1:ClassName} extends React.Component {
+	render() {
+		return (
+			${0:<div />}
+		)
+	}
+}
+endsnippet
+
+snippet rren "React render"
+render() {
+	return (
+		${1:<div />}
+	)
+}
+endsnippet
