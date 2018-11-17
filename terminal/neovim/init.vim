@@ -23,6 +23,7 @@ Plug 'kopischke/vim-stay'
 Plug 'soywod/phonetics.vim'
 Plug 'soywod/kronos.vim'
 Plug 'sirver/ultisnips'
+Plug 'soywod/autosave.vim'
 " Plug 'soywod/iris.vim'
 
 " Theme and syntax
@@ -37,12 +38,11 @@ call plug#end()
 
 " ----------------------------------------------------------------- # Function #
 
-function! s:insert_enter()
+function! s:on_insert_enter()
   highlight StatusLine guibg=#4078f2 guifg=#fafafa gui=None
 endfunction
 
-function! s:insert_leave()
-  if &buftype != 'nofile' && ! &ro && ! &diff && ! empty(@%) | :write | endif
+function! s:on_insert_leave()
   highlight StatusLine guibg=#494b53 guifg=#fafafa gui=None
 endfunction
 
@@ -191,8 +191,8 @@ let g:kronos_sync = 1
 let g:iris_host = 'imap.gmail.com'
 let g:iris_email = 'clement.douin@gmail.com'
 
-let g:UltiSnipsExpandTrigger = '<a-s>'
-let g:UltiSnipsJumpForwardTrigger  = '<a-s>'
+let g:UltiSnipsExpandTrigger = '<cr>'
+let g:UltiSnipsJumpForwardTrigger  = '<cr>'
 
 " ------------------------------------------------------------------ # Command #
 
@@ -233,8 +233,8 @@ autocmd BufEnter * call ncm2#enable_for_buffer()
 
 autocmd FileType qf wincmd J
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-autocmd InsertEnter * call s:insert_enter()
-autocmd InsertLeave,TextChanged * call s:insert_leave()
+autocmd InsertEnter * call s:on_insert_enter()
+autocmd InsertLeave * call s:on_insert_leave()
 
 command! -bang -nargs=* Grep call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" --glob "!.git/*" ' . shellescape(<q-args>), 1, <bang>0)
 
