@@ -1,0 +1,50 @@
+# ---------------------------------------------------------------- # Functions #
+
+snippet f "function"
+function ${1:name}(${2:params}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet af "async function"
+async function ${1:name}(${2:params}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet ff "arrow function"
+${1:name} = ${2:params} => {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet aff "async arrow function"
+${1:name} = async ${2:params} => {
+	${0:${VISUAL}}
+}
+endsnippet
+
+# -------------------------------------------------------------------- # Const #
+
+snippet const "const"
+const ${0} = ${1}
+endsnippet
+
+# ------------------------------------------------------------------ # Logging #
+
+snippet log "console.log"
+console.log({'${0:variable}', ${0}})
+endsnippet
+
+# ---------------------------------------------------------- # Import / export #
+
+snippet im "import"
+import ${0} from '${1}'
+endsnippet
+
+snippet ed "export default"
+export default ${0}
+endsnippet
+
+# -------------------------------------------------------------------- # React #
+# TODO
