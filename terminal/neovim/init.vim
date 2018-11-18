@@ -19,11 +19,11 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'kopischke/vim-stay'
+" Plug 'kopischke/vim-stay'
+" Plug 'mbbill/undotree'
 Plug 'soywod/phonetics.vim'
 Plug 'soywod/kronos.vim'
 Plug 'sirver/ultisnips'
-Plug 'soywod/autosave.vim'
 " Plug 'soywod/iris.vim'
 
 " Theme and syntax
@@ -32,35 +32,20 @@ Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'iloginow/vim-stylus'
 Plug 'digitaltoad/vim-pug'
-Plug 'kchmck/vim-coffee-script'
 
 call plug#end()
 
 " ----------------------------------------------------------------- # Function #
 
-function! s:on_insert_enter()
-  highlight StatusLine guibg=#4078f2 guifg=#fafafa gui=None
-endfunction
-
-function! s:on_insert_leave()
-  highlight StatusLine guibg=#494b53 guifg=#fafafa gui=None
-endfunction
-
-function! StatusLineCounters()
-  let l:qflen = len(getqflist())
-  let l:loclen = len(getloclist('%'))
-  return ' | qf:' . l:qflen . ' | loc:' . l:loclen . ' '
-endfunction
-
-function! ToggleLocList()
+function! s:toggle_loc_list()
   let locempty = empty(getloclist('.'))
   if  locempty | call setloclist(0, []) | endif
 
   let locopen  = filter(getwininfo(), 'v:val.loclist') == []
-  if  locopen  | lopen | else | lclose  | endif
+  if  locopen | lopen | else | lclose  | endif
 endfunction
 
-function! ToggleQfList()
+function! s:toggle_quick_fix()
   let qfopen = filter(getwininfo(), 'v:val.quickfix') == []
   if  qfopen | copen | else | cclose | endif
 endfunction
@@ -75,7 +60,7 @@ function! s:preview_opened()
   return 0
 endfunction
 
-" ------------------------------------------------------------------ # Setting #
+" ------------------------------------------------------------------ # Settings #
 
 set background=light
 set backspace=indent,eol,start
@@ -93,11 +78,6 @@ set hidden
 set history=1000
 set laststatus=2
 set linebreak
-set nobackup
-set noshowmode
-set noswapfile
-set nowritebackup
-set omnifunc=syntaxcomplete#Complete
 set ruler
 set scrolloff=3
 set shiftwidth=2
@@ -105,13 +85,11 @@ set shortmess+=c
 set smartcase
 set softtabstop=2
 set splitright
-set statusline=\ \:%-3p\ %-3{strwidth(getline('.'))}\ %l
-set statusline+=%=%y\ %f
-set statusline+=%{StatusLineCounters()}
+set statusline=%<%f\ %h%m%r%=%-14.(%l,%c-%{strwidth(getline('.'))}%)\ %P
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
-set viewoptions=cursor,folds,slash,unix
+" set viewoptions=cursor,folds,slash,unix
 
 " -------------------------------------------------------------------- # Theme #
 
@@ -192,7 +170,7 @@ let g:iris_host = 'imap.gmail.com'
 let g:iris_email = 'clement.douin@gmail.com'
 
 let g:UltiSnipsExpandTrigger = '<cr>'
-let g:UltiSnipsJumpForwardTrigger  = '<cr>'
+let g:UltiSnipsJumpForwardTrigger = '<cr>'
 
 " ------------------------------------------------------------------ # Command #
 
@@ -200,23 +178,13 @@ autocmd User lsp_setup call lsp#register_server({
   \'name': 'typescript-language-server',
   \'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
   \'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-  \'whitelist': ['javascript.jsx', 'typescript', 'typescript.tsx'],
+  \'whitelist': ['typescript', 'typescript.tsx'],
 \})
 
 autocmd User lsp_setup call lsp#register_server({
   \'name': 'javascript-language-server',
   \'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
   \'whitelist': ['javascript', 'javascript.jsx'],
-\})
-
-autocmd User Ncm2Plugin call ncm2#register_source({
-  \'name' : 'coffee',
-  \'priority': 2, 
-  \'subscope_enable': 1,
-  \'mark': 'coffee',
-  \'word_pattern': '\w+',
-  \'complete_pattern': ['\.'],
-  \'on_complete': ['ncm2#on_complete#omni', 'javascriptcomplete#CompleteJS'],
 \})
 
 autocmd User Ncm2Plugin call ncm2#register_source({
@@ -230,13 +198,12 @@ autocmd User Ncm2Plugin call ncm2#register_source({
 \})
 
 autocmd BufEnter * call ncm2#enable_for_buffer()
-
+autocmd FileType * setlocal fo-=c fo-=r fo-=o
 autocmd FileType qf wincmd J
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-autocmd InsertEnter * call s:on_insert_enter()
-autocmd InsertLeave * call s:on_insert_leave()
 
 command! -bang -nargs=* Grep call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --color "always" --glob "!.git/*" ' . shellescape(<q-args>), 1, <bang>0)
+
+command DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_ | diffthis | wincmd p | diffthis
 
 " ------------------------------------------------------------------ # Mapping #
 
@@ -249,8 +216,8 @@ nnoremap <silent> <c-c> :bdelete<cr>
 nnoremap <silent> <c-p> :cprev<cr>
 nnoremap <silent> <c-n> :cnext<cr>
 
-nnoremap <silent> <a-l> :call ToggleLocList()<cr>
-nnoremap <silent> <a-c> :call ToggleQfList()<cr>
+nnoremap <silent> <a-l> :call <sid>toggle_loc_list()<cr>
+nnoremap <silent> <a-c> :call <sid>toggle_quick_fix()<cr>
 nnoremap <silent> <a-t> :Kronos<cr>
 nnoremap <silent> <a-p> :PhoneticsPlay<cr>
 nnoremap <silent> <a-/> :noh<cr>
