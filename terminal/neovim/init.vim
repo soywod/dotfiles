@@ -129,6 +129,14 @@ highlight Folded       guibg=#fafafa guifg=#d3d3d3
 highlight StatusLine   guifg=#494B53 guibg=#f0f0f0
 highlight StatusLineNC guifg=#f0f0f0 guibg=#f0f0f0
 
+highlight Error        guibg=#e45649  guifg=#fafafa  gui=NONE
+highlight ErrorMsg     guibg=NONE     guifg=#e45649  gui=Bold
+highlight ALEErrorSign guibg=#e45649  guifg=#fafafa  gui=NONE
+
+highlight Warning        guibg=#c18401  guifg=#fafafa  gui=NONE
+highlight WarningMsg     guibg=NONE     guifg=#c18401  gui=Bold
+highlight ALEWarningSign guibg=#c18401  guifg=#fafafa  gui=NONE
+
 " ------------------------------------------------------------- # Plugins conf #
 
 let g:lsp_signs_enabled = 1
@@ -138,13 +146,14 @@ let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_signs_error = {'text': 'E>'}
 let g:lsp_signs_warning = {'text': 'W>'}
 let g:lsp_signs_hint = {'text': 'H>'}
+
 let g:ale_sign_error = 'E>'
 let g:ale_sign_warning = 'W>'
-
 let g:ale_pattern_options = {
   \'.*node_modules/.*$': {'ale_enabled': 0},
 \}
 
+let g:ale_fix_on_save = 1
 let g:ale_fixers = {
   \'javascript': ['prettier'],
   \'javascript.jsx': ['prettier'],
@@ -156,7 +165,7 @@ let g:iris_host = 'imap.gmail.com'
 let g:iris_email = 'clement.douin@gmail.com'
 
 let g:UltiSnipsExpandTrigger = '<a-cr>'
-let g:UltiSnipsJumpForwardTrigger = '<cr>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
 
 " ------------------------------------------------------------ # Auto commands #
 
