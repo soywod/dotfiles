@@ -8,4 +8,5 @@ sudo pacman -S --needed --noconfirm kitty
 
 # --------------------------------------------------------------------- # Link #
 
-ln -sf $DIRNAME/kitty.conf ~/.config/kitty
+mkdir -p ~/.config/kitty
+ln -sf $DIRNAME/kitty.conf ~/.config/kitty/
