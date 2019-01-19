@@ -8,6 +8,6 @@ sudo pacman -S --needed --noconfirm i3-gaps i3lock scrot xclip
 
 # --------------------------------------------------------------------- # Link #
 
-mkdir -p ~/.i3
+mkdir -p ~/.config/i3
 
-ln -sf $DIRNAME/config ~/.i3/
+ln -sfT $DIRNAME/config ~/.config/i3/config
