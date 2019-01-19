@@ -1,3 +1,13 @@
+# ---------------------------------------------------------------- # Variables #
+
+snippet c "const"
+const ${0} = ${1}
+endsnippet
+
+snippet cc "const {}"
+const {${0}} = ${1}
+endsnippet
+
 # ---------------------------------------------------------------- # Functions #
 
 snippet f "function"
@@ -6,45 +16,68 @@ function ${1:name}(${2:params}) {
 }
 endsnippet
 
-snippet af "async function"
+snippet fe "export function"
+export function ${1:name}(${2:params}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet fa "async function"
 async function ${1:name}(${2:params}) {
 	${0:${VISUAL}}
 }
 endsnippet
 
-snippet ff "arrow function"
+snippet fae "export async function"
+export async function ${1:name}(${2:params}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet f> "() =>"
 ${1:name} = ${2:params} => {
 	${0:${VISUAL}}
 }
 endsnippet
 
-snippet aff "async arrow function"
+snippet f>a "async () =>"
 ${1:name} = async ${2:params} => {
 	${0:${VISUAL}}
 }
 endsnippet
 
-# -------------------------------------------------------------------- # Const #
-
-snippet const "const"
-const ${0} = ${1}
-endsnippet
-
 # ------------------------------------------------------------------ # Logging #
 
 snippet log "console.log"
-console.log({'${0:variable}', ${0}})
+console.log(${0})
 endsnippet
 
-# ---------------------------------------------------------- # Import / export #
+snippet logs "console.log string"
+console.log('${0}')
+endsnippet
 
-snippet im "import"
+snippet logo "console.log object"
+console.log({${0}})
+endsnippet
+
+snippet elog "console.log"
+console.error(${0})
+endsnippet
+
+snippet elogs "console.log string"
+console.error('${0}')
+endsnippet
+
+snippet elogo "console.log object"
+console.error({${0}})
+endsnippet
+
+# ------------------------------------------------------------------ # Imports #
+
+snippet i "import"
 import ${0} from '${1}'
 endsnippet
 
-snippet ed "export default"
-export default ${0}
+snippet ii "import {}"
+import ${0} from '${1}'
 endsnippet
-
-# -------------------------------------------------------------------- # React #
-# TODO

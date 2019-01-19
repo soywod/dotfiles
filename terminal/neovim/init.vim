@@ -1,3 +1,5 @@
+set nocompatible
+
 " ------------------------------------------------------------------ # Plugins #
 
 call plug#begin()
@@ -16,6 +18,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
 " Utilities
+" Plug 'junegunn/vader.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -23,7 +26,8 @@ Plug 'mbbill/undotree'
 Plug 'soywod/phonetics.vim'
 Plug 'soywod/kronos.vim'
 Plug 'sirver/ultisnips'
-" Plug 'soywod/iris.vim'
+Plug 'zhimsel/vim-stay'
+Plug 'soywod/iris.vim'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
@@ -31,6 +35,8 @@ Plug 'soywod/typescript.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'iloginow/vim-stylus'
+" Plug 'cakebaker/scss-syntax.vim'
+Plug 'tpope/vim-haml'
 Plug 'digitaltoad/vim-pug'
 
 call plug#end()
@@ -77,25 +83,18 @@ function s:grep(args, bang)
   call fzf#vim#grep(printf('rg %s', join(args, ' ')), 1, a:bang)
 endfunction
 
-function s:diff_origin()
-  vert new
-  set buftype=nofile
-  read ++edit #
-  0d_
-  diffthis
-  wincmd p
-  diffthis
-endfunction
-
 " ------------------------------------------------------------------ # Settings #
 
+set autoindent
 set background=light
 set backspace=indent,eol,start
 set backupcopy=yes
+set backupdir=~/.config/nvim/backup//
 set breakindent
 set clipboard=unnamedplus
 set completeopt=noinsert,menuone,noselect
 set cursorline
+set directory=~/.config/nvim/swp//
 set expandtab
 set foldcolumn=2
 set foldlevelstart=99
@@ -112,10 +111,14 @@ set shortmess+=c
 set smartcase
 set softtabstop=2
 set splitright
-set statusline=%<%f\ %h%m%r%=%-14.(%l,%c-%{strwidth(getline('.'))}%)\ %P
+set statusline=%<%f\ %h%m%r%=%=%y\ %-14.(%l,%c-%{strwidth(getline('.'))}%)\ %P
 set tabstop=2
 set termguicolors
 set ttimeoutlen=50
+set undodir=~/.config/nvim/undo//
+set undofile
+set viewoptions=cursor,folds,slash,unix
+set wildmenu
 
 " -------------------------------------------------------------------- # Theme #
 
@@ -139,6 +142,8 @@ highlight ALEWarningSign guibg=#c18401  guifg=#fafafa  gui=NONE
 
 " ------------------------------------------------------------- # Plugins conf #
 
+let g:ncm2#complete_length = 1
+
 let g:lsp_signs_enabled = 1
 let g:lsp_preview_position = 'below'
 let g:lsp_preview_auto_resize = 1
@@ -157,15 +162,23 @@ let g:ale_fix_on_save = 1
 let g:ale_fixers = {
   \'javascript': ['prettier'],
   \'javascript.jsx': ['prettier'],
+  \'typescript': ['prettier'],
+  \'typescript.tsx': ['prettier'],
+\}
+
+let g:ale_linters = {
+  \'sass': ['stylelint'],
 \}
 
 let g:kronos_sync = 1
 
-let g:iris_host = 'imap.gmail.com'
-let g:iris_email = 'clement.douin@gmail.com'
+let g:iris_name = 'Clément DOUIN'
+let g:iris_email = 'mail@soywod.me'
+let g:iris_imap_host = 'mail.soywod.me'
+let g:iris_imap_login = 'mail'
 
-let g:UltiSnipsExpandTrigger = '<a-cr>'
-let g:UltiSnipsJumpForwardTrigger = '<tab>'
+let g:UltiSnipsExpandTrigger = '<m-cr>'
+let g:UltiSnipsJumpForwardTrigger = '<cr>'
 
 " ------------------------------------------------------------ # Auto commands #
 
@@ -177,7 +190,7 @@ augroup completion
     \'cmd': {server_info->[
       \&shell,
       \&shellcmdflag,
-      \'typescript-language-server --stdio',
+      \'node_modules/.bin/typescript-language-server --stdio',
     \]},
     \'root_uri':{server_info->
       \lsp#utils#path_to_uri(
@@ -195,23 +208,49 @@ augroup completion
     \'cmd': {server_info->[
       \&shell,
       \&shellcmdflag,
-      \'typescript-language-server --stdio'
+      \'node_modules/.bin/typescript-language-server --stdio'
       \]},
     \'whitelist': ['javascript', 'javascript.jsx'],
   \})
 
+  " autocmd User Ncm2Plugin call ncm2#register_source({
+  "   \'name' : 'stylus',
+  "   \'priority': 2, 
+  "   \'subscope_enable': 1,
+  "   \'mark': 'stylus',
+  "   \'word_pattern': '[\w\-]+',
+  "   \'complete_pattern': '\.',
+  "   \'on_complete': [
+  "     \'ncm2#on_complete#omni',
+  "     \'stylcomplete#CompleteStyl',
+  "   \],
+  " \})
+
   autocmd User Ncm2Plugin call ncm2#register_source({
-    \'name' : 'stylus',
+    \'name' : 'sass',
     \'priority': 2, 
     \'subscope_enable': 1,
-    \'mark': 'stylus',
+    \'mark': 'sass',
     \'word_pattern': '[\w\-]+',
     \'complete_pattern': '\.',
     \'on_complete': [
       \'ncm2#on_complete#omni',
-      \'stylcomplete#CompleteStyl',
+      \'csscomplete#CompleteCSS',
     \],
   \})
+
+  " autocmd User Ncm2Plugin call ncm2#register_source({
+  "   \'name' : 'iris-edit',
+  "   \'priority': 2, 
+  "   \'subscope_enable': 1,
+  "   \'mark': 'contacts',
+  "   \'word_pattern': '[a-zA-Z1-9\._@]\+',
+  "   \'complete_pattern': '[ ,]',
+  "   \'on_complete': [
+  "     \'ncm2#on_complete#omni',
+  "     \'iris#utils#completeContacts',
+  "   \],
+  " \})
 augroup end
 
 augroup base
