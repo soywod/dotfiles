@@ -14,7 +14,7 @@ yellow = #c18401
 ; ------------------------------------------------------------- # Bar (common) #
 
 [section/bar]
-font-0 = SpaceMonoNL:pixelsize=12;3
+font-0 = SpaceMono:pixelsize=12;3
 font-1 = FontAwesome5FreeSolid:pixelsize=12;3
 font-2 = DEATH_DEFY:pixelsize=20;5
 background = ${colors.white}
