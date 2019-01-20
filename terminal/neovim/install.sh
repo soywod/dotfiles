@@ -17,7 +17,9 @@ fi
 
 # --------------------------------------------------------------------- # Link #
 
-mkdir -p ~/.config/nvim
+mkdir -p ~/.config/nvim/backup
+mkdir -p ~/.config/nvim/swap
+mkdir -p ~/.config/nvim/undo
 
 ln -sf $DIRNAME/init.vim ~/.config/nvim/
 ln -sfn $DIRNAME/snippets ~/.config/nvim/UltiSnips

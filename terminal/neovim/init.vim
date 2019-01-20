@@ -94,7 +94,7 @@ set breakindent
 set clipboard=unnamedplus
 set completeopt=noinsert,menuone,noselect
 set cursorline
-set directory=~/.config/nvim/swp//
+set directory=~/.config/nvim/swap//
 set expandtab
 set foldcolumn=2
 set foldlevelstart=99
