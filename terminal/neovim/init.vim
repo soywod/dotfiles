@@ -28,6 +28,7 @@ Plug 'soywod/kronos.vim'
 Plug 'sirver/ultisnips'
 Plug 'zhimsel/vim-stay'
 Plug 'soywod/iris.vim'
+Plug 'plasticboy/vim-markdown'
 
 " Theme and syntax
 Plug 'rakr/vim-one'

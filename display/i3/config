@@ -1,4 +1,4 @@
-font pango:SpaceMonoForPowerline 0
+font pango:SpaceMonoNL 0
 
 set $mod Mod4
 
@@ -14,7 +14,7 @@ set $white  #fafafa
 
 bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
-bindsym $mod+d exec "dmenu_run -fn SpaceMono-15 -nb '$white' -nf '$black' -sb '$grey' -sf '$black'"
+bindsym $mod+d exec "dmenu_run -fn SpaceMonoNL-15 -nb '$white' -nf '$black' -sb '$grey' -sf '$black'"
 
 bindsym $mod+$down  focus down
 bindsym $mod+$left  focus left
