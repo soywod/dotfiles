@@ -3,6 +3,8 @@
 # ------------------------------------------------------------------ # Network #
 
 network/network-manager/install.sh
+network/chromium/install.sh
+network/slack/install.sh
 # network/transmission/install.sh
 
 # ------------------------------------------------------------------ # Display #
