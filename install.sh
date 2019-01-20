@@ -1,0 +1,16 @@
+#!/bin/bash
+
+display/i3/install.sh
+display/font/install.sh
+display/compton/install.sh
+display/dunst/install.sh
+display/feh/install.sh
+display/redshift/install.sh
+display/xorg/install.sh
+display/backlight/install.sh
+display/polybar/install.sh
+
+terminal/bash/install.sh
+terminal/fuzzy-finder/install.sh
+terminal/kitty/install.sh
+terminal/neovim/install.sh
