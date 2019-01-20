@@ -3,7 +3,6 @@
 pcm.amix {
   type dmix
   ipc_key 219345
-  # slave.pcm "hw:USB"
   slave.pcm "hw:Loopback,0,0"
 }
 

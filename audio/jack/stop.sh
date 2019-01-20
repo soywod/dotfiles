@@ -1,4 +1,3 @@
 #!/bin/bash
 
-systemctl --user stop jack@usb
-systemctl --user stop jack@pch
+killall -q -9 jackd

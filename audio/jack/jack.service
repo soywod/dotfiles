@@ -3,10 +3,11 @@ Description=JACK service
 
 [Service]
 ExecStart=/bin/bash start.sh
+ExecStartPost=/bin/bash connect.sh
 ExecStopPost=/bin/bash stop.sh
 WorkingDirectory=%h/.dotfiles/audio/jack
 Restart=always
-RestartSec=1
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
