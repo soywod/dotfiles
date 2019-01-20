@@ -14,7 +14,7 @@ yellow = #c18401
 ; ------------------------------------------------------------- # Bar (common) #
 
 [section/bar]
-font-0 = SpaceMono:pixelsize=12;3
+font-0 = SpaceMonoNL:pixelsize=12;3
 font-1 = FontAwesome5FreeSolid:pixelsize=12;3
 font-2 = DEATH_DEFY:pixelsize=20;5
 background = ${colors.white}
@@ -236,26 +236,26 @@ label-connected-foreground = ${colors.greya}
 
 [module/wlan]
 inherit = section/network
-interface = wlan0
+interface = wlp2s0
 label-connected = %local_ip% 
 
 [module/wlan-down]
 inherit = section/network
-interface = wlan0
+interface = wlp2s0
 interval = 1
 label-connected = %downspeed% 
 label-connected-foreground = ${colors.blue}
 
 [module/wlan-up]
 inherit = section/network
-interface = wlan0
+interface = wlp2s0
 interval = 1
 label-connected = %upspeed% 
 label-connected-foreground = ${colors.greya}
 
 [module/wlan-signal]
 inherit = section/network
-interface = wlan0
+interface = wlp2s0
 label-connected = (%essid%) %signal:2%% 
 
 ; vim:ft=dosini

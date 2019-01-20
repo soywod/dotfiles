@@ -1,4 +1,4 @@
-font pango:SpaceMono 0
+font pango:SpaceMonoForPowerline 0
 
 set $mod Mod4
 
