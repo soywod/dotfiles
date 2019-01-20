@@ -4,7 +4,7 @@ DIRNAME="$(cd "$(dirname "$0")";pwd -P)"
 
 # --------------------------------------------------------------- # Dependency #
 
-sudo pacman -S --needed --noconfirm jack
+sudo pacman -S --needed --noconfirm jack ffado celt
 
 # --------------------------------------------------------------------- # Link #
 
@@ -14,5 +14,4 @@ ln -sf $DIRNAME/jack.service ~/.config/systemd/user/
 sudo ln -sf $DIRNAME/limits.conf /etc/security/
 
 systemctl --user daemon-reload
-systemctl --user enable jack.service
 systemctl --user start jack.service
