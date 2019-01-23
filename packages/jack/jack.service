@@ -2,10 +2,12 @@
 Description=JACK service
 
 [Service]
-ExecStart=/bin/bash start.sh
-ExecStartPost=/bin/bash connect.sh
-ExecStopPost=/bin/bash stop.sh
-WorkingDirectory=%h/.dotfiles/audio/jack
+ExecStart=bash start.sh
+ExecStartPost=bash connect.sh
+ExecStopPost=bash stop.sh
+WorkingDirectory=%h/.dotfiles/packages/jack
+Restart=on-failure
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target

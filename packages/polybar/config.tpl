@@ -1,3 +1,5 @@
+; vim:ft=dosini
+
 ; -------------------------------------------------------------------- # Theme #
 
 [colors]
@@ -257,5 +259,3 @@ label-connected-foreground = ${colors.greya}
 inherit = section/network
 interface = wlp2s0
 label-connected = (%essid%) %signal:2%% 
-
-; vim:ft=dosini

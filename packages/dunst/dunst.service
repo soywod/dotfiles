@@ -3,10 +3,10 @@ Description=Dunst service
 
 [Service]
 ExecStart=/usr/bin/dunst
-WorkingDirectory=%h/.dotfiles/display/dunst
+WorkingDirectory=%h/.dotfiles/packages/dunst
 Environment=DISPLAY=:0
-Restart=always
-RestartSec=1
+Restart=on-failure
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target

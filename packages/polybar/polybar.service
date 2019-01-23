@@ -1,12 +1,14 @@
+# vim:ft=conf
+
 [Unit]
 Description=Polybar service
 
 [Service]
-ExecStart=/bin/bash start.sh
-WorkingDirectory=%h/.dotfiles/display/polybar
+ExecStart=bash start.sh
+WorkingDirectory=%h/.dotfiles/packages/polybar
 Environment=DISPLAY=:0
-Restart=always
-RestartSec=1
+Restart=on-failure
+RestartSec=3
 
 [Install]
 WantedBy=multi-user.target

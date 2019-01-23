@@ -8,4 +8,5 @@ ln -sf $DIRNAME/jack.service ~/.config/systemd/user/
 sudo ln -sf $DIRNAME/limits.conf /etc/security/
 
 systemctl --user daemon-reload
+systemctl --user enable jack.service
 systemctl --user start jack.service
