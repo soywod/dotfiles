@@ -26,12 +26,12 @@ install_packages \
   alsa-utils \
   bash-completion \
   celt \
+  chromium \
   compton \
   dmenu \
   dunst \
   feh \
   ffado \
-  firefox \
   fzf \
   i3lock \
   i3-gaps \
