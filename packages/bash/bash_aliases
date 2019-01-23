@@ -33,6 +33,7 @@ alias vi='nvim'
 alias vim='nvim'
 alias vimb='nvim ~/.bashrc'
 alias vimc='nvim ~/.config/nvim/init.vim'
+alias mail='~/.dotfiles/scripts/mail.sh'
 
 alias s='source ~/.bashrc'
 
