@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USER='pi'
-IP='192.168.0.2'
+IP=$(dig +short mail.soywod.me)
 PORT=60022
 IMAPS='mail.soywod.me:993:localhost:993'
 SMTPS='mail.soywod.me:587:localhost:587'
@@ -12,5 +12,7 @@ PORT="-p $PORT"
 IMAPS="-L $IMAPS"
 SMTPS="-L $SMTPS"
 WEBDAV="-L $WEBDAV"
+NO_CMD='-N'
+NO_PROMPT='-oStrictHostKeyChecking=no'
 
-ssh -N $HOST $PORT $IMAPS $SMTPS $WEBDAV
+ssh $HOST $PORT $IMAPS $SMTPS $WEBDAV $NO_CMD $NO_PROMPT
