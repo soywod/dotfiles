@@ -29,9 +29,12 @@ install_packages \
   chromium \
   compton \
   dmenu \
+  docker \
+  docker-compose \
   dunst \
   feh \
   ffado \
+  filezilla \
   fzf \
   i3lock \
   i3-gaps \
