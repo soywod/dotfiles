@@ -36,12 +36,15 @@ install_packages \
   ffado \
   filezilla \
   fzf \
+  ghostscript \
+  imagemagick \
   i3lock \
   i3-gaps \
   jack \
   kitty \
   libmpdclient \
   libnotify \
+  mpc \
   mpd \
   mpv \
   neovim \
@@ -52,6 +55,7 @@ install_packages \
   redshift \
   ripgrep \
   scrot \
+  sqlitebrowser \
   thunderbird \
   transmission-cli \
   w3m \
