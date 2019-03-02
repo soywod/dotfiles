@@ -17,8 +17,9 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:/opt/android-studio/gradle/gradle-4.4/bin
-export PATH=$PATH:$HOME/.local/bin
-export PATH=$PATH:$HOME/.yarn/bin
+export PATH=$PATH:~/.local/bin
+export PATH=$PATH:~/.yarn/bin
+export PATH=$PATH:~/.npm-global/bin
 
 export GIT_PROMPT_START="\[\e[36m\]\w\[\e[m\]"
 export GIT_PROMPT_END=" \[\e[31m\]➜\[\e[m\] "

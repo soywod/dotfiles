@@ -16,31 +16,37 @@ function ${1:name}(${2:params}) {
 }
 endsnippet
 
-snippet fe "export function"
+snippet ef "export function"
 export function ${1:name}(${2:params}) {
 	${0:${VISUAL}}
 }
 endsnippet
 
-snippet fa "async function"
+snippet edf "export default function"
+export function ${1:name}(${2:params}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet af "async function"
 async function ${1:name}(${2:params}) {
 	${0:${VISUAL}}
 }
 endsnippet
 
-snippet fae "export async function"
+snippet eaf "export async function"
 export async function ${1:name}(${2:params}) {
 	${0:${VISUAL}}
 }
 endsnippet
 
-snippet f> "() =>"
+snippet ff "() =>"
 ${1:name} = ${2:params} => {
 	${0:${VISUAL}}
 }
 endsnippet
 
-snippet f>a "async () =>"
+snippet aff "async () =>"
 ${1:name} = async ${2:params} => {
 	${0:${VISUAL}}
 }

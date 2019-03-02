@@ -25,12 +25,14 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'mbbill/undotree'
-Plug 'soywod/phonetics.vim'
-Plug 'soywod/kronos.vim'
+" Plug 'soywod/phonetics.vim'
+" Plug 'soywod/kronos.vim'
 Plug 'sirver/ultisnips'
 Plug 'zhimsel/vim-stay'
+Plug 'mattn/emmet-vim'
 " Plug 'soywod/iris.vim'
-Plug 'plasticboy/vim-markdown'
+" Plug 'plasticboy/vim-markdown'
+Plug 'jamessan/vim-gnupg'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
@@ -110,7 +112,7 @@ set linebreak
 set ruler
 set scrolloff=3
 set shiftwidth=2
-set shortmess+=c
+set shortmess+=ctT
 set smartcase
 set softtabstop=2
 set splitright
@@ -187,8 +189,19 @@ let g:UltiSnipsExpandTrigger = '<m-cr>'
 let g:UltiSnipsJumpForwardTrigger = '<cr>'
 
 let g:lsp_use_event_queue = 1
+let g:lsp_log_verbose=1
+let g:lsp_log_file='/tmp/lsp.log'
+
+let g:user_emmet_leader_key = ','
+let g:user_emmet_mode = 'a'
+let g:user_emmet_install_global = 0
+
+" let g:lsp_log_verbose = 1
+" let g:lsp_log_file = expand('~/vim-lsp.log')
 
 " ------------------------------------------------------------ # Auto commands #
+
+autocmd FileType html,css,scss,typescript.tsx EmmetInstall
 
 augroup completion
   autocmd!
@@ -198,7 +211,7 @@ augroup completion
     \'cmd': {server_info->[
       \&shell,
       \&shellcmdflag,
-      \'node_modules/.bin/typescript-language-server --stdio',
+      \'typescript-language-server --stdio',
     \]},
     \'root_uri':{server_info->
       \lsp#utils#path_to_uri(
@@ -211,34 +224,21 @@ augroup completion
     \'whitelist': ['typescript', 'typescript.tsx'],
   \})
 
-  " autocmd User lsp_setup call lsp#register_server({
-  "   \'name': 'javascript-language-server',
-  "   \'cmd': {server_info->[
-  "     \&shell,
-  "     \&shellcmdflag,
-  "     \'node_modules/.bin/typescript-language-server --stdio'
-  "     \]},
-  "   \'whitelist': ['javascript', 'javascript.jsx'],
-  " \})
+  autocmd User lsp_setup call lsp#register_server({
+    \'name': 'javascript-language-server',
+    \'cmd': {server_info->[
+      \&shell,
+      \&shellcmdflag,
+      \'typescript-language-server --stdio'
+      \]},
+    \'whitelist': ['javascript', 'javascript.jsx'],
+  \})
 
-  " autocmd User Ncm2Plugin call ncm2#register_source({
-  "   \'name' : 'stylus',
+  " autocmd FileType scss User Ncm2Plugin call ncm2#register_source({
+  "   \'name' : 'scss',
   "   \'priority': 2, 
   "   \'subscope_enable': 1,
-  "   \'mark': 'stylus',
-  "   \'word_pattern': '[\w\-]+',
-  "   \'complete_pattern': '\.',
-  "   \'on_complete': [
-  "     \'ncm2#on_complete#omni',
-  "     \'stylcomplete#CompleteStyl',
-  "   \],
-  " \})
-
-  " autocmd User Ncm2Plugin call ncm2#register_source({
-  "   \'name' : 'sass',
-  "   \'priority': 2, 
-  "   \'subscope_enable': 1,
-  "   \'mark': 'sass',
+  "   \'mark': 'scss',
   "   \'word_pattern': '[\w\-]+',
   "   \'complete_pattern': '\.',
   "   \'on_complete': [
@@ -246,20 +246,7 @@ augroup completion
   "     \'csscomplete#CompleteCSS',
   "   \],
   " \})
-
-  " autocmd User Ncm2Plugin call ncm2#register_source({
-  "   \'name' : 'iris-edit',
-  "   \'priority': 2, 
-  "   \'subscope_enable': 1,
-  "   \'mark': 'contacts',
-  "   \'word_pattern': '[a-zA-Z1-9\._@]\+',
-  "   \'complete_pattern': '[ ,]',
-  "   \'on_complete': [
-  "     \'ncm2#on_complete#omni',
-  "     \'iris#utils#completeContacts',
-  "   \],
-  " \})
-augroup end
+augroup END
 
 augroup base
   autocmd!
