@@ -1,5 +1,3 @@
-# vim:ft=conf
-
 [Unit]
 Description=Polybar service
 
@@ -12,3 +10,5 @@ RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
+
+# vim:ft=conf

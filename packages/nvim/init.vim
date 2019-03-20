@@ -250,7 +250,7 @@ augroup END
 
 augroup base
   autocmd!
-  autocmd FileType * setlocal fo-=c fo-=r fo-=o
+  " autocmd FileType * setlocal fo-=c fo-=r fo-=o
   autocmd FileType qf wincmd J
 augroup end
 
