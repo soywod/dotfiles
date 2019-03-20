@@ -25,6 +25,8 @@ function install_aur_packages {
 install_packages \
   alsa-utils \
   bash-completion \
+  bluez \
+  bluez-utils \
   celt \
   chromium \
   compton \

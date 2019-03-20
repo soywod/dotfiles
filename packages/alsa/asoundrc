@@ -1,28 +1,39 @@
-# ---------------------------------------------------------- # Playback device #
+# --------------------------------------------------------- # Playback devices #
 
-pcm.amix {
-  type dmix
-  ipc_key 219345
-  slave.pcm "hw:Loopback,0,0"
-}
-
-pcm.asoftvol {
+pcm.playback {
   type softvol
-  slave.pcm "amix"
-
-  control {
-    name PCM
-  }
-
   min_dB -51.0
   max_dB   0.0
+
+  control {
+    name PCH
+  }
+
+  slave.pcm {
+    type dmix
+    ipc_key 219345
+    slave.pcm "hw:Loopback,0,0"
+  }
+
+  # control {
+  #   name PCH
+  #   card 0
+  # }
+
+  # slave.pcm {
+  #   type bluealsa
+  #   profile "a2dp"
+  #   delay 10000
+  #   # device "1C:48:F9:9D:02:B7" # Jabra MOVE v2.3.0
+  #   device "2C:41:A1:F6:10:BB" # Bose Revolve 1
+  # }
 }
 
-# ----------------------------------------------------------- # Capture device #
+# ---------------------------------------------------------- # Capture devices #
 
-pcm.asnoop {
+pcm.capture {
   type dsnoop
-  ipc_key 219346
+  ipc_key 219347
   slave.pcm "hw:Loopback,0,1"
 }
 
@@ -30,8 +41,8 @@ pcm.asnoop {
 
 pcm.aduplex {
   type asym
-  playback.pcm "asoftvol"
-  capture.pcm "asnoop"
+  playback.pcm "playback"
+  capture.pcm "capture"
 }
 
 # --------------------------------------------------------- # Loopback devices #
@@ -51,7 +62,7 @@ pcm.cloop {
 
 pcm.pch {
   type hw
-  card "PCH"
+  card 0
 }
 
 pcm.isnoop {
@@ -62,17 +73,12 @@ pcm.isnoop {
 
 ctl.!default {
   type hw
-  card "PCH"
+  card PCH
 }
 
 pcm.!default {
   type plug
   slave.pcm "aduplex"
-
-  hint {
-    show on
-    description "Duplex Loopback"
-  }
 }
 
 pcm.card0 {
@@ -80,87 +86,4 @@ pcm.card0 {
   slave.pcm "aduplex"
 }
 
-# # -------------------------------------------------------- # Playback loopback #
-
-# pcm.amix {
-#   type dmix
-#   ipc_key 219345
-#   slave.pcm "hw:Loopback,0,0"
-# }
-
-# pcm.asoftvol {
-#   type softvol
-#   slave.pcm "amix"
-
-#   control {
-#     name PCM
-#   }
-
-#   min_dB -51.0
-#   max_dB   0.0
-# }
-
-# pcm.cloop {
-#   type dsnoop
-#   ipc_key 219348
-#   slave.pcm "hw:Loopback,1,0"
-# }
-
-# # --------------------------------------------------------- # Capture loopback #
-
-# pcm.pch {
-#   type hw
-#   card "PCH"
-# }
-
-# pcm.isnoop {
-#   type dsnoop
-#   ipc_key 219346
-#   slave.pcm "pch"
-# }
-
-# pcm.asnoop {
-#   type dsnoop
-#   ipc_key 219346
-#   slave.pcm "hw:Loopback,0,1"
-# }
-
-# pcm.ploop {
-#   type plug
-#   ipc_key 219347
-#   slave.pcm "hw:Loopback,1,1"
-# }
-
-# # ---------------------------------------------------------- # Duplex loopback #
-
-# pcm.aduplex {
-#   type asym
-#   playback.pcm "asoftvol"
-#   capture.pcm "pch"
-# }
-
-# # ----------------------------------------------------------- # Default device #
-
-# defaults.pcm.rate_converter "samplerate_best"
-
-# pcm.!default {
-#   type plug
-#   slave.pcm "aduplex"
-
-#   hint {
-#     show on
-#     description "Duplex Loopback"
-#   }
-# }
-
-# ctl.!default {
-#   type hw
-#   card "PCH"
-# }
-
-# pcm.card0 {
-#   type plug
-#   slave.pcm "aduplex"
-# }
-
-# # vim:ft=config
+# vim:ft=config
