@@ -23,7 +23,7 @@ export function ${1:name}(${2:params}) {
 endsnippet
 
 snippet edf "export default function"
-export function ${1:name}(${2:params}) {
+export default function ${1:name}(${2:params}) {
 	${0:${VISUAL}}
 }
 endsnippet
@@ -50,6 +50,12 @@ snippet aff "async () =>"
 ${1:name} = async ${2:params} => {
 	${0:${VISUAL}}
 }
+endsnippet
+
+snippet ue "useEffect(...)"
+useEffect(() => {
+	${0}
+})
 endsnippet
 
 # ------------------------------------------------------------------ # Logging #

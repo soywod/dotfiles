@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dirname="/var/backups/mail"
+dirname="/var/backups/chat"
 filename="$(date +"%d").tar.gz"
 file="$dirname/$filename"
 
@@ -9,7 +9,7 @@ if [ -f "$file" ]; then
 fi
 
 host="pi@$(dig +short mail.soywod.me)"
-tar="sudo tar -czf $file -C /var/mail/virtual/mail Maildir"
+tar="sudo tar -czf $file -C /var/lib prosody"
 
 ssh $host $tar
 scp $host:$file $dirname

@@ -70,5 +70,7 @@ install_aur_packages \
   polybar \
   slack-desktop \
   xrectsel ffcast \
+  jdk9 \
+  openoffice \
 
 find "$DIRNAME/../packages" -name install.sh -exec bash {} \;

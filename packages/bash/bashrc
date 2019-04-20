@@ -7,7 +7,7 @@ shopt -s cdspell
 
 stty -ixon
 
-export JAVA_HOME=/opt/jdk
+export JAVA_HOME=/usr/lib/jvm/default
 export JAVA_SDK=$JAVA_HOME
 export JAVA_SDK=$JAVA_HOME/jre
 export PATH=$PATH:$JAVA_HOME/bin
@@ -20,6 +20,7 @@ export PATH=$PATH:/opt/android-studio/gradle/gradle-4.4/bin
 export PATH=$PATH:~/.local/bin
 export PATH=$PATH:~/.yarn/bin
 export PATH=$PATH:~/.npm-global/bin
+export PATH=$PATH:/opt/platform-tools
 
 export GIT_PROMPT_START="\[\e[36m\]\w\[\e[m\]"
 export GIT_PROMPT_END=" \[\e[31m\]➜\[\e[m\] "
