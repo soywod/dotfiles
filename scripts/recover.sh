@@ -72,5 +72,6 @@ install_aur_packages \
   xrectsel ffcast \
   jdk9 \
   openoffice \
+  signal \
 
 find "$DIRNAME/../packages" -name install.sh -exec bash {} \;
