@@ -64,6 +64,7 @@ install_packages \
   xclip \
   xorg \
   xorg-xinit \
+  p7zip \
 
 install_aur_packages \
   light \
