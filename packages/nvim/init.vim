@@ -6,43 +6,32 @@ set nocompatible
 
 call plug#begin()
 
-" LSP & completion
-Plug 'roxma/nvim-yarp'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'ncm2/ncm2'
-Plug 'ncm2/ncm2-ultisnips'
-Plug 'ncm2/ncm2-vim-lsp'
+" Linting, fixing and completion
 Plug 'w0rp/ale'
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 
 " Fuzzy finder
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
 " Utilities
-" Plug 'junegunn/vader.vim'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'mbbill/undotree'
-" Plug 'soywod/phonetics.vim'
-" Plug 'soywod/kronos.vim'
 Plug 'sirver/ultisnips'
 Plug 'zhimsel/vim-stay'
 Plug 'mattn/emmet-vim'
-" Plug 'soywod/iris.vim'
-" Plug 'plasticboy/vim-markdown'
 Plug 'jamessan/vim-gnupg'
+Plug 'terryma/vim-expand-region'
 
 " Theme and syntax
 Plug 'rakr/vim-one'
-Plug 'soywod/typescript.vim'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-" Plug 'iloginow/vim-stylus'
-Plug 'cakebaker/scss-syntax.vim'
-" Plug 'tpope/vim-haml'
-Plug 'digitaltoad/vim-pug'
+Plug 'elzr/vim-json',             {'for': 'json'}
+Plug 'othree/html5.vim',          {'for': 'html'}
+Plug 'hail2u/vim-css3-syntax',    {'for': 'css'}
+Plug 'plasticboy/vim-markdown',   {'for': 'markdown'}
+Plug 'pangloss/vim-javascript',   {'for': ['javascript', 'javascript.jsx']}
+Plug 'mxw/vim-jsx',               {'for': ['javascript', 'javascript.jsx']}
+Plug 'soywod/typescript.vim',     {'for': ['typescript', 'typescript.jsx']}
 
 call plug#end()
 
@@ -147,117 +136,45 @@ highlight ALEWarningSign guibg=#c18401  guifg=#fafafa  gui=NONE
 
 " ------------------------------------------------------------- # Plugins conf #
 
-let g:ncm2#complete_length = 1
-
-let g:lsp_signs_enabled = 1
-let g:lsp_preview_position = 'below'
-let g:lsp_preview_auto_resize = 1
-let g:lsp_diagnostics_echo_cursor = 1
-let g:lsp_signs_error = {'text': 'E>'}
-let g:lsp_signs_warning = {'text': 'W>'}
-let g:lsp_signs_hint = {'text': 'H>'}
-
-let g:ale_sign_error = 'E>'
-let g:ale_sign_warning = 'W>'
-let g:ale_pattern_options = {
-  \'.*node_modules/.*$': {'ale_enabled': 0},
-\}
-
-let g:ale_fix_on_save = 1
-let g:ale_fixers = {
-  \'javascript': ['prettier'],
-  \'javascript.jsx': ['prettier'],
-  \'typescript': ['prettier'],
-  \'typescript.tsx': ['prettier'],
-  \'scss': ['stylelint', 'prettier'],
-\}
-
-let g:ale_linter_aliases = {
-  \'typescript.tsx': 'typescript',
-  \'javascript.tsx': 'javascript',
-\}
-
-let g:ale_linters = {
-  \'sass': ['stylelint'],
-  \'scss': ['stylelint'],
-  \'typescript': ['tslint'],
-\}
-
-" let g:kronos_sync = 1
-
 let g:UltiSnipsExpandTrigger = '<m-cr>'
 let g:UltiSnipsJumpForwardTrigger = '<cr>'
-
-let g:lsp_use_event_queue = 1
-let g:lsp_log_verbose=1
-let g:lsp_log_file='/tmp/lsp.log'
 
 let g:user_emmet_leader_key = ','
 let g:user_emmet_mode = 'a'
 let g:user_emmet_install_global = 0
 
-" let g:lsp_log_verbose = 1
-" let g:lsp_log_file = expand('~/vim-lsp.log')
+let g:deoplete#enable_at_startup = 1
+
+let g:ale_completion_enabled = 1
+let g:ale_fix_on_save = 1
+
+let ale_linters = {
+  \'javascript': ['tsserver'],
+  \'javascript.tsx': ['tsserver'],
+  \'typescript': ['tsserver', 'tslint'],
+  \'typescript.tsx': ['tsserver', 'tslint'],
+\}
+
+let ale_fixers = {
+  \'json': ['prettier'],
+  \'typescript': ['tslint', 'prettier'],
+  \'typescript.tsx': ['tslint', 'prettier'],
+\}
+
+call expand_region#custom_text_objects({'a]': 1, 'ab': 1, 'aB': 1})
 
 " ------------------------------------------------------------ # Auto commands #
 
-autocmd FileType html,css,scss,typescript.tsx EmmetInstall
-
-augroup completion
-  autocmd!
-  autocmd BufEnter * call ncm2#enable_for_buffer()
-  autocmd User lsp_setup call lsp#register_server({
-    \'name': 'typescript-language-server',
-    \'cmd': {server_info->[
-      \&shell,
-      \&shellcmdflag,
-      \'typescript-language-server --stdio',
-    \]},
-    \'root_uri':{server_info->
-      \lsp#utils#path_to_uri(
-        \lsp#utils#find_nearest_parent_file_directory(
-          \lsp#utils#get_buffer_path(),
-          \'tsconfig.json'
-        \)
-      \)
-    \},
-    \'whitelist': ['typescript', 'typescript.tsx'],
-  \})
-
-  autocmd User lsp_setup call lsp#register_server({
-    \'name': 'javascript-language-server',
-    \'cmd': {server_info->[
-      \&shell,
-      \&shellcmdflag,
-      \'typescript-language-server --stdio'
-      \]},
-    \'whitelist': ['javascript', 'javascript.jsx'],
-  \})
-
-  " autocmd FileType scss User Ncm2Plugin call ncm2#register_source({
-  "   \'name' : 'scss',
-  "   \'priority': 2, 
-  "   \'subscope_enable': 1,
-  "   \'mark': 'scss',
-  "   \'word_pattern': '[\w\-]+',
-  "   \'complete_pattern': '\.',
-  "   \'on_complete': [
-  "     \'ncm2#on_complete#omni',
-  "     \'csscomplete#CompleteCSS',
-  "   \],
-  " \})
-augroup END
+autocmd FileType html,css,scss,typescript.tsx,javascript,javascript.jsx EmmetInstall
 
 augroup base
   autocmd!
-  " autocmd FileType * setlocal fo-=c fo-=r fo-=o
   autocmd FileType qf wincmd J
 augroup end
 
 " ----------------------------------------------------------------- # Commands #
 
 command! -bang -nargs=* Grep call s:grep(<q-args>, <bang>0)
-command! DiffOrig call s:diff_origin()
 
 " ----------------------------------------------------------------- # Mappings #
 
@@ -272,8 +189,6 @@ nnoremap <silent> <c-n> :cnext<cr>
 
 nnoremap <silent> <a-l> :call <sid>toggle_loc_list()<cr>
 nnoremap <silent> <a-c> :call <sid>toggle_quick_fix()<cr>
-nnoremap <silent> <a-t> :Kronos<cr>
-nnoremap <silent> <a-p> :PhoneticsPlay<cr>
 
 nnoremap <silent> <a-/> :noh<cr>
 
@@ -281,14 +196,13 @@ nnoremap <a-f> :Files<cr>
 nnoremap <a-g> :Grep 
 nnoremap <a-h> :History<cr>
 nnoremap <a-b> :Buffers<cr>
-nnoremap <a-d> :LspDefinition<cr>
-nnoremap <a-r> :LspReferences<cr>
-nnoremap <s-a-r> :LspRename<cr>
+nnoremap <a-d> :ALEGoToDefinition<cr>
+nnoremap <a-r> :ALEFindReferences<cr>
+map      <a-v> <plug>(expand_region_expand)
 
-inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-nnoremap <a-s> :echo synIDattr(synID(line('.'), col('.'), 0), 'name')<cr>
 
 nnoremap <silent> <expr> <s-h> <sid>preview_opened()
   \? ":pclose\<cr>"
-  \: ":LspHover\<cr>"
+  \: ":ALEHover\<cr>"
