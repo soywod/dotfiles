@@ -41,3 +41,5 @@ alias s='source ~/.bashrc'
 
 alias xcopy='xclip -selection clipboard'
 alias xpaste='xclip -selection clipboard -o'
+
+alias kb='setxkbmap -layout us,ru -variant "dvorak-alt-intl", -option grp:shifts_toggle && xset r rate 250 33'
