@@ -2,7 +2,7 @@
 Description=Feh service
 
 [Service]
-ExecStart=feh --bg-fill background.png
+ExecStart=feh --bg-fill background.jpeg
 WorkingDirectory=%h/.dotfiles/packages/feh
 Environment=DISPLAY=:0
 Restart=on-failure
