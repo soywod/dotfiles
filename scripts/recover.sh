@@ -70,9 +70,10 @@ install_aur_packages \
   light \
   polybar \
   slack-desktop \
+  telegram-desktop \
   xrectsel ffcast \
   jdk9 \
   openoffice \
-  signal \
+  postman-bin \
 
 find "$DIRNAME/../packages" -name install.sh -exec bash {} \;

@@ -11,12 +11,14 @@ Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 Plug 'neoclide/coc-neco', {'for': 'vim'}
 Plug 'shougo/neco-vim'  , {'for': 'vim'}
 
+Plug 'junegunn/fzf'     , {'dir': '~/.fzf', 'do': './install --all'}
+Plug 'junegunn/fzf.vim'
+
 " Utilities
 Plug 'jamessan/vim-gnupg'
 Plug 'mattn/emmet-vim'
 Plug 'sirver/ultisnips'
 Plug 'soywod/autosess.vim'
-Plug 'soywod/bufmark.vim'
 Plug 'soywod/kronos.vim'
 Plug 'soywod/quicklist.vim'
 Plug 'tpope/vim-commentary'
@@ -117,7 +119,26 @@ function! s:show_documentation()
   endif
 endfunction
 
+function! s:grep(args, bang)
+  let args = [
+    \'--column',
+    \'--line-number',
+    \'--no-heading',
+    \'--fixed-strings',
+    \'--ignore-case',
+    \'--hidden',
+    \'--follow',
+    \'--color "always"',
+    \'--glob "!.git/*"',
+    \shellescape(a:args),
+  \]
+
+  call fzf#vim#grep(printf('rg %s', join(args, ' ')), 1, a:bang)
+endfunction
+
 " ----------------------------------------------------------------- # Commands #
+
+command! -bang -nargs=* Grep call s:grep(<q-args>, <bang>0)
 
 augroup dotfiles
   autocmd!
@@ -136,13 +157,13 @@ nmap      <silent>  <a-d> <plug>(coc-definition)
 nmap      <silent>  <a-r> <plug>(coc-references)
 nnoremap  <silent>  K     :call <sid>show_documentation()<cr>
 
-nmap      <a-R>           <plug>(coc-rename)
-nnoremap  <a-t>           :Kronos<cr>
-nnoremap  <a-g>           :CocList grep 
-nnoremap  <a-f>           :CocList files<cr>
-nnoremap  <a-b>           :CocList buffers<cr>
-nnoremap  <a-h>           :CocList mru<cr>
-vnoremap  .               :normal .<cr>
+nmap      <a-R> <plug>(coc-rename)
+nnoremap  <a-t> :Kronos<cr>
+nnoremap  <a-f> :Files<cr>
+nnoremap  <a-g> :Grep 
+nnoremap  <a-h> :History<cr>
+nnoremap  <a-b> :Buffers<cr>
+vnoremap  .     :normal .<cr>
 
 inoremap  <expr> <cr>     pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 inoremap  <expr> <tab>    pumvisible() ? "\<c-n>" : "\<tab>"
