@@ -35,7 +35,7 @@ monitor = eDP-1
 inherit = section/bar
 modules-left    = mpd
 modules-center  = date
-modules-right   = github transmission
+modules-right   = pomodoro github transmission
 
 ; ------------------------------------------------------------- # Bar (bottom) #
 
@@ -45,6 +45,18 @@ bottom = true
 modules-left = battery cpu memory temperature filesystem volume xkeyboard
 modules-center = title
 modules-right = eth-down eth-up eth wlan-down wlan-up wlan-signal wlan
+
+; ----------------------------------------------------------------- # Pomodoro #
+
+[module/pomodoro]
+type = custom/script
+exec = pymodoro -f ~/.pomodoro -ltr
+label = %output%
+tail = true
+interval = 0
+click-left = if [ -e ~/.pomodoro ]; then rm ~/.pomodoro; else echo "25 5" > ~/.pomodoro; fi
+click-right = echo "$((`cut ~/.pomodoro -d ' ' -f 1`+5)) 5" > ~/.pomodoro
+click-middle = echo "$((`cut ~/.pomodoro -d ' ' -f 1`-5)) 5" > ~/.pomodoro
 
 ; ---------------------------------------------------------------------- # MPD #
 

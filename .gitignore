@@ -1,4 +1,5 @@
-/display/polybar/config
+/packages/polybar/config
+/packages/polybar/.pomodoro
 /packages/nvim/snippets/javascript.snippets
-/tool/mpd/mpd.conf
-/tool/transmission/settings.json
+/packages/mpd/mpd.conf
+/packages/transmission/settings.json
