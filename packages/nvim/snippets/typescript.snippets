@@ -1,14 +1,20 @@
-# ---------------------------------------------------------------- # Variables #
+# ------------------------------------------------------------------ # General #
+
+snippet try "try...catch"
+try {
+	$0
+} catch (e) {
+	$1
+}
+endsnippet
 
 snippet c "const"
-const ${0} = ${1}
+const $0 = $1
 endsnippet
 
 snippet cc "const {}"
-const {${0}} = ${1}
+const {$0} = $1
 endsnippet
-
-# ---------------------------------------------------------------- # Functions #
 
 snippet f "function"
 function ${1:name}(${2:params}) {
@@ -52,44 +58,46 @@ ${1:name} = async ${2:params} => {
 }
 endsnippet
 
-snippet ue "useEffect(...)"
-useEffect(() => {
-	${0}
-})
-endsnippet
-
 # ------------------------------------------------------------------ # Logging #
 
 snippet log "console.log"
 console.log(${0})
 endsnippet
 
-snippet logs "console.log string"
-console.log('${0}')
-endsnippet
+# -------------------------------------------------------------------- # React #
 
-snippet logo "console.log object"
-console.log({${0}})
-endsnippet
+snippet fc "React.FC"
+import React, {FC} from 'react'
 
-snippet elog "console.log"
-console.error(${0})
-endsnippet
+type Props = {
+	$2
+}
 
-snippet elogs "console.log string"
-console.error('${0}')
-endsnippet
+const $1: FC<Props> = props => {
+	return (
+		$0
+	)
+}
 
-snippet elogo "console.log object"
-console.error({${0}})
+export default $1
 endsnippet
-
-# ------------------------------------------------------------------ # Imports #
 
 snippet i "import"
-import ${0} from '${1}'
+import $0 from '$1'
 endsnippet
 
-snippet ii "import {}"
-import ${0} from '${1}'
+snippet ue "useEffect"
+useEffect(() => {
+	$0
+}, [$1])
+endsnippet
+
+snippet ur "useRef"
+const $1 = useRef$2(${3:null})
+$0
+endsnippet
+
+snippet us "useState"
+const [$1, set${1/.+/\u$0/}] = useState$2(${3:null})
+$0
 endsnippet
