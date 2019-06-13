@@ -3,15 +3,14 @@
 ; -------------------------------------------------------------------- # Theme #
 
 [colors]
-black  = #494B53
-blue   = #4078f2
-green  = #50a14f
-greya  = #a0a1a7
-greyd  = #d0d0d0
-greyf  = #f0f0f0
-red    = #e45649
-white  = #fafafa
-yellow = #c18401
+black   = #D8DEE9
+blue    = #81A1C1
+green   = #A3BE8C
+greya   = #a0a1a7
+grey    = #434C5E
+red     = #BF616A
+white   = #2E3440
+yellow  = #EBCB8B
 
 ; ------------------------------------------------------------- # Bar (common) #
 
@@ -34,8 +33,8 @@ monitor = eDP-1
 
 [bar/top]
 inherit = section/bar
-border-bottom-color = ${colors.greyf}
-border-bottom-size  = 1
+; border-bottom-color = ${colors.grey}
+; border-bottom-size  = 1
 modules-left    = mpd
 modules-center  = date
 modules-right   = github transmission
@@ -45,8 +44,8 @@ modules-right   = github transmission
 [bar/bottom]
 inherit = section/bar
 bottom = true
-border-top-size = 1
-border-top-color = ${colors.greyf}
+; border-top-size = 1
+; border-top-color = ${colors.grey}
 modules-left = battery cpu memory temperature filesystem volume xkeyboard
 modules-center = title
 modules-right = eth-down eth-up eth wlan-down wlan-up wlan-signal wlan
@@ -67,13 +66,13 @@ icon-next      = 
 icon-random    = 
 icon-single = 
 icon-repeat    = 
-icon-prev-foreground  = ${colors.greyd}
-icon-stop-foreground  = ${colors.greyd}
-icon-play-foreground  = ${colors.greyd}
+icon-prev-foreground  = ${colors.grey}
+icon-stop-foreground  = ${colors.grey}
+icon-play-foreground  = ${colors.grey}
 icon-pause-foreground = ${colors.blue}
-icon-next-foreground  = ${colors.greyd}
-label-song-foreground = ${colors.greya}
-toggle-off-foreground = ${colors.greyd}
+icon-next-foreground  = ${colors.grey}
+label-song-foreground = ${colors.white}
+toggle-off-foreground = ${colors.grey}
 toggle-on-foreground  = ${colors.black}
 
 ; ----------------------------------------------------------------- # Datetime #
@@ -90,10 +89,10 @@ label-font = 3
 label-foreground = ${colors.black}
 format-prefix = "- "
 format-prefix-font = 3
-format-prefix-foreground = ${colors.greyd}
+format-prefix-foreground = ${colors.grey}
 format-suffix = " -"
 format-suffix-font = 3
-format-suffix-foreground = ${colors.greyd}
+format-suffix-foreground = ${colors.grey}
 
 ; ------------------------------------------------------------------- # GitHub #
 

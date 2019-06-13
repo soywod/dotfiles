@@ -26,7 +26,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 
 " Theme and syntax
-Plug 'rakr/vim-one'
+Plug 'arcticicestudio/nord-vim'
 Plug 'elzr/vim-json'          , {'for': 'json'}
 Plug 'othree/html5.vim'       , {'for': 'html'}
 Plug 'hail2u/vim-css3-syntax' , {'for': 'css'}
@@ -34,19 +34,19 @@ Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'pangloss/vim-javascript', {'for': ['javascript', 'javascript.jsx']}
 Plug 'mxw/vim-jsx'            , {'for': ['javascript', 'javascript.jsx']}
 Plug 'soywod/typescript.vim'  , {'for': ['typescript', 'typescript.jsx']}
+Plug 'vim-ruby/vim-ruby'      , {'for': ['ruby']}
 
 call plug#end()
 
 " ----------------------------------------------------------------- # Settings #
 
 set autoindent
-set background=light
+set background=dark
 set backspace=indent,eol,start
 set breakindent
 set clipboard=unnamedplus
 set completeopt=noinsert,menuone,noselect
 set cursorline
-set directory=~/.config/nvim/swap//
 set expandtab
 set foldcolumn=2
 set foldlevelstart=99
@@ -57,6 +57,7 @@ set history=1000
 set laststatus=2
 set linebreak
 set nobackup
+set noswapfile
 set nowritebackup
 set number
 set relativenumber
@@ -79,26 +80,16 @@ set wildmenu
 
 " -------------------------------------------------------------------- # Theme #
 
-colorscheme one
+colorscheme nord
 
-highlight clear FoldColumn
-highlight clear SignColumn
-
-highlight CocErrorHighlight   guibg=#e45649   guifg=#fafafa   gui=NONE
-highlight CocErrorSign        guibg=#e45649   guifg=#fafafa   gui=NONE
-highlight CocHighlightText    guibg=#d3d3d3   guifg=#494b53   gui=NONE
-highlight CocWarningHighlight guibg=#c18401   guifg=#fafafa   gui=NONE
-highlight CocWarningSign      guibg=#c18401   guifg=#fafafa   gui=NONE
-highlight Error               guibg=#e45649   guifg=#fafafa   gui=NONE
-highlight LineNr              guibg=#fafafa   guifg=#d3d3d3   gui=NONE
-highlight CursorLineNr        guibg=#fafafa   guifg=#c18401   gui=NONE
-highlight ErrorMsg            guibg=NONE      guifg=#e45649   gui=Bold
-highlight FoldColumn          guifg=#d3d3d3
-highlight Folded              guibg=#fafafa   guifg=#d3d3d3
-highlight StatusLine          guifg=#494B53   guibg=#f0f0f0
-highlight StatusLineNC        guifg=#f0f0f0   guibg=#f0f0f0
-highlight Warning             guibg=#c18401   guifg=#fafafa   gui=NONE
-highlight WarningMsg          guibg=NONE      guifg=#c18401   gui=Bold
+highlight Error               guibg=#BF616A guifg=#D8DEE9 gui=NONE
+highlight ErrorMsg            guibg=NONE    guifg=#BF616A gui=Bold
+highlight CocErrorHighlight   guibg=#BF616A guifg=#D8DEE9 gui=NONE
+highlight CocErrorSign        guibg=#BF616A guifg=#D8DEE9 gui=NONE
+highlight Warning             guibg=#EBCB8B guifg=#D8DEE9 gui=NONE
+highlight WarningMsg          guibg=NONE    guifg=#EBCB8B gui=Bold
+highlight CocWarningHighlight guibg=#EBCB8B guifg=#D8DEE9 gui=NONE
+highlight CocWarningSign      guibg=#EBCB8B guifg=#D8DEE9 gui=NONE
 
 " ------------------------------------------------------------- # Plugins conf #
 
@@ -156,16 +147,19 @@ nnoremap  <silent>  <a-/> :noh<cr>
 nmap      <silent>  <a-d> <plug>(coc-definition)
 nmap      <silent>  <a-r> <plug>(coc-references)
 nnoremap  <silent>  K     :call <sid>show_documentation()<cr>
+vnoremap  <silent>  <a-s> :'<,'>sort<cr>
 
 nmap      <a-R> <plug>(coc-rename)
+nmap      <a-a> <Plug>(coc-codeaction)
 nnoremap  <a-t> :Kronos<cr>
 nnoremap  <a-f> :Files<cr>
 nnoremap  <a-g> :Grep 
 nnoremap  <a-h> :History<cr>
 nnoremap  <a-b> :Buffers<cr>
+nnoremap  <a-e> :w<cr>:!%:p<cr>
 vnoremap  .     :normal .<cr>
 
-inoremap  <expr> <cr>     pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+inoremap  <expr> <c-j>    pumvisible() ? "\<c-y>" : "\<c-g>u\<c-j>"
 inoremap  <expr> <tab>    pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap  <expr> <s-tab>  pumvisible() ? "\<c-p>" : "\<s-tab>"
 

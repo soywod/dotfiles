@@ -9,10 +9,10 @@ set $left  h
 set $right l
 set $up    k
 
-set $black  #494B53
-set $blue   #4078f2
-set $grey   #f0f0f0
-set $white  #fafafa
+set $black  #D8DEE9
+set $blue   #81A1C1
+set $grey   #434C5E
+set $white  #2E3440
 
 bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
@@ -121,9 +121,7 @@ exec --no-startup-id "systemctl --user start redshift"
 exec --no-startup-id "systemctl --user start polybar"
 
 focus_follows_mouse no
-hide_edge_borders   none
-
-gaps inner 20
+hide_edge_borders   vertical
 
 default_border pixel 1
 
