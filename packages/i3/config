@@ -109,7 +109,10 @@ bindsym XF86MonBrightnessUp   exec "light -A 2"
 bindsym XF86MonBrightnessDown exec "light -S 1"
 
 # Screenshots controls
-bindsym --release Print exec "scrot /tmp/screenshot.png -s -z -e 'xclip -selection clipboard -t image/png -i $f'"
+bindsym --release Print             exec "~/.dotfiles/scripts/capture.sh png selection"
+bindsym --release $mod+Print        exec "~/.dotfiles/scripts/capture.sh png window"
+bindsym --release Shift+Print       exec "~/.dotfiles/scripts/capture.sh mp4 selection"
+bindsym --release $mod+Shift+Print  exec "~/.dotfiles/scripts/capture.sh mp4 window"
 
 exec --no-startup-id "systemctl --user start jack"
 exec --no-startup-id "xrandr | grep '^DP-2 c' && xrandr --output DP-2 --primary --output eDP-1 --noprimary --below DP-2"

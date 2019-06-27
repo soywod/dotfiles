@@ -23,7 +23,6 @@ function install_aur_packages {
 }
 
 install_packages \
-  alsa-utils \
   bash-completion \
   bluez \
   bluez-utils \
@@ -39,10 +38,9 @@ install_packages \
   filezilla \
   fzf \
   ghostscript \
-  imagemagick \
-  i3lock \
   i3-gaps \
-  jack \
+  i3lock \
+  imagemagick \
   kitty \
   libmpdclient \
   libnotify \
@@ -51,6 +49,8 @@ install_packages \
   mpv \
   neovim \
   networkmanager \
+  p7zip \
+  pulseaudio \
   python \
   python-neovim \
   ranger \
@@ -64,7 +64,6 @@ install_packages \
   xclip \
   xorg \
   xorg-xinit \
-  p7zip \
 
 install_aur_packages \
   light \
@@ -72,8 +71,9 @@ install_aur_packages \
   slack-desktop \
   telegram-desktop \
   xrectsel ffcast \
-  jdk9 \
+  android-sdk \
   openoffice \
   postman-bin \
+  # jdk8 \
 
 find "$DIRNAME/../packages" -name install.sh -exec bash {} \;
