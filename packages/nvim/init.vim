@@ -27,14 +27,19 @@ Plug 'tpope/vim-surround'
 
 " Theme and syntax
 Plug 'arcticicestudio/nord-vim'
-Plug 'elzr/vim-json'          , {'for': 'json'}
-Plug 'othree/html5.vim'       , {'for': 'html'}
-Plug 'hail2u/vim-css3-syntax' , {'for': 'css'}
-Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-Plug 'pangloss/vim-javascript', {'for': ['javascript', 'javascript.jsx']}
-Plug 'mxw/vim-jsx'            , {'for': ['javascript', 'javascript.jsx']}
-Plug 'soywod/typescript.vim'  , {'for': ['typescript', 'typescript.jsx']}
-Plug 'vim-ruby/vim-ruby'      , {'for': ['ruby']}
+Plug 'elzr/vim-json'                    , {'for': 'json'}
+Plug 'othree/html5.vim'                 , {'for': 'html'}
+Plug 'hail2u/vim-css3-syntax'           , {'for': 'css'}
+Plug 'plasticboy/vim-markdown'          , {'for': 'markdown'}
+Plug 'pangloss/vim-javascript'          , {'for': ['javascript', 'javascript.jsx']}
+Plug 'mxw/vim-jsx'                      , {'for': ['javascript', 'javascript.jsx']}
+Plug 'soywod/typescript.vim'            , {'for': ['typescript', 'typescript.jsx']}
+Plug 'vim-ruby/vim-ruby'                , {'for': ['ruby']}
+Plug 'rust-lang/rust.vim'               , {'for': 'rust'}
+Plug 'digitaltoad/vim-pug'              , {'for': 'pug'}
+Plug 'ElmCast/elm-vim'                  , {'for': 'elm'}
+Plug 'neovimhaskell/haskell-vim'        , {'for': 'haskell'}
+Plug 'purescript-contrib/purescript-vim', {'for': 'purescript'}
 
 call plug#end()
 
@@ -88,8 +93,8 @@ highlight CocErrorHighlight   guibg=#BF616A guifg=#D8DEE9 gui=NONE
 highlight CocErrorSign        guibg=#BF616A guifg=#D8DEE9 gui=NONE
 highlight Warning             guibg=#EBCB8B guifg=#D8DEE9 gui=NONE
 highlight WarningMsg          guibg=NONE    guifg=#EBCB8B gui=Bold
-highlight CocWarningHighlight guibg=#EBCB8B guifg=#D8DEE9 gui=NONE
-highlight CocWarningSign      guibg=#EBCB8B guifg=#D8DEE9 gui=NONE
+highlight CocWarningHighlight guibg=#EBCB8B guifg=#616E88 gui=NONE
+highlight CocWarningSign      guibg=#EBCB8B guifg=#616E88 gui=NONE
 
 " ------------------------------------------------------------- # Plugins conf #
 
@@ -101,6 +106,16 @@ let g:user_emmet_mode = 'a'
 let g:user_emmet_install_global = 0
 
 " ---------------------------------------------------------------- # Functions #
+
+function! s:run()
+  :w
+
+  if &filetype == 'rust'
+    :!cargo run -q
+  else
+    :!%:p
+  endif
+endfunction
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -136,7 +151,7 @@ augroup dotfiles
   autocmd CursorHold  *   silent call CocActionAsync('highlight')
   autocmd FileType    *   setlocal fo-=c fo-=r fo-=o
   autocmd FileType    qf  wincmd J
-  autocmd FileType    css,scss,javascript*,typescript*  EmmetInstall
+  autocmd FileType    html,css,scss,less,javascript*,typescript*  EmmetInstall
 augroup end
 
 " ----------------------------------------------------------------- # Mappings #
@@ -147,7 +162,7 @@ nnoremap  <silent>  <a-/> :noh<cr>
 nmap      <silent>  <a-d> <plug>(coc-definition)
 nmap      <silent>  <a-r> <plug>(coc-references)
 nnoremap  <silent>  K     :call <sid>show_documentation()<cr>
-vnoremap  <silent>  <a-s> :'<,'>sort<cr>
+" vnoremap  <silent>  <a-s> :'<,'>sort<cr>
 
 nmap      <a-R> <plug>(coc-rename)
 nmap      <a-a> <Plug>(coc-codeaction)
@@ -156,8 +171,10 @@ nnoremap  <a-f> :Files<cr>
 nnoremap  <a-g> :Grep 
 nnoremap  <a-h> :History<cr>
 nnoremap  <a-b> :Buffers<cr>
-nnoremap  <a-e> :w<cr>:!%:p<cr>
+nnoremap  <a-e> :call <sid>run()<cr>
 vnoremap  .     :normal .<cr>
+" nnoremap  <a-s> :echo synIDattr(synID(line('.'), col('.'), 0), 'name')<cr>
+nmap      <a-s> <plug>(coc-format-selected)
 
 inoremap  <expr> <c-j>    pumvisible() ? "\<c-y>" : "\<c-g>u\<c-j>"
 inoremap  <expr> <tab>    pumvisible() ? "\<c-n>" : "\<tab>"
