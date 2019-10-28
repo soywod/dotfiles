@@ -25,6 +25,7 @@ alias gpull='git pull origin $(git rev-parse --abbrev-ref HEAD)'
 alias gpush='git push origin $(git rev-parse --abbrev-ref HEAD)'
 alias gfpush='gpush --force'
 alias gss='git status'
+alias grm='git pull origin master --rebase'
 
 alias l='ls -CF'
 alias la='ls -A'
@@ -35,7 +36,9 @@ alias vi='nvim'
 alias vim='nvim'
 alias vimb='nvim ~/.bashrc'
 alias vimc='nvim ~/.config/nvim/init.vim'
+alias vimd='nvim ~/.config/lexy/definitions.yml'
 alias mail='~/.dotfiles/scripts/mail.sh'
+alias k='nvim +K'
 
 alias s='source ~/.bashrc'
 
