@@ -44,7 +44,7 @@ inherit = section/bar
 bottom = true
 modules-left = battery cpu memory temperature filesystem volume xkeyboard
 modules-center = title
-modules-right = eth-down eth-up eth wlan-down wlan-up wlan-signal wlan
+modules-right = eth-down eth-up eth wlan-down wlan-up wlan-signal wlan unfog
 
 ; ----------------------------------------------------------------- # Pomodoro #
 
@@ -57,6 +57,13 @@ interval = 0
 click-left = if [ -e ~/.pomodoro ]; then rm ~/.pomodoro; else echo "25 5" > ~/.pomodoro; fi
 click-right = echo "$((`cut ~/.pomodoro -d ' ' -f 1`+5)) 5" > ~/.pomodoro
 click-middle = echo "$((`cut ~/.pomodoro -d ' ' -f 1`-5)) 5" > ~/.pomodoro
+
+; -------------------------------------------------------------------- # Unfog #
+
+[module/unfog]
+type = custom/script
+exec = unfog status
+label = %output%
 
 ; ---------------------------------------------------------------------- # MPD #
 

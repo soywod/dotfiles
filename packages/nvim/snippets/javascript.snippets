@@ -3,7 +3,7 @@
 snippet try "try...catch"
 try {
 	$0
-} catch (e) {
+} catch (err) {
 	$1
 }
 endsnippet
@@ -82,6 +82,10 @@ endsnippet
 
 snippet i "import"
 import $0 from '$1'
+endsnippet
+
+snippet il "import lodash/fp/..."
+import $1 from 'lodash/fp/$1'
 endsnippet
 
 snippet ue "useEffect"

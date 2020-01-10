@@ -115,7 +115,7 @@ bindsym --release Shift+Print       exec "~/.dotfiles/scripts/capture.sh mp4 sel
 bindsym --release $mod+Shift+Print  exec "~/.dotfiles/scripts/capture.sh mp4 window"
 
 exec --no-startup-id "systemctl --user start jack"
-exec --no-startup-id "xrandr | grep '^DP-2 c' && xrandr --output DP-2 --primary --output eDP-1 --noprimary --below DP-2"
+exec --no-startup-id "xrandr | grep '^DP-2 c' && xrandr --output DP-2 --primary --output eDP-1 --noprimary --left-of DP-2"
 
 exec --no-startup-id "systemctl --user start compton"
 exec --no-startup-id "systemctl --user start dunst"

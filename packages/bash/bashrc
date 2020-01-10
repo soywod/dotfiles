@@ -23,8 +23,16 @@ export PATH=$PATH:~/.npm-global/bin
 export PATH=$PATH:~/.gem/ruby/2.6.0/bin
 export PATH=$PATH:/opt/platform-tools
 
+prompt_color() {
+  if [ -n "$IN_NIX_SHELL" ]; then
+    echo "33"
+  else
+    echo "31"
+  fi
+}
+
 export GIT_PROMPT_START="\[\e[36m\]\w\[\e[m\]"
-export GIT_PROMPT_END=" \[\e[31m\]➜\[\e[m\] "
+export GIT_PROMPT_END=" \[\e[`prompt_color`m\]➜\[\e[m\] "
 
 export HISTCONTROL=ignoreboth:erasedups
 export HISTFILE=~/.bash_eternal_history
@@ -56,7 +64,7 @@ if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
   exec startx
 fi
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 export PATH="$HOME/.cargo/bin:$PATH"
 

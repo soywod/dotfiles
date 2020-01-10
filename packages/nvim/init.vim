@@ -19,7 +19,7 @@ Plug 'jamessan/vim-gnupg'
 Plug 'mattn/emmet-vim'
 Plug 'sirver/ultisnips'
 Plug 'soywod/autosess.vim'
-Plug 'soywod/kronos.vim'
+Plug 'soywod/unfog.vim'
 Plug 'soywod/quicklist.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
@@ -50,10 +50,10 @@ set background=dark
 set backspace=indent,eol,start
 set breakindent
 set clipboard=unnamedplus
+set cmdheight=3
 set completeopt=noinsert,menuone,noselect
 set cursorline
 set expandtab
-set foldcolumn=2
 set foldlevelstart=99
 set foldmethod=syntax
 set foldtext=getline(v:foldstart)
@@ -166,7 +166,7 @@ nnoremap  <silent>  K     :call <sid>show_documentation()<cr>
 
 nmap      <a-R> <plug>(coc-rename)
 nmap      <a-a> <Plug>(coc-codeaction)
-nnoremap  <a-t> :Kronos<cr>
+nnoremap  <a-t> :Unfog<cr>
 nnoremap  <a-f> :Files<cr>
 nnoremap  <a-g> :Grep 
 nnoremap  <a-h> :History<cr>
