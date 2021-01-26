@@ -29,7 +29,6 @@ install_packages \
   celt \
   chromium \
   compton \
-  dmenu \
   docker \
   docker-compose \
   dunst \
@@ -62,6 +61,7 @@ install_packages \
   transmission-cli \
   w3m \
   xclip \
+  xdotool \
   xorg \
   xorg-xinit \
 
@@ -72,8 +72,8 @@ install_aur_packages \
   telegram-desktop \
   xrectsel ffcast \
   android-sdk \
-  openoffice \
+  libreoffice-still \
   postman-bin \
   # jdk8 \
 
-find "$DIRNAME/../packages" -name install.sh -exec bash {} \;
+find "$DIRNAME/.." -name install.sh -exec bash {} \;
