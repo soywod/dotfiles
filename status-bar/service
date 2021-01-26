@@ -3,7 +3,7 @@ Description=Polybar service
 
 [Service]
 ExecStart=bash start.sh
-WorkingDirectory=%h/.dotfiles/packages/polybar
+WorkingDirectory=%h/.dotfiles/status-bar
 Environment=DISPLAY=:0
 Restart=on-failure
 RestartSec=3
