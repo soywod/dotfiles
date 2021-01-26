@@ -1,8 +1,0 @@
-[Unit]
-Description=Mail tunnel service
-
-[Service]
-ExecStart=/home/soywod/.dotfiles/scripts/mail-tunnel.sh
-
-[Install]
-WantedBy=multi-user.target
