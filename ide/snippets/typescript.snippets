@@ -66,20 +66,32 @@ endsnippet
 
 # -------------------------------------------------------------------- # React #
 
-snippet fc "React.FC"
+snippet fcc "React.FC with import/export"
 import React, {FC} from 'react'
 
-type Props = {
+type $1Props = {
 	$2
 }
 
-const $1: FC<Props> = props => {
+const $1: FC<$1Props> = props => {
 	return (
 		$0
 	)
 }
 
 export default $1
+endsnippet
+
+snippet fc "React.FC"
+type $1Props = {
+	$2
+}
+
+const $1: FC<$1Props> = props => {
+	return (
+		$0
+	)
+}
 endsnippet
 
 snippet i "import"
@@ -106,10 +118,32 @@ const [$1, set${1/.+/\u$0/}] = useState$2(${3:null})
 $0
 endsnippet
 
-snippet cn "className={classes.X}"
-className={classes.$0}
+snippet cn "className={cs.X}"
+className={cs.$0}
 endsnippet
 
 snippet t "translate"
 {t("$0")}
+endsnippet
+
+snippet ** "JSDoc"
+/**
+ * $0
+ */
+endsnippet
+
+# ----------------------------------------------------------- # Web Components #
+
+snippet wc "Web Component"
+import style from "./index.css";
+import tpl from "./index.html";
+
+export class $1 extends HTMLElement {
+  public constructor() {
+    super();
+    this.attachShadow({mode: "open"}).append(parseStyle(style), parseTpl(tpl));
+  }
+}
+
+customElements.define($2, $1);
 endsnippet
