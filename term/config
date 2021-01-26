@@ -1,0 +1,56 @@
+# General
+
+cursor_blink_interval      0.5
+cursor_stop_blinking_after 0
+
+font_family Fira Code
+font_size   15
+
+sync_to_monitor no
+
+# Mappings
+
+map ctrl+shift+n new_os_window_with_cwd
+
+# Theme
+
+background            #2e3440
+foreground            #d8dee9
+selection_background  #434c5e
+selection_foreground  #d8dee9
+cursor                #88c0d0
+url_color             #5e81ac
+
+# Black
+color0   #3b4252
+color8   #4c566a
+
+# Red
+color1   #bf616a
+color9   #bf616a
+
+# Green
+color2   #a3be8c
+color10  #a3be8c
+
+# Yellow
+color3   #ebcb8b
+color11  #ebcb8b
+
+# Blue
+color4  #5e81ac
+color12 #5e81ac
+
+# Magenta
+color5   #b48ead
+color13  #b48ead
+
+# Cyan
+color6   #88c0d0
+color14  #88c0d0
+
+# White
+color7   #d8dee9
+color15  #d8dee9
+
+# vim:ft=conf
