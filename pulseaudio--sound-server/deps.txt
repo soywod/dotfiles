@@ -1,0 +1,3 @@
+pulseaudio
+pulseaudio-alsa
+pulseaudio-bluetooth
