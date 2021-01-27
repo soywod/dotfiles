@@ -1,0 +1,40 @@
+* {
+  font-family: "Fira Code", sans-serif;
+  font-size: 15px;
+}
+
+#waybar {
+  background-color: #2e3440;
+  border-top: 1px solid #3b4252;
+  color: #d8dee9;
+}
+
+#battery,
+#cpu,
+#temperature,
+#memory,
+#disk,
+#backlight,
+#pulseaudio,
+#language,
+#mode,
+#network {
+  padding: 5px 10px;
+}
+
+#battery.good {
+  color: #a3be8c;
+}
+
+#battery.warning {
+  color: #ebcb8b;
+}
+
+.critical {
+  background-color: #bf616a;
+  color: #d8dee9;
+}
+
+#battery.charging {
+  color: #d08770;
+}

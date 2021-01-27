@@ -1,0 +1,74 @@
+{
+  "layer": "top",
+  "position": "bottom",
+  "height": 15,
+  "modules-left": ["battery", "cpu", "temperature", "memory", "disk", "backlight", "pulseaudio", "sway/language"],
+  "modules-center": ["clock"],
+  "modules-right": ["sway/mode", "network"],
+  "battery": {
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-alt": "{time}",
+    "format-full": "",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-icons": ["", "", "", "", ""] 
+  },
+  "cpu": {
+    "tooltip": false,
+    "format": " {usage}%"
+  },
+  "temperature": {
+    "tooltip": false,
+    "hwmon-path": "/sys/devices/virtual/hwmon/hwmon5/temp1_input",
+    "thermal-zone": 0,
+    "critical-threshold": 80,
+    "format": "{icon} {temperatureC}°C",
+    "format-critical": "{icon} {temperatureC}°C",
+    "format-icons": ["", "", "", "", ""]
+  },
+  "memory": {
+    "format": " {percentage}%",
+    "tooltip-format": "{used:0.2f}GiB/{avail:0.2f}GiB"
+  },
+  "disk": {
+    "interval": 60,
+    "path": "/",
+    "format": " {percentage_free}%",
+    "tooltip-format": "{used}/{total}"
+  },
+  "backlight": {
+    "tooltip": false,
+    "device": "acpi_video1",
+    "format": " {percent}%"
+  },
+  "pulseaudio": {
+    "tooltip": false,
+    "scroll-step": 2,
+    "format": " {volume}%",
+    "format-muted": " --"
+  },
+  "sway/language": {
+    "tooltip": false,
+    "format": " {}"
+  },
+  "clock": {
+    "tooltip": false,
+    "format": "{:%H:%M, %a %b %e}"
+  },
+  "network": {
+    "interface": "wlp2*",
+    "format-wifi": " {ipaddr} ({signalStrength}%)",
+    "tooltip-format-wifi": "{essid}",
+    "format-ethernet": " {ipaddr}",
+    "tooltip-format-ethernet": "",
+    "format-disconnected": "⚠ No connection"
+  },
+  "sway/mode": {
+    "format": "{}"
+  }
+}
