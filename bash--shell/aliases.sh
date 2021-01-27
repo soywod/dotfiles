@@ -42,5 +42,3 @@ alias kb='setxkbmap -layout us,ru -variant "dvorak-alt-intl", -option grp:shifts
 
 alias rjpeg="exiv2 -r '%Y%m%d-%H%M%S-1' mv"
 alias u="unfog"
-
-# vim:ft=bash

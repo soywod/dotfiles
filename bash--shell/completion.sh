@@ -3,5 +3,3 @@ if [ -f /usr/share/bash-completion/completions/git ]; then
 fi
 
 __git_complete gco _git_checkout
-
-# vim:ft=bash
