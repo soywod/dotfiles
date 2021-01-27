@@ -12,7 +12,6 @@ function install_aur_packages {
     if [ ! -d /opt/$package ]; then
       sudo mkdir /opt/$package
       sudo chown -R $USER:$USER /opt/$package
-      # git init && git remote add origin https://aur.archlinux.org/$package.git
       git clone https://aur.archlinux.org/$package.git /opt/$package
     fi
 
@@ -28,17 +27,13 @@ install_packages \
   bluez-utils \
   celt \
   chromium \
-  compton \
   docker \
   docker-compose \
-  dunst \
   feh \
   ffado \
   filezilla \
   fzf \
   ghostscript \
-  i3-gaps \
-  i3lock \
   imagemagick \
   kitty \
   libmpdclient \
@@ -48,26 +43,18 @@ install_packages \
   mpv \
   neovim \
   networkmanager \
-  p7zip \
   pulseaudio \
   python \
   python-neovim \
-  ranger \
-  redshift \
   ripgrep \
   scrot \
-  sqlitebrowser \
   thunderbird \
-  transmission-cli \
   w3m \
   xclip \
   xdotool \
-  xorg \
-  xorg-xinit \
 
 install_aur_packages \
   light \
-  polybar \
   slack-desktop \
   telegram-desktop \
   xrectsel ffcast \
