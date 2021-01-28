@@ -9,8 +9,6 @@ fi
 
 alias dc='docker-compose'
 
-alias dl='~/.dotfiles/packages/transmission/start.sh'
-
 alias ga='git add'
 alias gcam='git commit --amend --no-edit'
 alias gcams='gcam -S'
@@ -25,12 +23,10 @@ alias gfpush='gpush --force'
 alias gss='git status'
 alias grm='git pull origin master --rebase'
 
-alias mpc='mpc -h /run/user/$UID/mpd.sock'
 alias vi='nvim'
 alias vim='nvim'
 alias vimc='nvim ~/.config/nvim/init.vim'
 alias vimd='nvim ~/.config/lexy/definitions.yml'
-alias mail='~/.dotfiles/scripts/mail.sh'
 alias k='nvim +K'
 
 alias s='source ~/.bashrc'

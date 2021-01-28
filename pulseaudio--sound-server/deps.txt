@@ -1,3 +1,5 @@
+bluez
+bluez-utils
 pulseaudio
 pulseaudio-alsa
 pulseaudio-bluetooth

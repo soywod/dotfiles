@@ -13,7 +13,7 @@ mkdir -p ~/.config/nvim/backup
 mkdir -p ~/.config/nvim/swap
 mkdir -p ~/.config/nvim/undo
 
-ln -sf $DIRNAME/config ~/.config/nvim/init.vim
+ln -sf $DIRNAME/config.vim ~/.config/nvim/init.vim
 ln -sfn $DIRNAME/snippets ~/.config/nvim/UltiSnips
 sudo ln -sf $DIRNAME/editor.sh /etc/profile.d
 

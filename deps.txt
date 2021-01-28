@@ -1,0 +1,7 @@
+chromium
+docker
+docker-compose
+filezilla
+mpv
+thunderbird
+w3m
