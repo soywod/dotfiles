@@ -75,3 +75,9 @@ test -r /home/soywod/.opam/opam-init/init.sh && . /home/soywod/.opam/opam-init/i
 # >>> coursier install directory >>>
 export PATH="$PATH:/home/soywod/.local/share/coursier/bin"
 # <<< coursier install directory <<<
+
+# Nix
+source ~/.nix-profile/etc/profile.d/nix.sh
+
+# Direnv
+eval "$(direnv hook bash)"
