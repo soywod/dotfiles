@@ -2,7 +2,7 @@
   "layer": "top",
   "position": "bottom",
   "height": 15,
-  "modules-left": ["battery", "cpu", "temperature", "memory", "disk", "backlight", "pulseaudio", "sway/language"],
+  "modules-left": ["battery", "temperature", "cpu", "memory", "disk", "sway/language", "backlight", "pulseaudio"],
   "modules-center": ["clock"],
   "modules-right": ["sway/mode", "network"],
   "battery": {
@@ -18,10 +18,6 @@
     "format-plugged": " {capacity}%",
     "format-icons": ["", "", "", "", ""] 
   },
-  "cpu": {
-    "tooltip": false,
-    "format": " {usage}%"
-  },
   "temperature": {
     "tooltip": false,
     "hwmon-path": "/sys/devices/virtual/hwmon/hwmon5/temp1_input",
@@ -30,6 +26,10 @@
     "format": "{icon} {temperatureC}°C",
     "format-critical": "{icon} {temperatureC}°C",
     "format-icons": ["", "", "", "", ""]
+  },
+  "cpu": {
+    "tooltip": false,
+    "format": " {usage}%"
   },
   "memory": {
     "format": " {percentage}%",
@@ -46,19 +46,22 @@
     "device": "acpi_video1",
     "format": " {percent}%"
   },
+  "sway/language": {
+    "tooltip": false,
+    "format": " {}"
+  },
   "pulseaudio": {
     "tooltip": false,
     "scroll-step": 2,
     "format": " {volume}%",
     "format-muted": " --"
   },
-  "sway/language": {
-    "tooltip": false,
-    "format": " {}"
-  },
   "clock": {
     "tooltip": false,
     "format": "{:%H:%M, %a %b %e}"
+  },
+  "sway/mode": {
+    "format": "{}"
   },
   "network": {
     "interface": "wlp2*",
@@ -67,8 +70,5 @@
     "format-ethernet": " {ipaddr}",
     "tooltip-format-ethernet": "",
     "format-disconnected": "⚠ No connection"
-  },
-  "sway/mode": {
-    "format": "{}"
   }
 }
