@@ -1,7 +1,9 @@
+brightnessctl
 chromium
 docker
 docker-compose
 filezilla
 mpv
+playerctl
 thunderbird
 w3m
