@@ -114,7 +114,14 @@ gnupg-cfg:
 	sudo groupadd -f uinput
 	sudo usermod -aG uinput ${USER}
 
-gnupg: gnupg-pkgs gnupg-pkgs-aur gnupg-cfg
+gnupg-srv:
+	mkdir -vp "${HOME}/.config/systemd/user"
+	cp -v "${PWD}/gnupg/service.ini" "${HOME}/.config/systemd/user/ydotool.service"
+	systemctl --user daemon-reload
+	systemctl --user enable ydotool.service
+	systemctl --user start ydotool.service
+
+gnupg: gnupg-pkgs gnupg-pkgs-aur gnupg-cfg gnupg-srv
 
 # }}}
 

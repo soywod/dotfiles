@@ -1,5 +1,11 @@
 # 🏠 Personal dotfiles
 
+## Install
+
+```bash
+make install
+```
+
 ## Theme
 
 Nord theme (https://www.nordtheme.com/)
