@@ -3,6 +3,7 @@ chromium
 docker
 docker-compose
 filezilla
+libreoffice-fresh
 mpv
 playerctl
 thunderbird

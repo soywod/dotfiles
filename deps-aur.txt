@@ -1,6 +1,3 @@
-android-sdk
-libreoffice-still
-light
 postman-bin
 slack-desktop
 telegram-desktop
