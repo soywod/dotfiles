@@ -13,5 +13,5 @@ passwd_files=("${passwd_files[@]%.gpg}")
 passwd=$(printf "%s\n" "${passwd_files[@]}" | rofi -dmenu "$@")
 
 if [[ -n "$passwd" ]]; then
-  xdotool type "$(pass show $passwd)"
+  ydotool type "$(pass show $passwd)"
 fi

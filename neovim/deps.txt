@@ -1,5 +1,0 @@
-fzf
-neovim
-python
-python-neovim
-ripgrep

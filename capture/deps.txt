@@ -1,4 +1,0 @@
-grim
-slurp
-wf-recorder
-wl-clipboard

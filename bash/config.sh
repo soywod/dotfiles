@@ -47,16 +47,16 @@ export FZF_DEFAULT_OPTS='--color fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg
 export GOOGLE_APPLICATION_CREDENTIALS='/home/soywod/Documents/service-account-file.json'
 export GPG_TTY=`tty`
 
-if [ -f ~/.bash-git-prompt/gitprompt.sh ]; then
-	source ~/.bash-git-prompt/gitprompt.sh
-fi
-
-if [ -f ~/.bash_aliases ]; then
-	source ~/.bash_aliases
+if [ -f /usr/lib/bash-git-prompt/gitprompt.sh ]; then
+  source /usr/lib/bash-git-prompt/gitprompt.sh
 fi
 
 if [ -f /usr/share/bash-completion/bash_completion ]; then
 	source /usr/share/bash-completion/bash_completion
+fi
+
+if [ -f ~/.bash_aliases ]; then
+	source ~/.bash_aliases
 fi
 
 eval "$(stack --bash-completion-script stack)"

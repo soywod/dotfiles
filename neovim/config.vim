@@ -55,9 +55,8 @@ set cmdheight=3
 set completeopt=noinsert,menuone,noselect
 set cursorline
 set expandtab
-set foldlevelstart=99
 set foldmethod=syntax
-set foldtext=getline(v:foldstart)
+" set foldtext=getline(v:foldstart)
 set hidden
 set history=1000
 set laststatus=2
@@ -208,5 +207,3 @@ inoremap  <expr> <s-tab>  pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 inoremap  <silent> <expr> <c-space>  coc#refresh()
 xnoremap  Q :'<,'>:normal @q<cr>
-
-" vim:ft=vim

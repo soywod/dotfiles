@@ -1,4 +1,0 @@
-postman-bin
-slack-desktop
-telegram-desktop
-ydotool
