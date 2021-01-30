@@ -1,5 +1,7 @@
 # 🏠 Personal dotfiles
 
+![screenshot](https://user-images.githubusercontent.com/10437171/106370433-4756a800-635a-11eb-8c74-e6a99a32e79d.jpeg)
+
 ## Install
 
 ```bash
