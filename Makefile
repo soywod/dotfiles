@@ -139,25 +139,27 @@ kitty: kitty-pkgs kitty-cfg
 
 # }}}
 
-# Mako (notification manager) {{{
+# Dunst (notification manager) {{{
 
-mako-pkgs:
+dunst-pkgs:
 	sudo pacman -S --needed --noconfirm \
+		mpv \
 		libnotify \
-		mako \
+		dunst \
 
-mako-cfg:
-	mkdir -vp "${HOME}/.config/mako"
-	ln -vsf "${PWD}/mako/config.cfg" "${HOME}/.config/mako/config.cfg"
+dunst-cfg:
+	mkdir -vp "${HOME}/.config/dunst"
+	ln -vsf "${PWD}/dunst/config.cfg" "${HOME}/.config/dunst/dunstrc"
+	sudo ln -vsf "${PWD}/dunst/notification.sh" /usr/local/bin/dotfiles--notification-play-sound
 
-mako-srv:
+dunst-srv:
 	mkdir -vp "${HOME}/.config/systemd/user"
-	cp -v "${PWD}/mako/service.ini" "${HOME}/.config/systemd/user/mako.service"
+	cp -v "${PWD}/dunst/service.ini" "${HOME}/.config/systemd/user/dunst.service"
 	systemctl --user daemon-reload
-	systemctl --user enable mako.service
-	systemctl --user start mako.service
+	systemctl --user enable dunst.service
+	systemctl --user start dunst.service
 
-mako: mako-pkgs mako-cfg mako-srv
+dunst: dunst-pkgs dunst-cfg dunst-srv
 
 # }}}
 
@@ -285,12 +287,12 @@ guis: guis-pkgs guis-pkgs-aur
 	bash \
 	bluetooth \
 	capture \
+	dunst \
 	fonts \
 	gammastep \
 	gnupg \
 	install \
 	kitty \
-	mako \
 	neovim \
 
 install: \
@@ -301,12 +303,12 @@ install: \
 	brightnessctl \
 	capture \
 	docker \
+	dunst \
 	fonts \
 	gammastep \
 	gnupg \
 	guis \
 	kitty \
-	mako \
 	neovim \
 	network-manager \
 	sway \

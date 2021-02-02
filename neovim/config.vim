@@ -16,8 +16,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'jamessan/vim-gnupg'
 Plug 'mattn/emmet-vim'
 Plug 'sirver/ultisnips'
-Plug 'soywod/unfog.vim'
 Plug 'soywod/quicklist.vim'
+Plug 'soywod/unfog.vim'
+Plug 'soywod/himalaya.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -55,6 +56,7 @@ set cmdheight=3
 set completeopt=noinsert,menuone,noselect
 set cursorline
 set expandtab
+set foldlevelstart=99
 set foldmethod=syntax
 " set foldtext=getline(v:foldstart)
 set hidden
