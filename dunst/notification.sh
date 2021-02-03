@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mpv --really-quiet notification.ogg &
+mpv --really-quiet ~/.dotfiles/dunst/notification.ogg &
