@@ -81,3 +81,6 @@ source ~/.nix-profile/etc/profile.d/nix.sh
 
 # Direnv
 eval "$(direnv hook bash)"
+
+# PAM GnuPG
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)

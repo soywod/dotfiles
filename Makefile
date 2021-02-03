@@ -102,6 +102,7 @@ gnupg-pkgs:
 
 gnupg-pkgs-aur:
 	yay -S --needed --noconfirm \
+		pam-gnupg \
 		libevdevplus \
 		libuinputplus \
 		ydotool \
@@ -110,7 +111,8 @@ gnupg-cfg:
 	mkdir -vp "${HOME}/.gnupg"
 	ln -vsf "${PWD}/gnupg/config.cfg" "${HOME}/.gnupg/gpg-agent.conf"
 	sudo ln -vsf "${PWD}/gnupg/password-type.sh" /usr/local/bin/dotfiles--password-type
-	sudo cp -vr "${PWD}/gnupg/uinput.rules" "/etc/udev/rules.d/80-uinput.rules"
+	sudo ln -vsf "${PWD}/gnupg/uinput.rules" "/etc/udev/rules.d/80-uinput.rules"
+	sudo ln -vsf "${PWD}/gnupg/pam.cfg" "/etc/pam.d/system-local-login"
 	sudo groupadd -f uinput
 	sudo usermod -aG uinput ${USER}
 
