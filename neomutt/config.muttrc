@@ -1,0 +1,119 @@
+source /usr/local/share/mutt-wizard/mutt-wizard.muttrc
+source accounts/1-clement.douin@posteo.net.muttrc
+
+macro index,pager <esc>1 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/1-clement.douin@posteo.net.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to clement.douin@posteo.net"
+macro index,pager <esc>2 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/2-clement.douin@gmail.com.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to clement.douin@gmail.com"
+
+# URL scan
+
+macro index,pager \cb "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
+macro attach,compose \cb "<pipe-entry> urlscan<Enter>" "call urlscan to extract URLs out of a message"
+
+# Vim bindings
+
+bind index G  last-entry
+bind pager G  bottom
+bind index gg first-entry
+bind pager gg top
+bind index,pager \Cd half-down
+bind index,pager \Cu half-up
+
+# General theme
+
+color indicator bold white black
+color error white red
+color prompt yellow default
+color message white default
+color status white black
+
+uncolor header *
+color header normal yellow default ".*"
+
+color attach_headers brightred default ".*"
+
+uncolor body *
+color body brightblue default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+" # Email addresses
+color body brightblue default "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" # URL
+
+color quoted  cyan default
+color quoted1 cyan default
+color quoted2 cyan default
+color quoted3 cyan default
+color quoted4 cyan default
+color quoted5 cyan default
+color quoted6 cyan default
+color quoted7 cyan default
+color quoted8 cyan default
+color quoted9 cyan default
+
+color signature white default
+
+# Bind query command to notmuch
+
+set query_command = "echo && notmuch address from:%s*"
+set query_format = "%5c %t %a %n %?e?(%e)?"
+
+# Search color
+
+color search default brightred
+
+# Msg list columns (tags|date|from|subject)
+
+set index_format="%Z %@date@ %-20.20F %s"
+
+index-format-hook date "~d<1d" "%[%H:%M]"
+index-format-hook date "~d<1y" "%[%d/%m]"
+index-format-hook date "~A"    "%[%Y]"
+
+# Default msg lines color
+
+color index yellow default ".*"
+color index_flags white default ".*"
+color index_author cyan default ".*"
+color index_subject green default ".*"
+
+# New msg lines color
+
+color index bold yellow brightblack "~N"
+color index_flags bold white brightblack "~N"
+color index_author bold cyan brightblack "~N"
+color index_subject bold green brightblack "~N"
+
+# Deleted msg lines color
+
+color index white red "~D"
+color index_flags white red "~D"
+color index_author white red "~D"
+color index_subject white red "~D"
+
+# New+Deleted msg lines color
+
+color index bold white red "~N ~D"
+color index_flags bold white red "~N ~D"
+color index_author bold white red "~N ~D"
+color index_subject bold white red "~N ~D"
+
+# Indicator color
+
+color index white blue "~T"
+color index_flags white blue "~T"
+color index_author white blue "~T"
+color index_subject white blue "~T"
+
+# Bind ISO-8859-1 to CP1252
+# https://github.com/neomutt/neomutt/pull/467#issuecomment-286097202
+
+charset-hook ^iso-8859-1$ cp1252
+
+# Sidebar settings
+
+set sidebar_visible = no
+
+color sidebar_highlight white black
+color sidebar_divider black default
+color sidebar_flagged default default
+color sidebar_new default default
+
+bind index,pager <esc>b sidebar-toggle-visible
+
+# vim:ft=neomuttrc
