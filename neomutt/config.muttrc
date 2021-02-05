@@ -1,5 +1,5 @@
 source /usr/local/share/mutt-wizard/mutt-wizard.muttrc
-source accounts/1-clement.douin@posteo.net.muttrc
+source ~/.config/mutt/accounts/1-clement.douin@posteo.net.muttrc
 
 macro index,pager <esc>1 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/1-clement.douin@posteo.net.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to clement.douin@posteo.net"
 macro index,pager <esc>2 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/2-clement.douin@gmail.com.muttrc<enter><change-folder>!<enter>;<check-stats>' "switch to clement.douin@gmail.com"

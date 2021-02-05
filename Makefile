@@ -191,6 +191,32 @@ neovim: neovim-pkgs neovim-cfg neovim-plugins
 
 # }}}
 
+# NeoMutt (mail client) {{{
+
+neomutt-pkgs:
+	sudo pacman -S --needed --noconfirm \
+		neomutt \
+		curl \
+		isync \
+		msmtp \
+		pass \
+
+neomutt-pkgs-aur:
+	yay -S --needed --noconfirm \
+		mutt-wizard
+
+neomutt-cfg:
+	mkdir -vp "${HOME}/.config/mutt" "${HOME}/.config/msmtp"
+	ln -vsf "${PWD}/neomutt/config.muttrc" "${HOME}/.config/mutt/muttrc"
+	ln -vsfn "${PWD}/neomutt/accounts" "${HOME}/.config/mutt/accounts"
+	ln -vsf "${PWD}/neomutt/signature.txt" "${HOME}/.signature"
+	ln -vsf "${PWD}/neomutt/isync.cfg" "${HOME}/.mbsyncrc"
+	ln -vsf "${PWD}/neomutt/msmtp.cfg" "${HOME}/.config/msmtp/config"
+
+neomutt: neomutt-pkgs neomutt-pkgs-aur neomutt-cfg
+
+# }}}
+
 # NetworkManager (network manager) {{{
 
 network-manager-pkgs:
@@ -295,6 +321,7 @@ guis: guis-pkgs guis-pkgs-aur
 	gnupg \
 	install \
 	kitty \
+	neomutt \
 	neovim \
 
 install: \
@@ -311,6 +338,7 @@ install: \
 	gnupg \
 	guis \
 	kitty \
+	neomutt \
 	neovim \
 	network-manager \
 	sway \
