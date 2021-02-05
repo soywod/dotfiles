@@ -81,3 +81,6 @@ export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 # Pass store dir
 export PASSWORD_STORE_DIR="${HOME}/Dropbox/password-store"
+
+# Ledger journal file path
+export LEDGER_FILE="${HOME}/Dropbox/hledger.journal"
