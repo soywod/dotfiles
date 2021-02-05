@@ -13,6 +13,21 @@ yay:
 
 # }}}
 
+# Cronie (cron daemon) {{{
+
+cronie-pkgs:
+	sudo pacman -S --needed --noconfirm \
+		cronie \
+
+cronie-cfg:
+	sudo cp -vf "${PWD}/cronie/config.crontab" "/var/spool/cron/${USER}"
+	sudo chown "${USER}:${USER}" "/var/spool/cron/${USER}"
+	sudo systemctl restart cronie.service
+
+cronie: cronie-pkgs cronie-cfg
+
+# }}}
+
 # Bash (shell) {{{
 
 bash-pkgs:
@@ -195,10 +210,10 @@ neovim: neovim-pkgs neovim-cfg neovim-plugins
 
 neomutt-pkgs:
 	sudo pacman -S --needed --noconfirm \
-		neomutt \
 		curl \
 		isync \
 		msmtp \
+		neomutt \
 		pass \
 
 neomutt-pkgs-aur:
@@ -213,7 +228,7 @@ neomutt-cfg:
 	ln -vsf "${PWD}/neomutt/isync.cfg" "${HOME}/.mbsyncrc"
 	ln -vsf "${PWD}/neomutt/msmtp.cfg" "${HOME}/.config/msmtp/config"
 
-neomutt: neomutt-pkgs neomutt-pkgs-aur neomutt-cfg
+neomutt: cronie neomutt-pkgs neomutt-pkgs-aur neomutt-cfg
 
 # }}}
 
@@ -315,6 +330,7 @@ guis: guis-pkgs guis-pkgs-aur
 	bash \
 	bluetooth \
 	capture \
+	cronie \
 	dunst \
 	fonts \
 	gammastep \
@@ -331,6 +347,7 @@ install: \
 	bluetooth \
 	brightnessctl \
 	capture \
+	cronie \
 	docker \
 	dunst \
 	fonts \
