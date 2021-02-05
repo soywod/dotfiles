@@ -44,7 +44,7 @@ export HISTTIMEFORMAT="[%F %T] "
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 export FZF_DEFAULT_OPTS='--color fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C,pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B'
 
-export GOOGLE_APPLICATION_CREDENTIALS='/home/soywod/Documents/service-account-file.json'
+export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/Documents/service-account-file.json"
 export GPG_TTY=`tty`
 
 if [ -f /usr/lib/bash-git-prompt/gitprompt.sh ]; then
@@ -55,8 +55,8 @@ if [ -f /usr/share/bash-completion/bash_completion ]; then
 	source /usr/share/bash-completion/bash_completion
 fi
 
-if [ -f ~/.bash_aliases ]; then
-	source ~/.bash_aliases
+if [ -f "${HOME}/.bash_aliases" ]; then
+	source "${HOME}/.bash_aliases"
 fi
 
 eval "$(stack --bash-completion-script stack)"
@@ -67,20 +67,17 @@ fi
 
 # [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="${HOME}/.cargo/bin:$PATH"
 
 # opam configuration
-test -r /home/soywod/.opam/opam-init/init.sh && . /home/soywod/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
 
 # >>> coursier install directory >>>
-export PATH="$PATH:/home/soywod/.local/share/coursier/bin"
+export PATH="${PATH}:${HOME}/.local/share/coursier/bin"
 # <<< coursier install directory <<<
-
-# Nix
-source ~/.nix-profile/etc/profile.d/nix.sh
-
-# Direnv
-eval "$(direnv hook bash)"
 
 # PAM GnuPG
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+# Pass store dir
+export PASSWORD_STORE_DIR="${HOME}/Dropbox/password-store"
