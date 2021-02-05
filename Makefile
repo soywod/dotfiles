@@ -215,6 +215,14 @@ guis: guis-pkgs guis-pkgs-aur
 
 # }}}
 
+# Hledger (plain text accounting) {{{
+
+hledger: bash dropbox kitty
+	sudo pacman -S --needed --noconfirm \
+		hledger \
+
+# }}}
+
 # Kitty (terminal) {{{
 
 kitty-pkgs:
@@ -378,6 +386,7 @@ install: \
 	gammastep \
 	gnupg \
 	guis \
+	hledger \
 	kitty \
 	neomutt \
 	neovim \
