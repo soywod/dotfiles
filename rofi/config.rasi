@@ -1,0 +1,192 @@
+* {
+  black3b: #3b4252;
+  black43: #434c5e;
+  black4c: #4c566a;
+  cyan: #88c0d0;
+  red: #bf616a;
+  white: #d8dee9;
+
+  background: @black3b;
+  foreground: @white;
+  separatorcolor: @black43;
+  spacing: 2;
+  border-color: @black43;
+  background-color: @black3b;
+
+  normal-background: @background;
+  normal-foreground: @foreground;
+  active-background: @cyan;
+  active-foreground: @white;
+  urgent-background: @background;
+  urgent-foreground: @red;
+
+  alternate-normal-background: @black43;
+  alternate-normal-foreground: @foreground;
+  alternate-active-background: @black43;
+  alternate-active-foreground: @cyan;
+  alternate-urgent-background: @red;
+  alternate-urgent-foreground: @foreground;
+
+  selected-normal-background: @cyan;
+  selected-normal-foreground: @black3b;
+  selected-active-background: @cyan;
+  selected-active-foreground: @black3b;
+  selected-urgent-background: @red;
+  selected-urgent-foreground: @foreground;
+}
+
+element {
+  padding: 1px;
+  spacing: 5px;
+  border: 0;
+}
+
+element normal.normal {
+  background-color: @normal-background;
+  text-color: @normal-foreground;
+}
+
+element normal.urgent {
+  background-color: @urgent-background;
+  text-color: @urgent-foreground;
+}
+
+element normal.active {
+  background-color: @active-background;
+  text-color: @active-foreground;
+}
+
+element selected.normal {
+  background-color: @selected-normal-background;
+  text-color: @selected-normal-foreground;
+}
+
+element selected.urgent {
+  background-color: @selected-urgent-background;
+  text-color: @selected-urgent-foreground;
+}
+
+element selected.active {
+  background-color: @selected-active-background;
+  text-color: @selected-active-foreground;
+}
+
+element alternate.normal {
+  background-color: @alternate-normal-background;
+  text-color: @alternate-normal-foreground;
+}
+
+element alternate.urgent {
+  background-color: @alternate-urgent-background;
+  text-color: @alternate-urgent-foreground;
+}
+
+element alternate.active {
+  background-color: @alternate-active-background;
+  text-color: @alternate-active-foreground;
+}
+
+element-text {
+  text-color: inherit;
+  highlight: inherit;
+}
+
+element-icon {
+  size: 1.0000em;
+  text-color: inherit;
+}
+
+window {
+  padding: 5;
+  background-color: @background;
+  border: 1;
+}
+
+mainbox {
+  padding: 0;
+  border: 0;
+}
+
+message {
+  padding: 1px;
+  border-color: @separatorcolor;
+  border: 2px dash 0px 0px;
+}
+
+textbox {
+  text-color: @foreground;
+}
+
+listview {
+  padding: 2px 0px 0px;
+  scrollbar: false;
+  border-color: @separatorcolor;
+  spacing: 2px;
+  fixed-height: 0;
+  border: 2px dash 0px 0px;
+}
+
+scrollbar {
+  width: 4px;
+  padding: 0;
+  handle-width: 8px;
+  border: 0;
+  handle-color: @normal-foreground;
+}
+
+sidebar {
+  border-color: @separatorcolor;
+  border: 2px dash 0px 0px;
+}
+
+button {
+  spacing: 0;
+  text-color: @normal-foreground;
+}
+
+button selected {
+  background-color: @selected-normal-background;
+  text-color: @selected-normal-foreground;
+}
+
+num-filtered-rows, num-rows {
+  text-color: @black43;
+  expand: false;
+}
+
+textbox-num-sep {
+  text-color: @black4c;
+  expand: false;
+  str: "/";
+}
+
+inputbar {
+  padding: 1px;
+  spacing: 0px;
+  text-color: @normal-foreground;
+  children: [ prompt,textbox-prompt-colon,entry, num-filtered-rows, textbox-num-sep, num-rows, case-indicator ];
+}
+
+case-indicator {
+  spacing: 0;
+  text-color: @normal-foreground;
+}
+
+entry {
+  spacing: 0;
+  text-color: @normal-foreground;
+  placeholder-color: @black4c;
+  placeholder: "Type to filter";
+}
+
+prompt {
+  spacing: 0;
+  text-color: @normal-foreground;
+}
+
+textbox-prompt-colon {
+  margin: 0px 0.3000em 0.0000em 0.0000em;
+  expand: false;
+  str: ":";
+  text-color: inherit;
+}

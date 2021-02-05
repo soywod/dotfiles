@@ -172,27 +172,14 @@ gnupg-pkgs:
 gnupg-pkgs-aur: yay
 	yay -S --needed --noconfirm \
 		pam-gnupg \
-		libevdevplus \
-		libuinputplus \
-		ydotool \
 
 gnupg-cfg:
 	mkdir -vp "${HOME}/.gnupg"
 	ln -vsf "${PWD}/gnupg/config.cfg" "${HOME}/.gnupg/gpg-agent.conf"
-	sudo ln -vsf "${PWD}/gnupg/password-type.sh" /usr/local/bin/dotfiles--password-type
-	sudo ln -vsf "${PWD}/gnupg/uinput.rules" "/etc/udev/rules.d/80-uinput.rules"
+	sudo ln -vsf "${PWD}/gnupg/password-to-clipboard.sh" /usr/local/bin/dotfiles--password-to-clipboard
 	sudo ln -vsf "${PWD}/gnupg/pam.cfg" "/etc/pam.d/system-local-login"
-	sudo groupadd -f uinput
-	sudo usermod -aG uinput ${USER}
 
-gnupg-srv:
-	mkdir -vp "${HOME}/.config/systemd/user"
-	cp -v "${PWD}/gnupg/service.ini" "${HOME}/.config/systemd/user/ydotool.service"
-	systemctl --user daemon-reload
-	systemctl --user enable ydotool.service
-	systemctl --user start ydotool.service
-
-gnupg: gnupg-pkgs gnupg-pkgs-aur gnupg-cfg gnupg-srv
+gnupg: gnupg-pkgs gnupg-pkgs-aur gnupg-cfg
 
 # }}}
 
@@ -303,6 +290,20 @@ network-manager: network-manager-pkgs network-manager-srv
 
 # }}}
 
+# Rofi (window switcher) {{{
+
+rofi-pkgs:
+	sudo pacman -S --needed --noconfirm \
+		rofi \
+
+rofi-cfg:
+	mkdir -vp "${HOME}/.config/rofi"
+	ln -vsf "${PWD}/rofi/config.rasi" "${HOME}/.config/rofi/config.rasi"
+
+rofi: rofi-pkgs rofi-cfg
+
+# }}}
+
 # Sway (tile window manager) {{{
 
 sway-pkgs:
@@ -315,7 +316,7 @@ sway-cfg:
 	mkdir -vp "${HOME}/.config/sway"
 	ln -vsf "${PWD}/sway/config.cfg" "${HOME}/.config/sway/config"
 
-sway: sway-pkgs sway-cfg
+sway: rofi sway-pkgs sway-cfg
 
 # }}}
 
@@ -367,6 +368,7 @@ yay:
 	kitty \
 	neomutt \
 	neovim \
+	rofi \
 
 # }}}
 
@@ -391,6 +393,7 @@ install: \
 	neomutt \
 	neovim \
 	network-manager \
+	rofi \
 	sway \
 	waybar \
 	yay \
