@@ -290,6 +290,23 @@ network-manager: network-manager-pkgs network-manager-srv
 
 # }}}
 
+# Pipewire (multimedia framework) {{{
+
+pipewire-pkgs:
+	sudo pacman -S --needed --noconfirm \
+		pipewire \
+		pipewire-media-session \
+		xdg-desktop-portal \
+		xdg-desktop-portal-wlr \
+
+pipewire-srv:
+	systemctl --user enable pipewire.service
+	systemctl --user start pipewire.service
+
+pipewire: pipewire-pkgs pipewire-srv
+
+# }}}
+
 # Rofi (window switcher) {{{
 
 rofi-pkgs:
@@ -393,6 +410,7 @@ install: \
 	neomutt \
 	neovim \
 	network-manager \
+	pipewire \
 	rofi \
 	sway \
 	waybar \

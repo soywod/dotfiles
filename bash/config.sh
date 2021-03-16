@@ -11,6 +11,7 @@ export JAVA_SDK=$JAVA_HOME/jre
 export PATH=$PATH:$JAVA_HOME/bin
 export ANDROID_HOME=/opt/android-sdk/
 export ANDROID_SDK_ROOT=/opt/android-sdk/
+export XDG_CURRENT_DESKTOP=sway
 
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
