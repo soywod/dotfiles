@@ -5,7 +5,7 @@
   "output": ["eDP-1"],
   "modules-left": ["battery", "temperature", "cpu", "memory", "disk", "sway/language", "backlight", "pulseaudio"],
   "modules-center": ["clock"],
-  "modules-right": ["sway/mode", "network"],
+  "modules-right": ["sway/mode", "custom/comodoro", "network"],
   "battery": {
     "states": {
       "good": 95,
@@ -73,6 +73,10 @@
   },
   "sway/mode": {
     "format": "{}"
+  },
+  "custom/comodoro": {
+    "exec": "comodoro watch",
+    "on-click": "if [ -e /tmp/comodoro.pid ]; then comodoro stop; else comodoro start; fi"
   },
   "network": {
     "interface": "wlp2*",
