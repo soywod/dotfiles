@@ -28,3 +28,18 @@
 [submodule "neovim/plugins/vim-prettier"]
 	path = neovim/plugins/vim-prettier
 	url = https://github.com/prettier/vim-prettier.git
+[submodule "neovim/plugins/vim-commentary"]
+	path = neovim/plugins/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule "neovim/plugins/vim-repeat"]
+	path = neovim/plugins/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "neovim/plugins/vim-surround"]
+	path = neovim/plugins/vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "neovim/plugins/vim-abolish"]
+	path = neovim/plugins/vim-abolish
+	url = https://github.com/tpope/vim-abolish.git
+[submodule "neovim/plugins/vim-gnupg"]
+	path = neovim/plugins/vim-gnupg
+	url = https://github.com/jamessan/vim-gnupg.git

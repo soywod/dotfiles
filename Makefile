@@ -224,55 +224,20 @@ kitty: kitty-pkgs kitty-cfg
 
 # }}}
 
-# NeoMutt (mail client) {{{
-
-neomutt-pkgs:
-	sudo pacman -S --needed --noconfirm \
-		curl \
-		isync \
-		msmtp \
-		neomutt \
-		pass \
-
-neomutt-pkgs-aur: yay
-	yay -S --needed --noconfirm \
-		mutt-wizard
-
-neomutt-cfg:
-	mkdir -vp "${HOME}/.config/mutt" "${HOME}/.config/msmtp"
-	ln -vsf "${PWD}/neomutt/config.muttrc" "${HOME}/.config/mutt/muttrc"
-	ln -vsfn "${PWD}/neomutt/accounts" "${HOME}/.config/mutt/accounts"
-	ln -vsf "${PWD}/neomutt/signature.txt" "${HOME}/.signature"
-	ln -vsf "${PWD}/neomutt/isync.cfg" "${HOME}/.mbsyncrc"
-	ln -vsf "${PWD}/neomutt/msmtp.cfg" "${HOME}/.config/msmtp/config"
-
-neomutt: cronie neomutt-pkgs neomutt-pkgs-aur neomutt-cfg
-
-# }}}
-
 # Neovim (text editor/IDE) {{{
 
 neovim-pkgs:
 	sudo pacman -S --needed --noconfirm \
-		fzf \
 		neovim \
-		python \
-		python-neovim \
 		ripgrep \
 
 neovim-cfg:
-	curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" \
-		--create-dirs \
-		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	mkdir -vp "${HOME}/.config/nvim/backup" "${HOME}/.config/nvim/swap" "${HOME}/.config/nvim/undo"
-	ln -vsf "${PWD}/neovim/config.vim" "${HOME}/.config/nvim/init.vim"
-	ln -vsfn "${PWD}/neovim/snippets" "${HOME}/.config/nvim/UltiSnips"
+	mkdir -vp "${HOME}/.local/share/nvim/site/pack/plugins/start"
+	ln -vsf "${PWD}/neovim/config.lua" "${HOME}/.config/nvim/init.lua"
+	ln -vsfn "${PWD}/neovim/plugins" "${HOME}/.local/share/nvim/site/pack/plugins/opt"
 	sudo ln -vsf "${PWD}/neovim/editor.sh" "/etc/profile.d/"
 
-neovim-plugins:
-	nvim +PlugInstall +qa
-
-neovim: neovim-pkgs neovim-cfg neovim-plugins
+neovim: neovim-pkgs neovim-cfg
 
 # }}}
 
@@ -383,7 +348,6 @@ yay:
 	gnupg \
 	install \
 	kitty \
-	neomutt \
 	neovim \
 	rofi \
 
@@ -407,7 +371,6 @@ install: \
 	guis \
 	hledger \
 	kitty \
-	neomutt \
 	neovim \
 	network-manager \
 	pipewire \

@@ -9,7 +9,12 @@ local plugins = {
   'popup.nvim',
   'snippets.nvim',
   'telescope.nvim',
+  'vim-abolish',
+  'vim-commentary',
+  'vim-gnupg',
   'vim-prettier',
+  'vim-repeat',
+  'vim-surround',
 }
 
 for _, plugin in ipairs(plugins) do
@@ -206,13 +211,15 @@ lspconfig.tsserver.setup {
 
 local sumneko_root_path = '/opt/lua-language-server'
 local sumneko_binary = sumneko_root_path..'/bin/Linux/lua-language-server'
+local lua_capabilities = vim.lsp.protocol.make_client_capabilities()
+lua_capabilities.textDocument.completion.completionItem.snippetSupport = true;
+lua_capabilities.textDocument.formatting = false;
+
 lspconfig.sumneko_lua.setup {
   capabilities = default_capabilities,
   on_attach = function(client)
     lsp_status.on_attach(client)
-    UseLspHighlight(client)
     UseLspDiagnostics()
-    UseLspFormatting(client)
   end,
   cmd = {sumneko_binary, '-E', sumneko_root_path .. '/main.lua'};
   settings = {
@@ -256,6 +263,7 @@ vim.o.foldlevelstart = 99
 vim.o.hidden = true
 vim.o.pumheight = 12
 vim.o.ruler = false
+vim.o.runtimepath = vim.o.runtimepath..',~/Code/himalaya/vim'
 vim.o.shortmess = 'ctT'
 vim.o.showbreak = '~'
 vim.o.smartcase = true
@@ -279,8 +287,10 @@ vim.cmd [[syntax on
 highlight Boolean			  guifg=#81a1c1 guibg=NONE    gui=NONE
 highlight Character   	      	      	  guifg=#a3be8c guibg=NONE    gui=NONE
 highlight Comment	      	      	  guifg=#4c566a guibg=NONE    gui=NONE
+highlight VertSplit	      	      	  guifg=#4c566a guibg=NONE    gui=NONE
 highlight Conditional 	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Constant    	      	      	  guifg=#d8dee9 guibg=NONE    gui=NONE
+highlight Constant    	      	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
+highlight CursorLine        	      	  guifg=NONE    guibg=#3b4252 gui=NONE
 highlight CursorLineNr        	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
 highlight Define      	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
 highlight Delimiter   	      	      	  guifg=#eceff4 guibg=NONE    gui=NONE
