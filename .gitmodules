@@ -1,0 +1,30 @@
+[submodule "neovim/plugins/nvim-treesitter"]
+	path = neovim/plugins/nvim-treesitter
+	url = https://github.com/nvim-treesitter/nvim-treesitter
+[submodule "neovim/plugins/nvim-lspconfig"]
+	path = neovim/plugins/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig
+[submodule "neovim/plugins/lsp-status.nvim"]
+	path = neovim/plugins/lsp-status.nvim
+	url = https://github.com/nvim-lua/lsp-status.nvim
+[submodule "neovim/plugins/snippets.nvim"]
+	path = neovim/plugins/snippets.nvim
+	url = https://github.com/norcalli/snippets.nvim
+[submodule "neovim/plugins/completion-nvim"]
+	path = neovim/plugins/completion-nvim
+	url = https://github.com/nvim-lua/completion-nvim.git
+[submodule "neovim/plugins/nvim-compe"]
+	path = neovim/plugins/nvim-compe
+	url = https://github.com/hrsh7th/nvim-compe.git
+[submodule "neovim/plugins/popup.nvim"]
+	path = neovim/plugins/popup.nvim
+	url = https://github.com/nvim-lua/popup.nvim.git
+[submodule "neovim/plugins/plenary.nvim"]
+	path = neovim/plugins/plenary.nvim
+	url = https://github.com/nvim-lua/plenary.nvim.git
+[submodule "neovim/plugins/telescope.nvim"]
+	path = neovim/plugins/telescope.nvim
+	url = https://github.com/nvim-telescope/telescope.nvim.git
+[submodule "neovim/plugins/vim-prettier"]
+	path = neovim/plugins/vim-prettier
+	url = https://github.com/prettier/vim-prettier.git
