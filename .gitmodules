@@ -43,3 +43,9 @@
 [submodule "neovim/plugins/vim-gnupg"]
 	path = neovim/plugins/vim-gnupg
 	url = https://github.com/jamessan/vim-gnupg.git
+[submodule "neovim/plugins/emmet-vim"]
+	path = neovim/plugins/emmet-vim
+	url = https://github.com/mattn/emmet-vim.git
+[submodule "neovim/plugins/dracula"]
+	path = neovim/plugins/dracula
+	url = https://github.com/dracula/vim.git
