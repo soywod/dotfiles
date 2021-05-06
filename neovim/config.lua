@@ -1,20 +1,25 @@
 -- Plugins
 
+
 local plugins = {
-  'lsp-status.nvim',
-  'nvim-compe',
-  'nvim-lspconfig',
-  'nvim-treesitter',
-  'plenary.nvim',
-  'popup.nvim',
-  'snippets.nvim',
-  'telescope.nvim',
-  'vim-abolish',
-  'vim-commentary',
-  'vim-gnupg',
-  'vim-prettier',
-  'vim-repeat',
-  'vim-surround',
+  'nvim-lspconfig',   -- ├ LSP
+  'lsp-status.nvim',  -- ├ LSP status line
+  'nvim-treesitter',  -- ├ Tree sitter
+  'nvim-compe',       -- ├ Completion
+
+  'popup.nvim',       -- │
+  'plenary.nvim',     -- ├ Fuzzy stuff
+  'telescope.nvim',   -- │
+
+  'ultisnips',        -- ├ Snippets
+
+  'vim-abolish',      -- │
+  'vim-commentary',   -- │
+  'vim-gnupg',        -- │
+  'vim-prettier',     -- ├ Utils
+  'vim-repeat',       -- │
+  'vim-surround',     -- │
+  'emmet-vim',        -- │
 }
 
 for _, plugin in ipairs(plugins) do
@@ -22,6 +27,12 @@ for _, plugin in ipairs(plugins) do
 end
 
 vim.g['prettier#config#config_precedence'] = 'prefer-file'
+vim.g['user_emmet_install_global'] = 0
+vim.g['user_emmet_mode'] = 'i'
+vim.g['user_emmet_leader_key'] = ','
+vim.g['vsnip_snippet_dir'] = '~/.dotfiles/neovim/snippets'
+vim.g['UltiSnipsExpandTrigger'] = '<nop>'
+vim.g['UltiSnipsJumpForwardTrigger'] = '<cr>'
 
 -- Tree sitter
 -- https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
@@ -34,6 +45,7 @@ local tree_sitter_languages = {
   'json',
   'ledger',
   'lua',
+  'ocaml',
   'php',
   'rust',
   'toml',
@@ -52,9 +64,9 @@ require'nvim-treesitter.configs'.setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = 'gs',
-      node_incremental = '<cr>',
-      node_decremental = '<s-cr>',
+      init_selection = '<a-s>',
+      node_incremental = '<a-s>',
+      node_decremental = '<a-S>',
     },
   },
 }
@@ -68,6 +80,7 @@ require'telescope'.setup {
         ["<esc>"] = require'telescope.actions'.close
       },
     },
+    borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
   }
 }
 
@@ -85,7 +98,7 @@ lsp_status.config({
   status_symbol = '[LSP] ',
 })
 
-function LspStatusLine()
+function lsp_status_line()
   if next(vim.lsp.buf_get_clients()) == nil then
     return ''
   else
@@ -96,76 +109,64 @@ end
 -- Completion
 
 require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'disable';
-  throttle_time = 80;
-  source_timeout = 200;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = true;
-
+  enabled = true,
+  autocomplete = true,
+  debug = false,
+  min_length = 1,
+  preselect = 'disable',
+  throttle_time = 80,
+  source_timeout = 200,
+  incomplete_delay = 400,
+  max_abbr_width = 100,
+  max_kind_width = 100,
+  max_menu_width = 100,
+  documentation = true,
   source = {
-    path = true;
-    buffer = true;
-    calc = true;
-    nvim_lsp = true;
-    nvim_lua = false;
-    vsnip = false;
-  };
+    path = true,
+    buffer = true,
+    calc = true,
+    nvim_lsp = true,
+    nvim_lua = true,
+    vsnip = false,
+    ultisnips = true,
+  },
 }
 
 -- LSP
 
 local lspconfig = require('lspconfig')
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true;
-
-function UseLspDiagnostics()
-  vim.api.nvim_exec([[
-    augroup lsp_diagnostics
-      autocmd! * <buffer>
-      autocmd CursorHold  <buffer> lua vim.lsp.diagnostic.show_line_diagnostics()
-    augroup END
-  ]], false)
-end
-
-function UseLspHighlight(client)
+function attach_lsp_highlight(client)
   if client.resolved_capabilities.document_highlight then
     vim.api.nvim_exec([[
       augroup lsp_document_highlight
-	autocmd! * <buffer>
-	autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-	autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+        autocmd! * <buffer>
+        autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
+        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
       augroup END
     ]], false)
   end
 end
 
-function UseLspFormatting(client)
+function attach_lsp_formatting(client)
   if client.resolved_capabilities.document_formatting then
     vim.api.nvim_exec([[
       augroup lsp_document_formatting
-	autocmd! * <buffer>
-	autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+        autocmd! * <buffer>
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
       augroup END
     ]], false)
   end
 end
 
-function UsePrettierFormatting()
-  vim.api.nvim_exec([[
-    augroup lsp_document_formatting
-      autocmd! * <buffer>
-      autocmd BufWritePre <buffer> Prettier
-    augroup END
-  ]], false)
-end
+-- function UsePrettierFormatting()
+--  vim.api.nvim_exec([[
+--    augroup lsp_document_formatting
+--      autocmd! * <buffer>
+--      autocmd BufWritePre <buffer> Prettier
+--    augroup END
+--  ]], false)
+--end
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -179,10 +180,37 @@ default_capabilities.textDocument.completion.completionItem.snippetSupport = tru
 
 local default_on_attach = function(client)
   lsp_status.on_attach(client)
-  UseLspHighlight(client)
-  UseLspDiagnostics()
-  UseLspFormatting(client)
+  attach_lsp_highlight(client)
+  attach_lsp_formatting(client)
 end
+
+-- LSP Bash
+
+lspconfig.bashls.setup {
+  capabilities = default_capabilities,
+  on_attach = default_on_attach,
+}
+
+-- LSP JSON
+
+lspconfig.jsonls.setup {
+  capabilities = default_capabilities,
+  on_attach = default_on_attach,
+  commands = {
+    Format = {
+      function()
+        vim.lsp.buf.range_formatting({}, {0, 0}, {vim.fn.line("$"),0})
+      end
+    }
+  }
+}
+
+-- LSP CSS
+
+lspconfig.cssls.setup {
+  capabilities = default_capabilities,
+  on_attach = default_on_attach,
+}
 
 -- LSP Rust
 
@@ -193,18 +221,17 @@ lspconfig.rust_analyzer.setup {
 
 -- LSP TypeScript
 
-local typescript_capabilities = vim.lsp.protocol.make_client_capabilities()
-typescript_capabilities.textDocument.completion.completionItem.snippetSupport = true;
-typescript_capabilities.textDocument.formatting = false;
-
 lspconfig.tsserver.setup {
-  capabilities = typescript_capabilities,
-  on_attach = function(client)
-    lsp_status.on_attach(client)
-    UseLspHighlight(client)
-    UseLspDiagnostics()
-    UsePrettierFormatting()
-  end,
+  capabilities = default_capabilities,
+  on_attach = default_on_attach,
+  cmd = {"typescript-language-server", "--stdio"}
+}
+
+-- LSP OCaml
+
+lspconfig.ocamllsp.setup{
+  capabilities = default_capabilities,
+  on_attach = default_on_attach,
 }
 
 -- LSP Lua
@@ -216,10 +243,9 @@ lua_capabilities.textDocument.completion.completionItem.snippetSupport = true;
 lua_capabilities.textDocument.formatting = false;
 
 lspconfig.sumneko_lua.setup {
-  capabilities = default_capabilities,
+  capabilities = lua_capabilities,
   on_attach = function(client)
     lsp_status.on_attach(client)
-    UseLspDiagnostics()
   end,
   cmd = {sumneko_binary, '-E', sumneko_root_path .. '/main.lua'};
   settings = {
@@ -244,33 +270,31 @@ lspconfig.sumneko_lua.setup {
   },
 }
 
--- Snippets
-
-require'snippets'.snippets = {
-  _global = {
-    -- TODO
-  }
-}
-
 -- Vim settings
 
+vim.bo.expandtab = true
 vim.bo.shiftwidth = 2
-vim.bo.softtabstop = 2
-vim.bo.undofile = true
+vim.bo.tabstop = 2
 vim.o.background = 'dark'
+vim.o.clipboard = 'unnamedplus'
 vim.o.completeopt = 'menuone,noselect'
+vim.o.expandtab = true
 vim.o.foldlevelstart = 99
 vim.o.hidden = true
 vim.o.pumheight = 12
 vim.o.ruler = false
+vim.o.runtimepath = vim.o.runtimepath..',~/Code/bufmark.vim'
 vim.o.runtimepath = vim.o.runtimepath..',~/Code/himalaya/vim'
+vim.o.shiftwidth = 2
 vim.o.shortmess = 'ctT'
 vim.o.showbreak = '~'
 vim.o.smartcase = true
 vim.o.splitbelow = true
 vim.o.splitright = true
-vim.o.statusline = '%m%{luaeval("LspStatusLine()")}%=%r%y'
+vim.o.statusline = '%m%{luaeval("lsp_status_line()")}%=%{himalaya#statusline#not_seen()} %r%y'
+vim.o.tabstop = 2
 vim.o.termguicolors = true
+vim.o.undofile = true
 vim.o.updatetime = 300
 vim.o.writebackup = false
 vim.wo.breakindent = true
@@ -280,77 +304,93 @@ vim.wo.foldmethod = 'expr'
 vim.wo.number = true
 vim.wo.relativenumber = true
 
+-- vim.cmd [[
+-- augroup emmet
+--   autocmd FileType html,typescriptreact,css,scss EmmetInstall
+-- augroup END
+-- ]]
+
 -- Theme
--- https://github.com/arcticicestudio/nord-vim
+-- https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el
 
 vim.cmd [[syntax on
-highlight Boolean			  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Character   	      	      	  guifg=#a3be8c guibg=NONE    gui=NONE
-highlight Comment	      	      	  guifg=#4c566a guibg=NONE    gui=NONE
-highlight VertSplit	      	      	  guifg=#4c566a guibg=NONE    gui=NONE
-highlight Conditional 	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Constant    	      	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
-highlight CursorLine        	      	  guifg=NONE    guibg=#3b4252 gui=NONE
-highlight CursorLineNr        	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
-highlight Define      	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Delimiter   	      	      	  guifg=#eceff4 guibg=NONE    gui=NONE
-highlight Error               	      	  guifg=#d8dee9 guibg=#bf616a gui=NONE
-highlight ErrorMsg            	      	  guifg=#bf616a guibg=NONE    gui=bold
-highlight Exception   	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Float	      	      	      	  guifg=#b48ead guibg=NONE    gui=NONE
-highlight Folded              	      	  guifg=#4c566a guibg=NONE    gui=NONE
-highlight Function    	      	      	  guifg=#88c0d0 guibg=NONE    gui=NONE
-highlight Identifier  	      	      	  guifg=#d8dee9 guibg=NONE    gui=NONE
-highlight IncSearch              	  guifg=#d8dee9 guibg=#d08770 gui=NONE
-highlight Include     	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Keyword     	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Label	      	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight LineNr	      	      	  guifg=#4c566a guibg=NONE    gui=NONE
-highlight LspDiagnosticsFloatingError	  guifg=NONE	guibg=NONE    gui=NONE
-highlight LspDiagnosticsFloatingHint	  guifg=NONE	guibg=NONE    gui=NONE
-highlight LspDiagnosticsFloatingWarning	  guifg=NONE	guibg=NONE    gui=NONE
-highlight LspDiagnosticsUnderlineError	  guifg=#d8dee9 guibg=#bf616a gui=NONE
-highlight LspDiagnosticsUnderlineHint	  guifg=#3b4252 guibg=#b48ead gui=NONE
-highlight LspDiagnosticsUnderlineInfo	  guifg=#3b4252	guibg=#b48ead gui=NONE
-highlight LspDiagnosticsUnderlineWarning  guifg=#3b4252 guibg=#ebcb8b gui=NONE
-highlight LspReferenceRead	          guifg=NONE	guibg=#434c5e gui=NONE
-highlight LspReferenceText                guifg=NONE    guibg=#434c5e gui=NONE
-highlight LspReferenceWrite	          guifg=NONE    guibg=#434c5e gui=NONE
-highlight MatchParen          	      	  guifg=#88c0d0 guibg=NONE    gui=bold,underline
-highlight NonText	      	      	  guifg=#4c566a guibg=NONE    gui=NONE
-highlight Number      	      	      	  guifg=#b48ead guibg=NONE    gui=NONE
-highlight Operator    	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Pmenu				  guifg=#d8dee9 guibg=#3b4252 gui=NONE
-highlight PmenuSel              	  guifg=#d8dee9 guibg=#d08770 gui=NONE
-highlight PreProc     	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Repeat      	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Search              	      	  guifg=#d8dee9 guibg=#d08770 gui=NONE
-highlight Special     	      	      	  guifg=#d8dee9 guibg=NONE    gui=NONE
-highlight SpecialChar 	      	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
-highlight SpecialComment      	      	  guifg=#88c0d0 guibg=NONE    gui=italic
-highlight Statement	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight StatusLine          	      	  guifg=#d8dee9 guibg=#3b4252 gui=NONE
-highlight StatusLineNC	      	      	  guifg=#d8dee9 guibg=#3b4252 gui=NONE
-highlight StorageClass	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight String	      	      	  guifg=#a3be8c guibg=NONE    gui=NONE
-highlight Structure	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight TabLine             	      	  guifg=#d8dee9 guibg=#2e3440 gui=NONE
-highlight TabLineFill         	      	  guifg=#d8dee9 guibg=#2e3440 gui=NONE
-highlight TabLineSel          	      	  guifg=#2e3440 guibg=#d8dee9 gui=NONE
-highlight Tag		      	      	  guifg=#d8dee9 guibg=NONE    gui=NONE
-highlight TelescopeBorder        	  guifg=#d8dee9 guibg=NONE    gui=NONE
-highlight TelescopeMatching               guifg=#eceff4 guibg=#d08770 gui=NONE
-highlight TelescopeMultiSelection	  guifg=#d08770 guibg=NONE    gui=NONE
-highlight TelescopeNormal        	  guifg=#d8dee9 guibg=#2e3440 gui=NONE
-highlight TelescopeResultsBorder          guifg=#4c566a guibg=NONE    gui=NONE
-highlight TelescopeSelection	      	  guifg=#d8dee9	guibg=#434c5e gui=NONE
-highlight Todo		      	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
-highlight Type		      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Typedef	      	      	  guifg=#81a1c1 guibg=NONE    gui=NONE
-highlight Visual	      	      	  guifg=#d8dee9	guibg=#434c5e gui=NONE
-highlight Warning			  guifg=#3b4252 guibg=#ebcb8b gui=NONE
-highlight WarningMsg			  guifg=#ebcb8b guibg=NONE    gui=bold
+highlight Normal													guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Character   	      	      	  guifg=#98be65 guibg=NONE    gui=NONE
+highlight String	      	      	  	    guifg=#98be65 guibg=NONE    gui=NONE
+highlight Boolean			  	                guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Number      	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Float	      	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Constant    	      	      	  guifg=#a9a1e1 guibg=NONE    gui=NONE
+highlight Type		      	      	        guifg=#ecbe7b guibg=NONE    gui=NONE
+highlight Typedef	      	      	        guifg=#ecbe7b guibg=NONE    gui=NONE
+highlight Function    	      	      	  guifg=#c678dd guibg=NONE    gui=NONE
+highlight IncSearch              	        guifg=#dfdfdf guibg=#c678dd gui=NONE
+highlight Search              	      	  guifg=#dfdfdf guibg=#c678dd gui=NONE
+highlight StatusLine          	      	  guifg=#bbc2cf guibg=#21242b gui=NONE
+highlight StatusLineNC	      	      	  guifg=#5b6268 guibg=#21242b gui=NONE
+highlight Identifier  	      	      	  guifg=#a9a1e1 guibg=NONE    gui=NONE
+highlight Pmenu				                    guifg=#bbc2cf guibg=#21242b gui=NONE
+highlight PmenuSel              	        guifg=#bbc2cf guibg=#2257a0 gui=NONE
+highlight Title		      	      	        guifg=#ff6c6b guibg=NONE    gui=NONE
+highlight NonText	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
+highlight Comment	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
+highlight Folded              	      	  guifg=#5b6268 guibg=NONE    gui=NONE
+highlight LineNr	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
+highlight VertSplit	      	      	      guifg=#21242b guibg=NONE    gui=NONE
+highlight CursorLineNr        	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight MatchParen          	      	  guifg=#ff6c6b guibg=#21242b gui=bold
+highlight SpecialComment      	      	  guifg=#bbc2cf guibg=NONE    gui=italic
+highlight Delimiter   	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Visual	      	      	        guifg=NONE	  guibg=#3f444a gui=NONE
+
+highlight Statement	      	      	      guifg=#51afef guibg=NONE    gui=NONE
+highlight Conditional 	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight Define      	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight Exception   	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight Include     	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight Keyword     	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight Label	      	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight Operator    	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight PreProc     	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight Repeat      	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight StorageClass	      	      	  guifg=#51afef guibg=NONE    gui=NONE
+highlight Structure	      	      	      guifg=#51afef guibg=NONE    gui=NONE
+
+highlight Special     	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Tag		      	      	          guifg=#c678dd guibg=NONE    gui=NONE
+highlight TabLine             	      	  guifg=#bbc2cf guibg=#2e3440 gui=NONE
+highlight TabLineFill         	      	  guifg=#bbc2cf guibg=#2e3440 gui=NONE
+highlight TabLineSel          	      	  guifg=#2e3440 guibg=#bbc2cf gui=NONE
+highlight TelescopeBorder        	        guifg=#c678dd guibg=NONE    gui=NONE
+highlight TelescopeResultsBorder          guifg=#3f444a guibg=NONE    gui=NONE
+highlight TelescopeNormal        	        guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight TelescopeSelection	      	    guifg=#bbc2cf	guibg=#3f444a gui=NONE
+highlight TelescopeMatching              	guifg=#dfdfdf guibg=#c678dd gui=NONE
+highlight TelescopeSelectionCaret	      	guifg=#c678dd	guibg=#3f444a gui=NONE
+highlight TelescopePromptPrefix           guifg=#c678dd guibg=NONE    gui=bold
+highlight TelescopeMultiSelection	        guifg=#c678dd guibg=NONE    gui=NONE
+highlight Error               	      	  guifg=#ff6c6b guibg=NONE    gui=bold
+highlight ErrorMsg            	      	  guifg=#ff6c6b guibg=NONE    gui=bold
+highlight LspDiagnosticsUnderlineError	  guifg=#282c34 guibg=#ff6c6b gui=NONE
+
 ]]
+
+-- highlight SpecialChar 	      	      	  guifg=#da8548 guibg=NONE    gui=NONE
+
+-- vim.cmd [[
+-- highlight LspDiagnosticsFloatingError	  guifg=NONE	guibg=NONE    gui=NONE
+-- highlight LspDiagnosticsFloatingHint	  guifg=NONE	guibg=NONE    gui=NONE
+-- highlight LspDiagnosticsFloatingWarning	  guifg=NONE	guibg=NONE    gui=NONE
+-- highlight LspDiagnosticsUnderlineHint	  guifg=#3b4252 guibg=#b48ead gui=NONE
+-- highlight LspDiagnosticsUnderlineInfo	  guifg=#3b4252	guibg=#b48ead gui=NONE
+-- highlight LspDiagnosticsUnderlineWarning  guifg=#3b4252 guibg=#ebcb8b gui=NONE
+-- highlight LspReferenceRead	          guifg=NONE	guibg=#434c5e gui=NONE
+-- highlight LspReferenceText                guifg=NONE    guibg=#434c5e gui=NONE
+-- highlight LspReferenceWrite	          guifg=NONE    guibg=#434c5e gui=NONE
+-- highlight Todo		      	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
+-- highlight Warning			  guifg=#3b4252 guibg=#ebcb8b gui=NONE
+-- highlight WarningMsg			  guifg=#ebcb8b guibg=NONE    gui=bold
+-- ]]
 
 -- Mappings
 
@@ -372,26 +412,25 @@ end
 
 local map_opts = {noremap = true, silent = true}
 
-vim.api.nvim_set_keymap('i', '<tab>'  , 'pumvisible() ? "\\<c-n>" : "\\<tab>"', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "\\<s-tab>"', {noremap = true, silent = true, expr = true})
 vim.api.nvim_set_keymap('i', '<cr>'   , 'compe#confirm("\\<cr>")', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<a-cr>' , "<cmd>lua require'snippets'.expand_or_advance(1)<cr>", map_opts)
-
-vim.api.nvim_set_keymap('n', '<a-cr>' , "<cmd>lua require'snippets'.expand_or_advance(1)<cr>", map_opts)
-vim.api.nvim_set_keymap('n', 'K'    , '<cmd>lua Hover()<cr>', map_opts)
-vim.api.nvim_set_keymap('n', '<c-]>', '<cmd>lua Definition()<cr>', map_opts)
-vim.api.nvim_set_keymap('n', '<a-f>', "<cmd>lua require'telescope.builtin'.find_files({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-h>', "<cmd>lua require'telescope.builtin'.oldfiles({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-g>', "<cmd>lua require'telescope.builtin'.live_grep({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-b>', "<cmd>lua require'telescope.builtin'.buffers({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-d>', "<cmd>lua require'telescope.builtin'.lsp_document_diagnostics({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-D>', "<cmd>lua require'telescope.builtin'.lsp_workspace_diagnostics({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-c>', "<cmd>lua require'telescope.builtin'.lsp_code_actions({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-p>', "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-n>', "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-w>', "<cmd>lua require'telescope.builtin'.lsp_document_symbols({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-W>', "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-t>', '<cmd>lua vim.lsp.buf.type_definition()<cr>', map_opts)
-vim.api.nvim_set_keymap('n', '<a-r>', "<cmd>lua require'telescope.builtin'.lsp_references({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-R>', "<cmd>lua vim.lsp.buf.rename()<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-i>', "<cmd>lua require'telescope.builtin'.lsp_implementation({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('i', '<tab>'  , 'pumvisible() ? "\\<c-n>" : "\\<tab>"', {noremap = true, silent = true, expr = true})
+vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "<s-tab>"', {noremap = true, silent = true, expr = true})
+vim.api.nvim_set_keymap('n', 'K'      , '<cmd>lua Hover()<cr>', map_opts)
+vim.api.nvim_set_keymap('n', '<c-]>'  , '<cmd>lua Definition()<cr>', map_opts)
+vim.api.nvim_set_keymap('n', '<a-f>'  , "<cmd>lua require'telescope.builtin'.find_files({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-h>'  , "<cmd>lua require'telescope.builtin'.oldfiles({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-g>'  , "<cmd>lua require'telescope.builtin'.live_grep({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-b>'  , "<cmd>lua require'telescope.builtin'.buffers({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-d>'  , "<cmd>lua require'telescope.builtin'.lsp_document_diagnostics({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-D>'  , "<cmd>lua require'telescope.builtin'.lsp_workspace_diagnostics({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-c>'  , "<cmd>lua require'telescope.builtin'.lsp_code_actions({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-p>'  , "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-n>'  , "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-w>'  , "<cmd>lua require'telescope.builtin'.lsp_document_symbols({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-W>'  , "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-t>'  , '<cmd>lua vim.lsp.buf.type_definition()<cr>', map_opts)
+vim.api.nvim_set_keymap('n', '<a-r>'  , "<cmd>lua require'telescope.builtin'.lsp_references({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-R>'  , "<cmd>lua vim.lsp.buf.rename()<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-i>'  , "<cmd>lua require'telescope.builtin'.lsp_implementation({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-m>'  , ":Himalaya<cr>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-2>'  , ":Unfog<cr>", {noremap = true, silent = true})

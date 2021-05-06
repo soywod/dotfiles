@@ -24,6 +24,7 @@ export PATH=$PATH:~/.npm-global/bin
 export PATH=$PATH:~/.gem/ruby/2.6.0/bin
 export PATH=$PATH:/opt/platform-tools
 export PATH=$PATH:/opt/flutter/bin
+export PATH=$PATH:$HOME/.emacs.d/bin
 
 prompt_color() {
   if [ -n "$IN_NIX_SHELL" ]; then

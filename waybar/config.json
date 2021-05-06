@@ -2,7 +2,6 @@
   "layer": "top",
   "position": "bottom",
   "height": 15,
-  "output": ["eDP-1"],
   "modules-left": ["battery", "temperature", "cpu", "memory", "disk", "sway/language", "backlight", "pulseaudio"],
   "modules-center": ["clock"],
   "modules-right": ["sway/mode", "custom/comodoro", "network"],

@@ -229,12 +229,12 @@ kitty: kitty-pkgs kitty-cfg
 neovim-pkgs:
 	sudo pacman -S --needed --noconfirm \
 		neovim \
-		ripgrep \
 
 neovim-cfg:
 	mkdir -vp "${HOME}/.local/share/nvim/site/pack/plugins/start"
 	ln -vsf "${PWD}/neovim/config.lua" "${HOME}/.config/nvim/init.lua"
 	ln -vsfn "${PWD}/neovim/plugins" "${HOME}/.local/share/nvim/site/pack/plugins/opt"
+	ln -vsfn "${PWD}/neovim/snippets" "${HOME}/.config/nvim/UltiSnips"
 	sudo ln -vsf "${PWD}/neovim/editor.sh" "/etc/profile.d/"
 
 neovim: neovim-pkgs neovim-cfg
