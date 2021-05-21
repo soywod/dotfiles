@@ -137,7 +137,9 @@ dunst: dunst-pkgs dunst-cfg dunst-srv
 # Fonts {{{
 
 fonts:
-	cp -v ${PWD}/fonts/* "${HOME}/.local/share/fonts/"
+	mkdir -vp "${HOME}/.config/fontconfig"
+	ln -vsf "${PWD}/fonts/config.conf" "${HOME}/.config/fontconfig/fonts.conf"
+	cp -v ${PWD}/fonts/*.ttf "${HOME}/.local/share/fonts/"
 	fc-cache -fv
 
 # }}}
