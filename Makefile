@@ -138,7 +138,7 @@ dunst: dunst-pkgs dunst-cfg dunst-srv
 
 fonts:
 	cp -v ${PWD}/fonts/* "${HOME}/.local/share/fonts/"
-	fc-cache -v
+	fc-cache -fv
 
 # }}}
 
@@ -232,7 +232,7 @@ neovim-pkgs:
 
 neovim-cfg:
 	mkdir -vp "${HOME}/.local/share/nvim/site/pack/plugins/start"
-	ln -vsf "${PWD}/neovim/config.lua" "${HOME}/.config/nvim/init.lua"
+	ln -vsfn "${PWD}/neovim/config" "${HOME}/.config/nvim"
 	ln -vsfn "${PWD}/neovim/plugins" "${HOME}/.local/share/nvim/site/pack/plugins/opt"
 	ln -vsfn "${PWD}/neovim/snippets" "${HOME}/.config/nvim/UltiSnips"
 	sudo ln -vsf "${PWD}/neovim/editor.sh" "/etc/profile.d/"

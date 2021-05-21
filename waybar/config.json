@@ -3,8 +3,8 @@
   "position": "bottom",
   "height": 15,
   "modules-left": ["battery", "temperature", "cpu", "memory", "disk", "sway/language", "backlight", "pulseaudio"],
-  "modules-center": ["clock"],
-  "modules-right": ["sway/mode", "custom/comodoro", "network"],
+  "modules-center": ["custom/himalaya", "clock"],
+  "modules-right": ["custom/wallet", "sway/mode", "network"],
   "battery": {
     "states": {
       "good": 95,
@@ -66,9 +66,20 @@
         "default": ""
     }
   },
+  "custom/himalaya": {
+    "exec": "tail -fn 1 /tmp/himalaya-unseen-msgs-counter | xargs -I {} sh -c 'if [ {} -gt 0 ]; then echo ; else echo; fi'",
+    "format": "{} ",
+    "tooltip": false
+  },
   "clock": {
     "tooltip": false,
     "format": "{:%H:%M, %a %b %e}"
+  },
+  "custom/wallet": {
+    "exec": "sh -c '~/Code/binance/wallet.sh'",
+    "tooltip": true,
+    "interval": 60,
+    "format": " "
   },
   "sway/mode": {
     "format": "{}"

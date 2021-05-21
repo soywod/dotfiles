@@ -1,6 +1,5 @@
 -- Plugins
 
-
 local plugins = {
   'nvim-lspconfig',   -- ├ LSP
   'lsp-status.nvim',  -- ├ LSP status line
@@ -11,6 +10,9 @@ local plugins = {
   'plenary.nvim',     -- ├ Fuzzy stuff
   'telescope.nvim',   -- │
 
+  'nvim-web-devicons',-- ├ Status line
+  'galaxyline.nvim',  -- ├ Status line
+
   'ultisnips',        -- ├ Snippets
 
   'vim-abolish',      -- │
@@ -20,18 +22,23 @@ local plugins = {
   'vim-repeat',       -- │
   'vim-surround',     -- │
   'emmet-vim',        -- │
+  'vim-ledger',       -- │
 }
 
 for _, plugin in ipairs(plugins) do
   vim.cmd('packadd! '..plugin)
 end
 
+
+require('status-line')
+
+-- Plugins global setup
+
 vim.g['prettier#config#config_precedence'] = 'prefer-file'
 vim.g['user_emmet_install_global'] = 0
 vim.g['user_emmet_mode'] = 'i'
 vim.g['user_emmet_leader_key'] = ','
-vim.g['vsnip_snippet_dir'] = '~/.dotfiles/neovim/snippets'
-vim.g['UltiSnipsExpandTrigger'] = '<nop>'
+vim.g['UltiSnipsExpandTrigger'] = '<m-cr>'
 vim.g['UltiSnipsJumpForwardTrigger'] = '<cr>'
 
 -- Tree sitter
@@ -43,7 +50,7 @@ local tree_sitter_languages = {
   'html',
   'javascript',
   'json',
-  'ledger',
+  -- 'ledger',
   'lua',
   'ocaml',
   'php',
@@ -64,9 +71,9 @@ require'nvim-treesitter.configs'.setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = '<a-s>',
-      node_incremental = '<a-s>',
-      node_decremental = '<a-S>',
+      init_selection = '<a-v>',
+      node_incremental = '<a-v>',
+      node_decremental = '<a-V>',
     },
   },
 }
@@ -127,7 +134,6 @@ require'compe'.setup {
     calc = true,
     nvim_lsp = true,
     nvim_lua = true,
-    vsnip = false,
     ultisnips = true,
   },
 }
@@ -159,14 +165,14 @@ function attach_lsp_formatting(client)
   end
 end
 
--- function UsePrettierFormatting()
---  vim.api.nvim_exec([[
---    augroup lsp_document_formatting
---      autocmd! * <buffer>
---      autocmd BufWritePre <buffer> Prettier
---    augroup END
---  ]], false)
---end
+ function attach_prettier_formatting()
+  vim.api.nvim_exec([[
+    augroup lsp_document_formatting
+      autocmd! * <buffer>
+      autocmd BufWritePre <buffer> PrettierAsync
+    augroup END
+  ]], false)
+end
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -223,7 +229,11 @@ lspconfig.rust_analyzer.setup {
 
 lspconfig.tsserver.setup {
   capabilities = default_capabilities,
-  on_attach = default_on_attach,
+  on_attach = function(client)
+    lsp_status.on_attach(client)
+    attach_lsp_highlight(client)
+    attach_prettier_formatting(client)
+  end,
   cmd = {"typescript-language-server", "--stdio"}
 }
 
@@ -232,42 +242,6 @@ lspconfig.tsserver.setup {
 lspconfig.ocamllsp.setup{
   capabilities = default_capabilities,
   on_attach = default_on_attach,
-}
-
--- LSP Lua
-
-local sumneko_root_path = '/opt/lua-language-server'
-local sumneko_binary = sumneko_root_path..'/bin/Linux/lua-language-server'
-local lua_capabilities = vim.lsp.protocol.make_client_capabilities()
-lua_capabilities.textDocument.completion.completionItem.snippetSupport = true;
-lua_capabilities.textDocument.formatting = false;
-
-lspconfig.sumneko_lua.setup {
-  capabilities = lua_capabilities,
-  on_attach = function(client)
-    lsp_status.on_attach(client)
-  end,
-  cmd = {sumneko_binary, '-E', sumneko_root_path .. '/main.lua'};
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT',
-        path = vim.split(package.path, ';'),
-      },
-      diagnostics = {
-        globals = {'vim'},
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-        },
-      },
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
 }
 
 -- Vim settings
@@ -283,15 +257,15 @@ vim.o.foldlevelstart = 99
 vim.o.hidden = true
 vim.o.pumheight = 12
 vim.o.ruler = false
-vim.o.runtimepath = vim.o.runtimepath..',~/Code/bufmark.vim'
 vim.o.runtimepath = vim.o.runtimepath..',~/Code/himalaya/vim'
+vim.o.runtimepath = vim.o.runtimepath..',~/Code/unfog.vim'
 vim.o.shiftwidth = 2
 vim.o.shortmess = 'ctT'
 vim.o.showbreak = '~'
 vim.o.smartcase = true
 vim.o.splitbelow = true
 vim.o.splitright = true
-vim.o.statusline = '%m%{luaeval("lsp_status_line()")}%=%{himalaya#statusline#not_seen()} %r%y'
+vim.o.statusline = '%m%{luaeval("lsp_status_line()")}%=%r%y'
 vim.o.tabstop = 2
 vim.o.termguicolors = true
 vim.o.undofile = true
@@ -304,11 +278,11 @@ vim.wo.foldmethod = 'expr'
 vim.wo.number = true
 vim.wo.relativenumber = true
 
--- vim.cmd [[
--- augroup emmet
---   autocmd FileType html,typescriptreact,css,scss EmmetInstall
--- augroup END
--- ]]
+vim.cmd [[
+augroup emmet
+  autocmd FileType html,typescriptreact,css,scss EmmetInstall
+augroup END
+]]
 
 -- Theme
 -- https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el
@@ -337,6 +311,7 @@ highlight Comment	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight Folded              	      	  guifg=#5b6268 guibg=NONE    gui=NONE
 highlight LineNr	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight VertSplit	      	      	      guifg=#21242b guibg=NONE    gui=NONE
+highlight CursorLine        	      	    guifg=NONE    guibg=#21242b gui=NONE
 highlight CursorLineNr        	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight MatchParen          	      	  guifg=#ff6c6b guibg=#21242b gui=bold
 highlight SpecialComment      	      	  guifg=#bbc2cf guibg=NONE    gui=italic
@@ -372,7 +347,15 @@ highlight TelescopeMultiSelection	        guifg=#c678dd guibg=NONE    gui=NONE
 highlight Error               	      	  guifg=#ff6c6b guibg=NONE    gui=bold
 highlight ErrorMsg            	      	  guifg=#ff6c6b guibg=NONE    gui=bold
 highlight LspDiagnosticsUnderlineError	  guifg=#282c34 guibg=#ff6c6b gui=NONE
+]]
 
+-- Emails
+
+vim.cmd [[
+highlight! link mailSubject mailHeaderKey
+highlight! link mailEmail mailURL
+
+highlight mailURL guifg=#51afef guibg=NONE gui=NONE
 ]]
 
 -- highlight SpecialChar 	      	      	  guifg=#da8548 guibg=NONE    gui=NONE
@@ -428,9 +411,11 @@ vim.api.nvim_set_keymap('n', '<a-p>'  , "<cmd>lua vim.lsp.diagnostic.goto_prev()
 vim.api.nvim_set_keymap('n', '<a-n>'  , "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", map_opts)
 vim.api.nvim_set_keymap('n', '<a-w>'  , "<cmd>lua require'telescope.builtin'.lsp_document_symbols({previewer = false})<cr>", map_opts)
 vim.api.nvim_set_keymap('n', '<a-W>'  , "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-t>'  , '<cmd>lua vim.lsp.buf.type_definition()<cr>', map_opts)
+-- vim.api.nvim_set_keymap('n', '<a-t>'  , '<cmd>lua vim.lsp.buf.type_definition()<cr>', map_opts)
 vim.api.nvim_set_keymap('n', '<a-r>'  , "<cmd>lua require'telescope.builtin'.lsp_references({previewer = false})<cr>", map_opts)
 vim.api.nvim_set_keymap('n', '<a-R>'  , "<cmd>lua vim.lsp.buf.rename()<cr>", map_opts)
 vim.api.nvim_set_keymap('n', '<a-i>'  , "<cmd>lua require'telescope.builtin'.lsp_implementation({previewer = false})<cr>", map_opts)
 vim.api.nvim_set_keymap('n', '<a-m>'  , ":Himalaya<cr>", {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<a-2>'  , ":Unfog<cr>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-t>'  , ":Unfog<cr>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-s>'  , ":UltiSnipsEdit<cr>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-e>'  , ":Lexplore<cr>", {noremap = true, silent = true})

@@ -25,7 +25,7 @@ alias grm='git pull origin master --rebase'
 
 alias vi='nvim'
 alias vim='nvim'
-alias vimc='nvim ~/.dotfiles/neovim/config.lua'
+alias vimc='nvim ~/.dotfiles/neovim/config/init.lua'
 alias vimd='nvim ~/.config/lexy/definitions.yml'
 alias k='nvim +K'
 

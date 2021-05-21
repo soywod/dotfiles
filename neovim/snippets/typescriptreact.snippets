@@ -1,0 +1,61 @@
+snippet log "console.log"
+console.log($1);$0
+endsnippet
+
+snippet et "export type"
+export type $1 = {
+	$0
+}
+endsnippet
+
+snippet f "function"
+function $1($2) {
+	$0
+}
+endsnippet
+
+snippet t "type"
+type $1 = {
+	$0
+}
+endsnippet
+
+snippet cs "className={cs.?}"
+className={cs.$0}
+endsnippet
+
+snippet i "import"
+import $2${3: from }"$1";$0
+endsnippet
+
+snippet us "useState"
+const [$1, set${1/.+/\u$0/}] = useState$2($3);$0
+endsnippet
+
+snippet ue "useEffect"
+useEffect(() => {
+	$0
+}, [$1])
+endsnippet
+
+snippet uc "useCallback"
+const $1 = useCallback(() => {
+	$0
+}, [$2])
+endsnippet
+
+snippet ur "useRef"
+const $1 = useRef<$2>(null);$0
+endsnippet
+
+snippet fc "React.FC"
+const $1: FC${2:<$1Props>} = ${3:()} => {
+	$0
+
+	return (
+		<>
+			<></>
+		</>
+	)
+}
+endsnippet

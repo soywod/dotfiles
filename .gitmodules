@@ -58,3 +58,12 @@
 [submodule "neovim/plugins/ultisnips"]
 	path = neovim/plugins/ultisnips
 	url = https://github.com/SirVer/ultisnips.git
+[submodule "neovim/plugins/vim-ledger"]
+	path = neovim/plugins/vim-ledger
+	url = https://github.com/ledger/vim-ledger.git
+[submodule "neovim/plugins/galaxyline.nvim"]
+	path = neovim/plugins/galaxyline.nvim
+	url = https://github.com/glepnir/galaxyline.nvim.git
+[submodule "neovim/plugins/nvim-web-devicons"]
+	path = neovim/plugins/nvim-web-devicons
+	url = https://github.com/kyazdani42/nvim-web-devicons.git
