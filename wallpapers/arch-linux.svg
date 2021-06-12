@@ -152,6 +152,57 @@
          in="result6"
          id="feBlend2129" />
     </filter>
+    <linearGradient
+       id="lg-3"
+       y1="9.90843"
+       x2="25.431995"
+       x1="34.76569"
+       y2="28.426884"
+       gradientTransform="scale(0.9319351,1.0730361)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#fff"
+         stop-opacity="0"
+         offset="0"
+         id="stop1065" />
+      <stop
+         stop-color="#fff"
+         stop-opacity=".27451"
+         offset="1"
+         id="stop1067" />
+    </linearGradient>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter1593">
+      <feFlood
+         flood-opacity="0.25098"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood1583" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite1585" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0.5"
+         result="blur"
+         id="feGaussianBlur1587" />
+      <feOffset
+         dx="-1.08247e-15"
+         dy="2.5"
+         result="offset"
+         id="feOffset1589" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite1591" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -164,12 +215,12 @@
      inkscape:cx="905.38668"
      inkscape:cy="603.59444"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      inkscape:document-rotation="0"
      showgrid="true"
      units="px"
-     inkscape:window-width="1904"
-     inkscape:window-height="1009"
+     inkscape:window-width="1918"
+     inkscape:window-height="1044"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1">
@@ -185,7 +236,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -201,20 +252,14 @@
        height="285.75"
        x="0"
        y="-7.1054274e-14" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="Logo"
-     style="display:inline">
     <g
-       id="g915"
-       transform="matrix(0.82682294,0,0,0.82682294,227.33248,116.24314)"
-       style="opacity:0.75;filter:url(#filter1667)">
+       id="g1089"
+       transform="matrix(0.82682279,0,0,0.82682279,227.33249,116.24315)"
+       style="filter:url(#filter1593)">
       <path
          d="m 32.253,0.20991 c -2.849,6.9843 -4.579,11.559 -7.75,18.336 1.944,2.061 4.334,4.453 8.211,7.164 -4.168,-1.715 -7.009,-3.432 -9.133,-5.219 -4.059,8.47 -10.423,20.531 -23.328,43.719 10.14,-5.854 18.002,-9.466 25.328,-10.844 -0.314,-1.351 -0.481,-2.819 -0.469,-4.344 l 0.008,-0.32 c 0.161,-6.498 3.542,-11.495 7.547,-11.156 4.004,0.339 7.122,5.884 6.961,12.383 -0.031,1.224 -0.173,2.4 -0.414,3.492 7.247,1.418 15.034,5.013 25.039,10.789 -1.973,-3.632 -3.74,-6.905 -5.422,-10.024 -2.649,-2.053 -5.411,-4.724 -11.047,-7.617 3.874,1.007 6.65,2.171 8.812,3.469 -17.098,-31.835 -18.48,-36.068 -24.343,-49.828 v -9e-5 z"
          fill="#1793d1"
-         id="path898"
+         id="path1072"
          style="fill:#c678dd;fill-opacity:1" />
       <path
          id="path2522"
@@ -224,8 +269,13 @@
       <path
          d="m 32.378,0.45992 c -0.36,0.88448 -0.7,1.7468 -1.032,2.5625 -0.364,0.8946 -0.718,1.7565 -1.062,2.5938 -0.344,0.8373 -0.693,1.6309 -1.031,2.4375 -0.339,0.8065 -0.654,1.6039 -1,2.4063 -0.346,0.802 -0.726,1.613 -1.094,2.437 -0.368,0.825 -0.752,1.658 -1.156,2.532 -0.404,0.873 -0.828,1.801 -1.282,2.75 -0.061,0.128 -0.124,0.276 -0.187,0.406 1.939,2.054 4.33,4.427 8.187,7.125 -4.167,-1.715 -7,-3.432 -9.125,-5.219 -0.11,0.226 -0.198,0.425 -0.312,0.656 -0.42,0.871 -0.871,1.733 -1.344,2.688 -0.113,0.224 -0.196,0.427 -0.312,0.656 -0.501,1.004 -1.026,2.043 -1.594,3.156 -0.113,0.22 -0.228,0.402 -0.344,0.625 -0.343,0.667 -1.44,2.77 -2.562,4.907 -0.655,1.248 -1.169,2.27 -1.907,3.656 -0.209,0.398 -0.639,1.195 -0.75,1.406 8.125,-4.573 16.891,-11.216 32.813,-5.531 -0.797,-1.51 -1.562,-2.919 -2.25,-4.25 -0.688,-1.332 -1.312,-2.571 -1.906,-3.75 -0.594,-1.179 -1.143,-2.291 -1.657,-3.344 -0.513,-1.053 -0.989,-2.047 -1.437,-3 -0.448,-0.953 -0.885,-1.87 -1.281,-2.75 -0.397,-0.879 -0.766,-1.73 -1.125,-2.562 -0.359,-0.833 -0.695,-1.658 -1.032,-2.469 -0.336,-0.8115 -0.672,-1.5896 -1,-2.4063 -0.142,-0.3554 -0.263,-0.7338 -0.406,-1.0938 -0.888,-2.0849 -1.759,-4.1515 -2.812,-6.625 v 2e-5 z"
          fill="url(#lg)"
-         id="path901"
-         style="fill:url(#lg)" />
+         id="path1075"
+         style="fill:url(#lg-3)" />
     </g>
   </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Logo"
+     style="display:inline" />
 </svg>

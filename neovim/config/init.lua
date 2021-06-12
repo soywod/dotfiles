@@ -2,33 +2,35 @@
 
 local plugins = {
   'nvim-lspconfig',   -- ├ LSP
-  'lsp-status.nvim',  -- ├ LSP status line
   'nvim-treesitter',  -- ├ Tree sitter
   'nvim-compe',       -- ├ Completion
 
-  'popup.nvim',       -- │
-  'plenary.nvim',     -- ├ Fuzzy stuff
+  'popup.nvim',       -- ├ Fuzzy stuff
+  'plenary.nvim',     -- │
   'telescope.nvim',   -- │
 
   'nvim-web-devicons',-- ├ Status line
-  'galaxyline.nvim',  -- ├ Status line
+  'galaxyline.nvim',  -- │
 
   'ultisnips',        -- ├ Snippets
 
-  'vim-abolish',      -- │
+  'zeta-note',        -- ├ Markdown
+  'vim-markdown',     -- │
+
+  'vim-abolish',      -- ├ Utils
   'vim-commentary',   -- │
   'vim-gnupg',        -- │
-  'vim-prettier',     -- ├ Utils
+  'vim-prettier',     -- │
   'vim-repeat',       -- │
   'vim-surround',     -- │
   'emmet-vim',        -- │
   'vim-ledger',       -- │
+
 }
 
 for _, plugin in ipairs(plugins) do
   vim.cmd('packadd! '..plugin)
 end
-
 
 require('status-line')
 
@@ -90,28 +92,6 @@ require'telescope'.setup {
     borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
   }
 }
-
--- Status line
-
-local lsp_status = require('lsp-status')
-
-lsp_status.register_progress()
-lsp_status.config({
-  indicator_errors = '',
-  indicator_warnings = '',
-  indicator_info = '',
-  indicator_hint = '',
-  indicator_ok = '',
-  status_symbol = '[LSP] ',
-})
-
-function lsp_status_line()
-  if next(vim.lsp.buf_get_clients()) == nil then
-    return ''
-  else
-    return lsp_status.status()
-  end
-end
 
 -- Completion
 
@@ -185,10 +165,18 @@ local default_capabilities = vim.lsp.protocol.make_client_capabilities()
 default_capabilities.textDocument.completion.completionItem.snippetSupport = true;
 
 local default_on_attach = function(client)
-  lsp_status.on_attach(client)
   attach_lsp_highlight(client)
   attach_lsp_formatting(client)
 end
+
+-- LSP Markdown
+
+lspconfig.zeta_note.setup {
+  cmd = {'/opt/zeta-note'},
+  root_dir = function(fname)
+    return '/home/soywod/Documents'
+  end,
+}
 
 -- LSP Bash
 
@@ -230,7 +218,6 @@ lspconfig.rust_analyzer.setup {
 lspconfig.tsserver.setup {
   capabilities = default_capabilities,
   on_attach = function(client)
-    lsp_status.on_attach(client)
     attach_lsp_highlight(client)
     attach_prettier_formatting(client)
   end,
@@ -265,7 +252,6 @@ vim.o.showbreak = '~'
 vim.o.smartcase = true
 vim.o.splitbelow = true
 vim.o.splitright = true
-vim.o.statusline = '%m%{luaeval("lsp_status_line()")}%=%r%y'
 vim.o.tabstop = 2
 vim.o.termguicolors = true
 vim.o.undofile = true
@@ -283,6 +269,18 @@ augroup emmet
   autocmd FileType html,typescriptreact,css,scss EmmetInstall
 augroup END
 ]]
+
+function LedgerFormat()
+  vim.cmd "mkview"
+  vim.cmd "LedgerAlignBuffer"
+  vim.cmd "silent! loadview"
+end
+
+vim.api.nvim_exec([[
+augroup ledger
+  autocmd BufWritePre *.ledger lua LedgerFormat()
+augroup END
+]], false)
 
 -- Theme
 -- https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el
@@ -310,7 +308,7 @@ highlight NonText	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight Comment	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight Folded              	      	  guifg=#5b6268 guibg=NONE    gui=NONE
 highlight LineNr	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
-highlight VertSplit	      	      	      guifg=#21242b guibg=NONE    gui=NONE
+highlight VertSplit	      	      	      guifg=#3f444a guibg=NONE    gui=NONE
 highlight CursorLine        	      	    guifg=NONE    guibg=#21242b gui=NONE
 highlight CursorLineNr        	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight MatchParen          	      	  guifg=#ff6c6b guibg=#21242b gui=bold
@@ -401,6 +399,7 @@ vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "<s-tab>"', 
 vim.api.nvim_set_keymap('n', 'K'      , '<cmd>lua Hover()<cr>', map_opts)
 vim.api.nvim_set_keymap('n', '<c-]>'  , '<cmd>lua Definition()<cr>', map_opts)
 vim.api.nvim_set_keymap('n', '<a-f>'  , "<cmd>lua require'telescope.builtin'.find_files({previewer = false})<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-F>'  , "<cmd>lua require'telescope.builtin'.file_browser({previewer = false})<cr>", map_opts)
 vim.api.nvim_set_keymap('n', '<a-h>'  , "<cmd>lua require'telescope.builtin'.oldfiles({previewer = false})<cr>", map_opts)
 vim.api.nvim_set_keymap('n', '<a-g>'  , "<cmd>lua require'telescope.builtin'.live_grep({previewer = false})<cr>", map_opts)
 vim.api.nvim_set_keymap('n', '<a-b>'  , "<cmd>lua require'telescope.builtin'.buffers({previewer = false})<cr>", map_opts)
@@ -418,4 +417,4 @@ vim.api.nvim_set_keymap('n', '<a-i>'  , "<cmd>lua require'telescope.builtin'.lsp
 vim.api.nvim_set_keymap('n', '<a-m>'  , ":Himalaya<cr>", {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<a-t>'  , ":Unfog<cr>", {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<a-s>'  , ":UltiSnipsEdit<cr>", {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<a-e>'  , ":Lexplore<cr>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-e>'  , ":Explore<cr>", {noremap = true, silent = true})

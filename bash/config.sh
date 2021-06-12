@@ -13,18 +13,18 @@ export ANDROID_HOME=/opt/android-sdk/
 export ANDROID_SDK_ROOT=/opt/android-sdk/
 export XDG_CURRENT_DESKTOP=sway
 
+export PATH=$PATH:$HOME/.emacs.d/bin
+export PATH=$PATH:$HOME/.gem/ruby/2.6.0/bin
+export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/.npm-global/bin
+export PATH=$PATH:$HOME/.yarn/bin
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:/opt/android-studio/gradle/gradle-4.4/bin
-export PATH=$PATH:~/.local/bin
-export PATH=$PATH:~/.yarn/bin
-export PATH=$PATH:~/.npm-global/bin
-export PATH=$PATH:~/.gem/ruby/2.6.0/bin
-export PATH=$PATH:/opt/platform-tools
 export PATH=$PATH:/opt/flutter/bin
-export PATH=$PATH:$HOME/.emacs.d/bin
+export PATH=$PATH:/opt/platform-tools
 
 prompt_color() {
   if [ -n "$IN_NIX_SHELL" ]; then

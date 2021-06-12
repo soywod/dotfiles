@@ -1,10 +1,24 @@
 {
   "layer": "top",
-  "position": "bottom",
+  "position": "top",
   "height": 15,
-  "modules-left": ["battery", "temperature", "cpu", "memory", "disk", "sway/language", "backlight", "pulseaudio"],
-  "modules-center": ["custom/himalaya", "clock"],
-  "modules-right": ["custom/wallet", "sway/mode", "network"],
+  "modules-left": [
+    "battery",
+    "temperature",
+    "cpu",
+    "memory",
+    "disk",
+    "backlight",
+    "pulseaudio"
+  ],
+  "modules-center": ["clock"],
+  "modules-right": [
+    "network",
+    "custom/himalaya",
+    "custom/wallet",
+    "sway/mode",
+    "tray"
+  ],
   "battery": {
     "states": {
       "good": 95,
@@ -16,7 +30,7 @@
     "format-full": "",
     "format-charging": " {capacity}%",
     "format-plugged": " {capacity}%",
-    "format-icons": ["", "", "", "", ""] 
+    "format-icons": ["", "", "", "", ""]
   },
   "temperature": {
     "tooltip": false,
@@ -32,7 +46,7 @@
     "format": " {usage}%"
   },
   "memory": {
-    "format": " {percentage}%",
+    "format": " {percentage}%",
     "tooltip-format": "{used:0.2f}GiB/{avail:0.2f}GiB"
   },
   "disk": {
@@ -44,7 +58,7 @@
   "backlight": {
     "tooltip": false,
     "device": "acpi_video1",
-    "format": " {percent}%"
+    "format": " {percent}%"
   },
   "sway/language": {
     "tooltip": false,
@@ -57,13 +71,13 @@
     "format-bluetooth": " {icon} {volume}%",
     "format-muted": "{icon} --%",
     "format-icons": {
-        "headphone": "",
-        "hands-free": "",
-        "headset": "",
-        "phone": "",
-        "portable": "",
-        "car": "",
-        "default": ""
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ""
     }
   },
   "custom/himalaya": {
@@ -75,11 +89,15 @@
     "tooltip": false,
     "format": "{:%H:%M, %a %b %e}"
   },
+  "tray": {
+    "icon-size": 25,
+    "spacing": 10
+  },
   "custom/wallet": {
     "exec": "sh -c '~/Code/binance/wallet.sh'",
     "tooltip": true,
     "interval": 60,
-    "format": " "
+    "format": "₿ "
   },
   "sway/mode": {
     "format": "{}"

@@ -1,40 +1,39 @@
 * {
   font-family: JetBrainsMono Nerd Font;
-  font-size: 15px;
+  font-size: 1.1rem;
 }
 
 #waybar {
-  background-color: #2e3440;
-  border-top: 1px solid #3b4252;
-  color: #d8dee9;
+  background-color: #21242b;
+  color: #bbc2cf;
 }
 
 #battery,
-#cpu,
 #temperature,
+#cpu,
 #memory,
 #disk,
+#language,
 #backlight,
 #pulseaudio,
-#language,
 #mode,
 #network {
-  padding: 5px 10px;
+  padding: 0.5rem 0.75rem;
 }
 
 #battery.good {
-  color: #a3be8c;
+  color: #98be65;
 }
 
 #battery.warning {
-  color: #ebcb8b;
+  color: #da8548;
 }
 
 .critical {
-  background-color: #bf616a;
-  color: #d8dee9;
+  background-color: #ff6c6b;
+  color: #bbc2cf;
 }
 
 #battery.charging {
-  color: #d08770;
+  color: #ecbe7b;
 }

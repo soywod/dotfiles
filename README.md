@@ -10,36 +10,31 @@ make install
 
 ## Theme
 
-Nord theme (https://www.nordtheme.com/)
+https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el
 
-### Darks
+bg:     #282c34
+bg-alt: #21242b
+fg:     #bbc2cf
+fg-alt: #5b6268
 
-`#2e3440 #3b4252 #434c5e #4c566a`
+mono0: #1b2229
+mono1: #1c1f24
+mono2: #202328
+mono3: #23272e
+mono4: #3f444a (grey)
+mono5: #5b6268
+mono6: #73797e
+mono7: #9ca0a4
+mono8: #dfdfdf
 
-### Lights
-
-`#d8dee9 #e5e9f0 #eceff4`
-
-### Blues
-
-`#5e81ac #81a1c1 #88c0d0 #8fbcbb`
-
-### Red
-
-`#bf616a`
-
-### Orange
-
-`#d08770`
-
-### Yellow
-
-`#ebcb8b`
-
-### Green
-
-`#a3be8c`
-
-### Purple
-
-`#b48ead`
+red:       #ff6c6b
+orange:    #da8548
+green:     #98be65
+teal:      #4db5bd
+yellow:    #ecbe7b
+blue:      #51afef
+dark-blue: #2257a0
+magenta:   #c678dd
+violet:    #a9a1e1
+cyan:      #46d9ff
+dark-cyan: #5699af

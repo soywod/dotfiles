@@ -39,6 +39,7 @@ alias kb='setxkbmap -layout us,ru -variant "dvorak-alt-intl", -option grp:shifts
 alias rjpeg="exiv2 -r '%Y%m%d-%H%M%S-1' mv"
 alias u="unfog"
 
-alias vat-for="hledger bal --effective --monthly --cleared --tree --period"
+alias vat-for="hledger --file ~/Dropbox/hledger.journal bal --effective --monthly --cleared --tree --period"
+alias jedit="vim ~/Dropbox/ledger/journal.ledger"
 
 alias h="himalaya"

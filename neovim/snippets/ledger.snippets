@@ -1,0 +1,91 @@
+snippet swiss "SwissLife"
+`date +%Y/%m/`${1:`date +%d`}            * SwissLife: épargne retraite
+	Actif:SwissLife                                    ${2:103,53} €
+	Actif:N26
+endsnippet
+
+snippet aviva "Aviva"
+`date +%Y/%m/`${1:`date +%d`}            * Aviva: assurance vie
+	Actif:Aviva                                        ${2:100,00} €
+	Actif:Monabanq
+endsnippet
+
+snippet macif "Macif"
+`date +%Y/%m/`${1:`date +%d`}            * Macif: assurance auto
+	Dépense:Récurrent:AssuranceAuto                     ${2:44,39} €
+	Actif:Monabanq
+endsnippet
+
+snippet mut "KLESIA Mut'"
+`date +%Y/%m/`${1:`date +%d`}            * Mutuelle
+	Dépense:Récurrent:Mutuelle                          ${2:38,21} €
+	Actif:N26
+endsnippet
+
+snippet loyer "Loyer"
+`date +%Y/%m/`${1:`date +%d`}            * Loyer
+	Dépense:Récurrent:Loyer                            ${2:960,00} €
+	Actif:N26
+endsnippet
+
+snippet net "Internet"
+`date +%Y/%m/`${1:`date +%d`}            * Internet
+	Dépense:Récurrent:Internet                          ${2:24,99} €
+	Actif:N26
+endsnippet
+
+snippet telc "Téléphone Clément"
+`date +%Y/%m/`${1:`date +%d`}            * Téléphone Clément
+	Dépense:Récurrent:Téléphone                                 $2 €
+	Actif:N26
+endsnippet
+
+snippet telp "Téléphone Palina"
+`date +%Y/%m/`${1:`date +%d`}            * Téléphone Palina
+	Dépense:Récurrent:Téléphone                          ${2:9,99} €
+	Actif:Monabanq
+endsnippet
+
+snippet total "Total Direct Energie"
+`date +%Y/%m/`${1:`date +%d`}            * Total Direct Energie
+	Dépense:Récurrent:Électricité                      ${2:101,00} €
+	Actif:N26
+endsnippet
+
+snippet paypal "PayPal"
+`date +%Y/%m/`${1:`date +%d`}            * $2
+	$3     																									  	$4 €
+	Actif:PayPal                                               -$4 €
+	Actif:PayPal                                                $4 €
+	Actif:N26                                                  -$4 €$0
+endsnippet
+
+snippet leclerc "E.Leclerc"
+`date +%Y/%m/`${1:`date +%d`}            * E.Leclerc
+	Dépense:Course:Leclerc                                      $2 €
+	Actif:${3:Revolut}
+endsnippet
+
+snippet monop "Monoprix"
+`date +%Y/%m/`${1:`date +%d`}            * Monoprix
+	Dépense:Course:Monoprix                                     $2 €
+	Actif:${3:Revolut}
+endsnippet
+
+snippet boul "Boulangerie"
+`date +%Y/%m/`${1:`date +%d`}            * Boulangerie
+	Dépense:Course:Boulangerie                                  $2 €
+	Actif:${3:Revolut}
+endsnippet
+
+snippet n "Dépense N26"
+`date +%Y/%m/`${1:`date +%d`}            * $2
+	Dépense:$3                                                  $4 €
+	Actif:${5:N26}
+endsnippet
+
+snippet r "Dépense Revolut"
+`date +%Y/%m/`${1:`date +%d`}            * $2
+	Dépense:$3                                                  $4 €
+	Actif:${5:Revolut}
+endsnippet

@@ -1,36 +1,36 @@
 * {
-  black3b: #3b4252;
-  black43: #434c5e;
-  black4c: #4c566a;
+  bg: #282c34;
+  fg: #d8dee9;
+  grey: #3f444a;
   cyan: #88c0d0;
   red: #bf616a;
-  white: #d8dee9;
+  magenta: #c678dd;
 
-  background: @black3b;
-  foreground: @white;
-  separatorcolor: @black43;
+  background: @bg;
+  foreground: @fg;
+  separatorcolor: @grey;
   spacing: 2;
-  border-color: @black43;
-  background-color: @black3b;
+  border-color: @grey;
+  background-color: @bg;
 
   normal-background: @background;
   normal-foreground: @foreground;
-  active-background: @cyan;
-  active-foreground: @white;
-  urgent-background: @background;
-  urgent-foreground: @red;
+  active-background: @magenta;
+  active-foreground: @foreground;
+  urgent-background: @red;
+  urgent-foreground: @foreground;
 
-  alternate-normal-background: @black43;
+  alternate-normal-background: @background;
   alternate-normal-foreground: @foreground;
-  alternate-active-background: @black43;
-  alternate-active-foreground: @cyan;
+  alternate-active-background: @magenta;
+  alternate-active-foreground: @foreground;
   alternate-urgent-background: @red;
   alternate-urgent-foreground: @foreground;
 
-  selected-normal-background: @cyan;
-  selected-normal-foreground: @black3b;
-  selected-active-background: @cyan;
-  selected-active-foreground: @black3b;
+  selected-normal-background: @magenta;
+  selected-normal-foreground: @foreground;
+  selected-active-background: @magenta;
+  selected-active-foreground: @foreground;
   selected-urgent-background: @red;
   selected-urgent-foreground: @foreground;
 }
@@ -150,12 +150,12 @@ button selected {
 }
 
 num-filtered-rows, num-rows {
-  text-color: @black43;
+  text-color: @bg;
   expand: false;
 }
 
 textbox-num-sep {
-  text-color: @black4c;
+  text-color: @grey;
   expand: false;
   str: "/";
 }
@@ -175,7 +175,7 @@ case-indicator {
 entry {
   spacing: 0;
   text-color: @normal-foreground;
-  placeholder-color: @black4c;
+  placeholder-color: @grey;
   placeholder: "Type to filter";
 }
 
