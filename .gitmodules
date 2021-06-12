@@ -67,3 +67,9 @@
 [submodule "neovim/plugins/nvim-web-devicons"]
 	path = neovim/plugins/nvim-web-devicons
 	url = https://github.com/kyazdani42/nvim-web-devicons.git
+[submodule "neovim/plugins/zeta-note"]
+	path = neovim/plugins/zeta-note
+	url = https://github.com/artempyanykh/zeta-note.git
+[submodule "neovim/plugins/vim-markdown"]
+	path = neovim/plugins/vim-markdown
+	url = https://github.com/plasticboy/vim-markdown.git
