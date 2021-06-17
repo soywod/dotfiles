@@ -171,17 +171,12 @@ gnupg-pkgs:
 	sudo pacman -S --needed --noconfirm \
 		gnupg \
 
-gnupg-pkgs-aur: yay
-	yay -S --needed --noconfirm \
-		pam-gnupg \
-
 gnupg-cfg:
 	mkdir -vp "${HOME}/.gnupg"
 	ln -vsf "${PWD}/gnupg/config.cfg" "${HOME}/.gnupg/gpg-agent.conf"
 	sudo ln -vsf "${PWD}/gnupg/password-to-clipboard.sh" /usr/local/bin/dotfiles--password-to-clipboard
-	sudo ln -vsf "${PWD}/gnupg/pam.cfg" "/etc/pam.d/system-local-login"
 
-gnupg: gnupg-pkgs gnupg-pkgs-aur gnupg-cfg
+gnupg: gnupg-pkgs gnupg-cfg
 
 # }}}
 
@@ -300,7 +295,13 @@ sway-cfg:
 	mkdir -vp "${HOME}/.config/sway"
 	ln -vsf "${PWD}/sway/config.cfg" "${HOME}/.config/sway/config"
 
-sway: rofi sway-pkgs sway-cfg
+sway-srv:
+	mkdir -vp "${HOME}/.config/systemd/user"
+	cp -v "${PWD}/sway/target.ini" "${HOME}/.config/systemd/user/sway-session.target"
+	cp -v "${PWD}/sway/service.ini" "${HOME}/.config/systemd/user/sway.service"
+	systemctl --user daemon-reload
+
+sway: rofi sway-pkgs sway-cfg sway-srv
 
 # }}}
 
