@@ -13,6 +13,7 @@
   ],
   "modules-center": ["clock"],
   "modules-right": [
+    "custom/comodoro",
     "network",
     "custom/himalaya",
     "custom/wallet",
