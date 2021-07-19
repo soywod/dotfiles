@@ -269,20 +269,6 @@ pipewire: pipewire-pkgs pipewire-srv
 
 # }}}
 
-# Rofi (window switcher) {{{
-
-rofi-pkgs:
-	sudo pacman -S --needed --noconfirm \
-		rofi \
-
-rofi-cfg:
-	mkdir -vp "${HOME}/.config/rofi"
-	ln -vsf "${PWD}/rofi/config.rasi" "${HOME}/.config/rofi/config.rasi"
-
-rofi: rofi-pkgs rofi-cfg
-
-# }}}
-
 # Sway (tile window manager) {{{
 
 sway-pkgs:

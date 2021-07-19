@@ -12,6 +12,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 export ANDROID_HOME=/opt/android-sdk/
 export ANDROID_SDK_ROOT=/opt/android-sdk/
 export XDG_CURRENT_DESKTOP=sway
+export XDG_SESSION_TYPE=wayland
 
 export PATH=$PATH:$HOME/.emacs.d/bin
 export PATH=$PATH:$HOME/.gem/ruby/2.6.0/bin
@@ -63,11 +64,7 @@ fi
 
 eval "$(stack --bash-completion-script stack)"
 
-if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-  exec startx
-fi
-
-# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f "${HOME}/.fzf.bash" ] && source "${HOME}/.fzf.bash"
 
 export PATH="${HOME}/.cargo/bin:$PATH"
 
