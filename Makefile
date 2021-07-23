@@ -291,6 +291,19 @@ sway: rofi sway-pkgs sway-cfg sway-srv
 
 # }}}
 
+# TLP (battery optimizer) {{{
+
+tlp-pkgs:
+	sudo pacman -S --needed --noconfirm \
+		tlp \
+
+tlp-srv:
+	sudo systemctl enable --now tlp
+
+tlp: tlp-pkgs tlp-srv
+
+# }}}
+
 # Waybar (status bar manager) {{{
 
 waybar-pkgs:
