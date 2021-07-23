@@ -43,3 +43,4 @@ alias vat-for="hledger --file ~/Dropbox/hledger.journal bal --effective --monthl
 alias jedit="vim ~/Dropbox/ledger/journal.ledger"
 
 alias h="himalaya"
+alias o="xdg-open"

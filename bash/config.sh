@@ -11,8 +11,6 @@ export JAVA_SDK=$JAVA_HOME/jre
 export PATH=$PATH:$JAVA_HOME/bin
 export ANDROID_HOME=/opt/android-sdk/
 export ANDROID_SDK_ROOT=/opt/android-sdk/
-export XDG_CURRENT_DESKTOP=sway
-export XDG_SESSION_TYPE=wayland
 
 export PATH=$PATH:$HOME/.emacs.d/bin
 export PATH=$PATH:$HOME/.gem/ruby/2.6.0/bin
