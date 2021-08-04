@@ -1,235 +1,23 @@
--- Plugins
+-- Modules
 
-local plugins = {
-  'nvim-lspconfig',   -- ├ LSP
-  'nvim-treesitter',  -- ├ Tree sitter
-  'nvim-compe',       -- ├ Completion
+local load_module = require('module-loader')
 
-  'popup.nvim',       -- ├ Fuzzy stuff
-  'plenary.nvim',     -- │
-  'telescope.nvim',   -- │
+load_module('galaxyline')
+load_module('tree-sitter')
+load_module('telescope')
+load_module('compe')
+load_module('lsp')
 
-  'nvim-web-devicons',-- ├ Status line
-  'galaxyline.nvim',  -- │
+load_module('emmet')
+load_module('ultisnips')
+load_module('prettier')
 
-  'ultisnips',        -- ├ Snippets
-
-  'zeta-note',        -- ├ Markdown
-  'vim-markdown',     -- │
-
-  'vim-abolish',      -- ├ Utils
-  'vim-commentary',   -- │
-  'vim-gnupg',        -- │
-  'vim-prettier',     -- │
-  'vim-repeat',       -- │
-  'vim-surround',     -- │
-  'emmet-vim',        -- │
-  'vim-ledger',       -- │
-
-}
-
-for _, plugin in ipairs(plugins) do
-  vim.cmd('packadd! '..plugin)
-end
-
-require('status-line')
-
--- Plugins global setup
-
-vim.g['prettier#config#config_precedence'] = 'prefer-file'
-vim.g['user_emmet_install_global'] = 0
-vim.g['user_emmet_mode'] = 'i'
-vim.g['user_emmet_leader_key'] = ','
-vim.g['UltiSnipsExpandTrigger'] = '<m-cr>'
-vim.g['UltiSnipsJumpForwardTrigger'] = '<cr>'
-
--- Tree sitter
--- https://github.com/nvim-treesitter/nvim-treesitter#supported-languages
-
-local tree_sitter_languages = {
-  'bash',
-  'css',
-  'html',
-  'javascript',
-  'json',
-  -- 'ledger',
-  'lua',
-  'ocaml',
-  'php',
-  'rust',
-  'toml',
-  'tsx',
-  'typescript',
-}
-
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = tree_sitter_languages,
-  highlight = {
-    enable = true,
-  },
-  indent = {
-    enable = true
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = '<a-v>',
-      node_incremental = '<a-v>',
-      node_decremental = '<a-V>',
-    },
-  },
-}
-
--- Telescope
-
-require'telescope'.setup {
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = require'telescope.actions'.close
-      },
-    },
-    borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
-  }
-}
-
--- Completion
-
-require'compe'.setup {
-  enabled = true,
-  autocomplete = true,
-  debug = false,
-  min_length = 1,
-  preselect = 'disable',
-  throttle_time = 80,
-  source_timeout = 200,
-  incomplete_delay = 400,
-  max_abbr_width = 100,
-  max_kind_width = 100,
-  max_menu_width = 100,
-  documentation = true,
-  source = {
-    path = true,
-    buffer = true,
-    calc = true,
-    nvim_lsp = true,
-    nvim_lua = true,
-    ultisnips = true,
-  },
-}
-
--- LSP
-
-local lspconfig = require('lspconfig')
-
-function attach_lsp_highlight(client)
-  if client.resolved_capabilities.document_highlight then
-    vim.api.nvim_exec([[
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]], false)
-  end
-end
-
-function attach_lsp_formatting(client)
-  if client.resolved_capabilities.document_formatting then
-    vim.api.nvim_exec([[
-      augroup lsp_document_formatting
-        autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-      augroup END
-    ]], false)
-  end
-end
-
- function attach_prettier_formatting()
-  vim.api.nvim_exec([[
-    augroup lsp_document_formatting
-      autocmd! * <buffer>
-      autocmd BufWritePre <buffer> PrettierAsync
-    augroup END
-  ]], false)
-end
-
-vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false,
-    signs = false,
-  }
-)
-
-local default_capabilities = vim.lsp.protocol.make_client_capabilities()
-default_capabilities.textDocument.completion.completionItem.snippetSupport = true;
-
-local default_on_attach = function(client)
-  attach_lsp_highlight(client)
-  attach_lsp_formatting(client)
-end
-
--- LSP Markdown
-
-lspconfig.zeta_note.setup {
-  cmd = {'/opt/zeta-note'},
-  root_dir = function(fname)
-    return '/home/soywod/Documents'
-  end,
-}
-
--- LSP Bash
-
-lspconfig.bashls.setup {
-  capabilities = default_capabilities,
-  on_attach = default_on_attach,
-}
-
--- LSP JSON
-
-lspconfig.jsonls.setup {
-  capabilities = default_capabilities,
-  on_attach = default_on_attach,
-  commands = {
-    Format = {
-      function()
-        vim.lsp.buf.range_formatting({}, {0, 0}, {vim.fn.line("$"),0})
-      end
-    }
-  }
-}
-
--- LSP CSS
-
-lspconfig.cssls.setup {
-  capabilities = default_capabilities,
-  on_attach = default_on_attach,
-}
-
--- LSP Rust
-
-lspconfig.rust_analyzer.setup {
-  capabilities = default_capabilities,
-  on_attach = default_on_attach,
-}
-
--- LSP TypeScript
-
-lspconfig.tsserver.setup {
-  capabilities = default_capabilities,
-  on_attach = function(client)
-    attach_lsp_highlight(client)
-    attach_prettier_formatting(client)
-  end,
-  cmd = {"typescript-language-server", "--stdio"}
-}
-
--- LSP OCaml
-
-lspconfig.ocamllsp.setup{
-  capabilities = default_capabilities,
-  on_attach = default_on_attach,
-}
+load_module('abolish')
+load_module('commentary')
+load_module('gnupg')
+load_module('repeat')
+load_module('surround')
+load_module('ledger')
 
 -- Vim settings
 
@@ -263,24 +51,6 @@ vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.wo.foldmethod = 'expr'
 vim.wo.number = true
 vim.wo.relativenumber = true
-
-vim.cmd [[
-augroup emmet
-  autocmd FileType html,typescriptreact,css,scss EmmetInstall
-augroup END
-]]
-
-function LedgerFormat()
-  vim.cmd "mkview"
-  vim.cmd "LedgerAlignBuffer"
-  vim.cmd "silent! loadview"
-end
-
-vim.api.nvim_exec([[
-augroup ledger
-  autocmd BufWritePre *.ledger lua LedgerFormat()
-augroup END
-]], false)
 
 -- Theme
 -- https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el
@@ -356,9 +126,8 @@ highlight! link mailEmail mailURL
 highlight mailURL guifg=#51afef guibg=NONE gui=NONE
 ]]
 
+-- TODO: sort
 -- highlight SpecialChar 	      	      	  guifg=#da8548 guibg=NONE    gui=NONE
-
--- vim.cmd [[
 -- highlight LspDiagnosticsFloatingError	  guifg=NONE	guibg=NONE    gui=NONE
 -- highlight LspDiagnosticsFloatingHint	  guifg=NONE	guibg=NONE    gui=NONE
 -- highlight LspDiagnosticsFloatingWarning	  guifg=NONE	guibg=NONE    gui=NONE
@@ -371,50 +140,10 @@ highlight mailURL guifg=#51afef guibg=NONE gui=NONE
 -- highlight Todo		      	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
 -- highlight Warning			  guifg=#3b4252 guibg=#ebcb8b gui=NONE
 -- highlight WarningMsg			  guifg=#ebcb8b guibg=NONE    gui=bold
--- ]]
 
 -- Mappings
 
-function Hover()
-  if next(vim.lsp.buf_get_clients()) == nil then
-     vim.cmd [[execute printf('h %s', expand('<cword>'))]]
-  else
-    vim.lsp.buf.hover()
-  end
-end
-
-function Definition()
-  if next(vim.lsp.buf_get_clients()) == nil then
-     vim.cmd [[execute printf('tag %s', expand('<cword>'))]]
-  else
-    require'telescope.builtin'.lsp_definitions({previewer = false})
-  end
-end
-
 local map_opts = {noremap = true, silent = true}
-
-vim.api.nvim_set_keymap('i', '<cr>'   , 'compe#confirm("\\<cr>")', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<tab>'  , 'pumvisible() ? "\\<c-n>" : "\\<tab>"', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "<s-tab>"', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('n', 'K'      , '<cmd>lua Hover()<cr>', map_opts)
-vim.api.nvim_set_keymap('n', '<c-]>'  , '<cmd>lua Definition()<cr>', map_opts)
-vim.api.nvim_set_keymap('n', '<a-f>'  , "<cmd>lua require'telescope.builtin'.find_files({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-F>'  , "<cmd>lua require'telescope.builtin'.file_browser({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-h>'  , "<cmd>lua require'telescope.builtin'.oldfiles({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-g>'  , "<cmd>lua require'telescope.builtin'.live_grep({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-b>'  , "<cmd>lua require'telescope.builtin'.buffers({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-d>'  , "<cmd>lua require'telescope.builtin'.lsp_document_diagnostics({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-D>'  , "<cmd>lua require'telescope.builtin'.lsp_workspace_diagnostics({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-c>'  , "<cmd>lua require'telescope.builtin'.lsp_code_actions({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-p>'  , "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-n>'  , "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-w>'  , "<cmd>lua require'telescope.builtin'.lsp_document_symbols({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-W>'  , "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols({previewer = false})<cr>", map_opts)
--- vim.api.nvim_set_keymap('n', '<a-t>'  , '<cmd>lua vim.lsp.buf.type_definition()<cr>', map_opts)
-vim.api.nvim_set_keymap('n', '<a-r>'  , "<cmd>lua require'telescope.builtin'.lsp_references({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-R>'  , "<cmd>lua vim.lsp.buf.rename()<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-i>'  , "<cmd>lua require'telescope.builtin'.lsp_implementation({previewer = false})<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-m>'  , ":Himalaya<cr>", {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<a-t>'  , ":Unfog<cr>", {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<a-s>'  , ":UltiSnipsEdit<cr>", {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<a-e>'  , ":Explore<cr>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-m>', ":Himalaya<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-t>', ":Unfog<cr>", map_opts)
+vim.api.nvim_set_keymap('n', '<a-e>', ":Explore<cr>", map_opts)

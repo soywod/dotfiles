@@ -1,5 +1,21 @@
-require('nvim-web-devicons').setup {
+-- {{{ Installation
+
+vim.cmd('packadd! nvim-web-devicons') -- Patched icons
+vim.cmd('packadd! galaxyline.nvim')   -- Status line
+
+-- }}}
+
+-- Configuration {{{
+
+local devicons_opts = {
   default = true,
+}
+
+local short_line_list = {
+  'NvimTree',
+  'vista',
+  'dbui',
+  'packer',
 }
 
 local theme = {
@@ -15,38 +31,37 @@ local theme = {
   red = '#ff6c6b'
 }
 
-local gl = require('galaxyline')
-local gls = gl.section
-gl.short_line_list = {'NvimTree','vista','dbui','packer'}
+local section = require('galaxyline').section
+local cond = require('galaxyline.condition')
 
-local condition = require('galaxyline.condition')
+-- {{{ Left section
 
-gls.left[1] ={
+section.left[1] = {
   FileIcon = {
     provider = 'FileIcon',
-    condition = condition.buffer_not_empty,
+    condition = cond.buffer_not_empty,
     highlight = {require('galaxyline.provider_fileinfo').get_file_icon_color, theme.bg},
   },
 }
 
-gls.left[2] = {
+section.left[2] = {
   FileName = {
     provider = 'FileName',
-    condition = condition.buffer_not_empty,
+    condition = cond.buffer_not_empty,
     separator = ' ',
     separator_highlight = {'NONE', theme.bg},
     highlight = {theme.blue, theme.bg, 'bold'}
   }
 }
 
-gls.left[3] = {
+section.left[3] = {
   DiagnosticError = {
     provider = 'DiagnosticError',
     icon = '  ',
     highlight = {theme.red, theme.bg}
   }
 }
-gls.left[4] = {
+section.left[4] = {
   DiagnosticWarn = {
     provider = 'DiagnosticWarn',
     icon = '  ',
@@ -54,7 +69,7 @@ gls.left[4] = {
   }
 }
 
-gls.left[5] = {
+section.left[5] = {
   DiagnosticHint = {
     provider = 'DiagnosticHint',
     icon = '  ',
@@ -62,7 +77,7 @@ gls.left[5] = {
   }
 }
 
-gls.left[6] = {
+section.left[6] = {
   DiagnosticInfo = {
     provider = 'DiagnosticInfo',
     icon = '  ',
@@ -70,7 +85,11 @@ gls.left[6] = {
   }
 }
 
-gls.mid[1] = {
+-- }}}
+
+-- {{{ Middle section
+
+section.mid[1] = {
   ShowLspClient = {
     provider = 'GetLspClient',
     condition = function ()
@@ -85,7 +104,11 @@ gls.mid[1] = {
   }
 }
 
-gls.right[1] = {
+-- }}}
+
+-- {{{ Right section
+
+section.right[1] = {
   LineInfo = {
     provider = 'LineColumn',
     separator = ' ',
@@ -94,7 +117,7 @@ gls.right[1] = {
   },
 }
 
-gls.right[2] = {
+section.right[2] = {
   PerCent = {
     provider = 'LinePercent',
     separator = ' ',
@@ -103,60 +126,60 @@ gls.right[2] = {
   }
 }
 
-gls.right[3] = {
+section.right[3] = {
   FileTypeName = {
     provider = 'FileTypeName',
-    condition = condition.buffer_not_empty,
+    condition = cond.buffer_not_empty,
     separator = ' ',
     separator_highlight = {'NONE', theme.bg},
     highlight = {theme.cyan, theme.bg}
   }
 }
 
-gls.right[4] = {
+section.right[4] = {
   GitIcon = {
     provider = function() return '  ' end,
-    condition = condition.check_git_workspace,
+    condition = cond.check_git_workspace,
     separator = ' ',
     separator_highlight = {'NONE', theme.bg},
     highlight = {theme.magenta, theme.bg},
   }
 }
 
-gls.right[5] = {
+section.right[5] = {
   GitBranch = {
     provider = 'GitBranch',
-    condition = condition.check_git_workspace,
+    condition = cond.check_git_workspace,
     highlight = {theme.magenta, theme.bg},
   }
 }
 
-gls.right[6] = {
+section.right[6] = {
   DiffAdd = {
     provider = 'DiffAdd',
-    condition = condition.hide_in_width,
+    condition = cond.hide_in_width,
     icon = '  ',
     highlight = {theme.green, theme.bg},
   }
 }
-gls.right[7] = {
+section.right[7] = {
   DiffModified = {
     provider = 'DiffModified',
-    condition = condition.hide_in_width,
+    condition = cond.hide_in_width,
     icon = ' 柳',
     highlight = {theme.orange, theme.bg},
   }
 }
-gls.right[8] = {
+section.right[8] = {
   DiffRemove = {
     provider = 'DiffRemove',
-    condition = condition.hide_in_width,
+    condition = cond.hide_in_width,
     icon = '  ',
     highlight = {theme.red, theme.bg},
   }
 }
 
-gls.short_line_left[1] = {
+section.short_line_left[1] = {
   BufferType = {
     provider = 'FileTypeName',
     separator = ' ',
@@ -165,17 +188,30 @@ gls.short_line_left[1] = {
   }
 }
 
-gls.short_line_left[2] = {
+section.short_line_left[2] = {
   SFileName = {
     provider =  'SFileName',
-    condition = condition.buffer_not_empty,
+    condition = cond.buffer_not_empty,
     highlight = {theme.fg, theme.bg, 'bold'}
   }
 }
 
-gls.short_line_right[1] = {
+section.short_line_right[1] = {
   BufferIcon = {
     provider= 'BufferIcon',
     highlight = {theme.fg, theme.bg}
   }
 }
+
+-- }}}
+
+-- }}}
+
+-- {{{ Initialization
+
+require('nvim-web-devicons').setup(devicons_opts)
+require('galaxyline').short_line_list = short_line_list
+
+-- }}}
+
+-- vim:foldmethod=marker
