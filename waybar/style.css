@@ -1,5 +1,5 @@
 * {
-  font-family: JetBrainsMono Nerd Font;
+  font-family: JetBrains Mono;
   font-size: 1.1rem;
 }
 
@@ -17,7 +17,8 @@
 #backlight,
 #pulseaudio,
 #mode,
-#network {
+#network,
+#custom-dask {
   padding: 0.5rem 0.75rem;
 }
 
@@ -36,4 +37,30 @@
 
 #battery.charging {
   color: #ecbe7b;
+}
+
+.todo {
+  font-weight: bold;
+  color: #ff6c6b;
+}
+
+#custom-dask.todo {
+  color: #da8548;
+}
+
+#custom-dask.done {
+  color: #98be65;
+}
+
+/* Pacman */
+
+#custom-pacman {
+  color: #51afef;
+  padding: 0.5rem 0.75rem;
+}
+
+/* Weather */
+
+#custom-weather {
+  padding: 0.5rem 0.75rem;
 }

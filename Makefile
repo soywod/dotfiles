@@ -137,6 +137,8 @@ dunst: dunst-pkgs dunst-cfg dunst-srv
 # Fonts {{{
 
 fonts:
+	sudo pacman -S --needed --noconfirm \
+		ttf-jetbrains-mono
 	mkdir -vp "${HOME}/.config/fontconfig"
 	ln -vsf "${PWD}/fonts/config.conf" "${HOME}/.config/fontconfig/fonts.conf"
 	cp -v ${PWD}/fonts/*.ttf "${HOME}/.local/share/fonts/"
@@ -367,7 +369,6 @@ install: \
 	docker \
 	dropbox \
 	dunst \
-	fonts \
 	gammastep \
 	gnupg \
 	guis \
