@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+<fontconfig>
+  <match target="pattern">
+    <test name="charset">
+      <charset>
+        <range>
+          <int>0x000000</int>
+          <int>0x10FFFF</int>
+        </range>
+      </charset>
+    </test>
+    <edit name="family" mode="assign" binding="strong">
+      <string>Font Awesome 6 Pro</string>
+    </edit>
+  </match>
+</fontconfig>

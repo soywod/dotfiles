@@ -16,8 +16,8 @@
     "clock"
   ],
   "modules-right": [
-    "custom/dask",
     "custom/pacman",
+    "custom/dask",
     "custom/weather",
     "custom/himalaya",
     "custom/wallet",
@@ -69,17 +69,13 @@
   "disk": {
     "interval": 60,
     "path": "/",
-    "format": " {percentage_free}%",
+    "format": "🖴 {percentage_free}%",
     "tooltip-format": "{used}/{total}"
   },
   "backlight": {
     "tooltip": false,
     "device": "acpi_video1",
-    "format": "︁ {percent}%"
-  },
-  "sway/language": {
-    "tooltip": false,
-    "format": " {}"
+    "format": " {percent}%"
   },
   "pulseaudio": {
     "tooltip": false,
@@ -88,9 +84,9 @@
     "format-bluetooth": "︁ {icon} {volume}%",
     "format-muted": "{icon} --%",
     "format-icons": {
-      "headphone": "🎧︁",
-      "headset": "🎧︁",
-      "default": "🔉︁"
+      "headphone": "",
+      "headset": "",
+      "default": "🔉"
     }
   },
   "custom/himalaya": {
@@ -123,26 +119,28 @@
     "exec": "node ~/Code/dask/dist/index.js count",
     "on-click": "kitty -- nvim --noplugin ~/Code/dask/tasks.md",
     "on-click-right": "node ~/Code/dask/dist/index.js reset",
-    "format": "✓︁ {}",
+    "format": " {}",
     "return-type": "json"
   },
   "network": {
     "interface": "wlp2*",
     "format-wifi": "︁ {signalStrength}%",
     "tooltip-format-wifi": "IP: {ipaddr}\nSSID: {essid}",
-    "format-ethernet": " ",
+    "format-ethernet": "",
     "tooltip-format-ethernet": "IP: {ipaddr}",
     "format-disconnected": ""
   },
   "custom/pacman": {
     "exec": "~/.dotfiles/waybar/scripts/checkupdates.js",
     "exec-if": "[ $(checkupdates | wc -l) -gt 0 ]",
-    "format": "🔧︁ {}",
+    "return-type": "json",
+    "format": " {}",
     "interval": 3600
   },
   "custom/weather": {
     "exec": "~/.dotfiles/waybar/scripts/forecast.js",
     "return-type": "json",
+    "on-click": "kitty -- bash -c 'curl wttr.in?2;read -rsn1 -p \"\nPress any key to continue\"'",
     "interval": 3600
   }
 }

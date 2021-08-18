@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
-const { execSync } = require("child_process");
+const childProcess = require("child_process");
 
-const packagesCount = execSync("checkupdates | wc -l");
-const packagesName = execSync("checkupdates");
+function execSync(cmd) {
+  return childProcess.execSync(cmd).toString().replace(/\n*$/g, "");
+}
 
 console.log(
   JSON.stringify({
-    text: packagesCount,
-    tooltip: packagesName,
+    text: execSync("checkupdates | wc -l"),
+    tooltip: execSync("checkupdates"),
   })
 );

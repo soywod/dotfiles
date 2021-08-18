@@ -140,9 +140,9 @@ fonts:
 	sudo pacman -S --needed --noconfirm \
 		ttf-jetbrains-mono
 	mkdir -vp "${HOME}/.config/fontconfig"
-	ln -vsf "${PWD}/fonts/config.conf" "${HOME}/.config/fontconfig/fonts.conf"
+	# ln -vsf "${PWD}/fonts/config.xml" "${HOME}/.config/fontconfig/fonts.conf"
 	cp -v ${PWD}/fonts/*.ttf "${HOME}/.local/share/fonts/"
-	fc-cache -fv
+	fc-cache -vf
 
 # }}}
 

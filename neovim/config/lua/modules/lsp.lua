@@ -94,6 +94,7 @@ local default_capabilities = vim.lsp.protocol.make_client_capabilities()
 default_capabilities.textDocument.completion.completionItem.snippetSupport = true;
 
 local default_on_attach = function(client)
+  lsp_status.on_attach(client)
   attach_lsp_highlight(client)
   attach_lsp_formatting(client)
 end
@@ -160,6 +161,7 @@ lsp.rust_analyzer.setup(default_setup())
 lsp.tsserver.setup {
   capabilities = default_capabilities,
   on_attach = function(client)
+    lsp_status.on_attach(client)
     attach_lsp_highlight(client)
     attach_prettier_formatting(client)
   end,
