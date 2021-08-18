@@ -2,7 +2,7 @@
 
 local load_module = require('module-loader')
 
-load_module('galaxyline')
+-- load_module('galaxyline')
 load_module('tree-sitter')
 load_module('telescope')
 load_module('compe')
@@ -40,6 +40,7 @@ vim.o.showbreak = '~'
 vim.o.smartcase = true
 vim.o.splitbelow = true
 vim.o.splitright = true
+vim.o.statusline = '%m%{luaeval("lsp_status_line()")}%=%r%y'
 vim.o.tabstop = 2
 vim.o.termguicolors = true
 vim.o.undofile = true

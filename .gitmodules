@@ -6,7 +6,7 @@
 	url = https://github.com/neovim/nvim-lspconfig
 [submodule "neovim/plugins/lsp-status.nvim"]
 	path = neovim/plugins/lsp-status.nvim
-	url = https://github.com/nvim-lua/lsp-status.nvim
+	url = https://github.com/nvim-lua/lsp-status.nvim.git
 [submodule "neovim/plugins/snippets.nvim"]
 	path = neovim/plugins/snippets.nvim
 	url = https://github.com/norcalli/snippets.nvim

@@ -1,3 +1,29 @@
+-- LSP status line
+
+vim.cmd('packadd! lsp-status.nvim')
+
+local lsp_status = require('lsp-status')
+
+lsp_status.register_progress()
+lsp_status.config({
+  indicator_errors = '',
+  indicator_warnings = '',
+  indicator_info = '',
+  indicator_hint = '',
+  indicator_ok = '',
+  status_symbol = '[LSP] ',
+})
+
+function lsp_status_line()
+  if next(vim.lsp.buf_get_clients()) == nil then
+    return ''
+  else
+    return lsp_status.status()
+  end
+end
+
+-- LSP
+
 vim.cmd('packadd! nvim-lspconfig')
 
 local lsp = require('lspconfig')
