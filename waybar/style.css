@@ -52,6 +52,11 @@
   color: #98be65;
 }
 
+
+#tray {
+  padding: 0.5rem 0.75rem;
+}
+
 /* Pacman */
 
 #custom-pacman {
@@ -59,8 +64,21 @@
   padding: 0.5rem 0.75rem;
 }
 
+/* Binance wallet */
+
+#custom-binance {
+  padding: 0.5rem 0.75rem;
+}
+
 /* Weather */
 
 #custom-weather {
+  padding: 0.5rem 0.75rem;
+}
+
+/* GitHub */
+
+#custom-github {
+  color: #51afef;
   padding: 0.5rem 0.75rem;
 }

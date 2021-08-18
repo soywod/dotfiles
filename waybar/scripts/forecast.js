@@ -30,7 +30,7 @@ async function requestForecast(format, postData) {
 }
 
 Promise.all([
-  requestForecast("%t %c"),
+  requestForecast("%c%t"),
   requestForecast("%c%C\\n︁ %t (%f)\\n︁ %w\\n%m %M\\n🌅︁ %S\\n🌇︁ %s"),
 ]).then(([text, tooltip]) => {
   console.log(JSON.stringify({ text, tooltip }));

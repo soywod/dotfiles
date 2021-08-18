@@ -13,16 +13,17 @@
     "pulseaudio"
   ],
   "modules-center": [
-    "clock"
+    "clock",
+    "tray"
   ],
   "modules-right": [
+    "sway/mode",
+    "custom/github",
     "custom/pacman",
     "custom/dask",
-    "custom/weather",
     "custom/himalaya",
-    "custom/wallet",
-    "sway/mode",
-    "tray"
+    "custom/binance",
+    "custom/weather"
   ],
   "battery": {
     "states": {
@@ -102,11 +103,11 @@
     "icon-size": 25,
     "spacing": 10
   },
-  "custom/wallet": {
+  "custom/binance": {
     "exec": "sh -c '~/Code/binance/wallet.sh'",
     "tooltip": true,
     "interval": 60,
-    "format": "₿ "
+    "format": ""
   },
   "sway/mode": {
     "format": "{}"
@@ -142,5 +143,12 @@
     "return-type": "json",
     "on-click": "kitty -- bash -c 'curl wttr.in?2;read -rsn1 -p \"\nPress any key to continue\"'",
     "interval": 3600
+  },
+  "custom/github": {
+    "exec": "~/.dotfiles/waybar/scripts/github.sh",
+    "on-click": "xdg-open https://github.com/notifications",
+    "format": " {}",
+    "return-type": "json",
+    "interval": 60
   }
 }
