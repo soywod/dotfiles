@@ -6,18 +6,23 @@ const QUOTE_REGEXP = new RegExp('"', "g");
 
 async function requestForecast(format, postData) {
   return new Promise(function (resolve, reject) {
-    const req = http.request(`http://wttr.in?format="${format}"`, (res) => {
-      if (res.statusCode < 200 || res.statusCode >= 300) {
-        return reject(new Error(res.statusCode));
-      }
+    const req = http.request(
+      `http://wttr.in/Boëge?format="${format}"`,
+      (res) => {
+        if (res.statusCode < 200 || res.statusCode >= 300) {
+          return reject(new Error(res.statusCode));
+        }
 
-      const buffer = [];
-      res.on("data", (chunk) => buffer.push(chunk));
-      res.on("end", () => {
-        const data = Buffer.concat(buffer).toString().replace(QUOTE_REGEXP, "");
-        resolve(data);
-      });
-    });
+        const buffer = [];
+        res.on("data", (chunk) => buffer.push(chunk));
+        res.on("end", () => {
+          const data = Buffer.concat(buffer)
+            .toString()
+            .replace(QUOTE_REGEXP, "");
+          resolve(data);
+        });
+      }
+    );
 
     req.on("error", reject);
 

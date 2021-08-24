@@ -136,13 +136,13 @@
     "exec-if": "[ $(checkupdates | wc -l) -gt 0 ]",
     "return-type": "json",
     "format": " {}",
-    "interval": 3600
+    "interval": 900
   },
   "custom/weather": {
     "exec": "~/.dotfiles/waybar/scripts/forecast.js",
     "return-type": "json",
-    "on-click": "kitty -- bash -c 'curl wttr.in?2;read -rsn1 -p \"\nPress any key to continue\"'",
-    "interval": 3600
+    "on-click": "kitty -- bash -c 'curl wttr.in/Boëge?2;read -rsn1 -p \"\nPress any key to continue\"'",
+    "interval": 900
   },
   "custom/github": {
     "exec": "~/.dotfiles/waybar/scripts/github.sh",

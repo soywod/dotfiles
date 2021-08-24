@@ -209,6 +209,27 @@ hledger: bash dropbox kitty
 
 # }}}
 
+# Kanshi (screen manager) {{{
+
+kanshi-pkgs:
+	sudo pacman -S --needed --noconfirm \
+		kanshi \
+
+kanshi-cfg:
+	mkdir -vp "${HOME}/.config/kanshi"
+	ln -vsf "${PWD}/kanshi/config.cfg" "${HOME}/.config/kanshi/config"
+
+kanshi-srv:
+	mkdir -vp "${HOME}/.config/systemd/user"
+	cp -v "${PWD}/kanshi/service.ini" "${HOME}/.config/systemd/user/kanshi.service"
+	systemctl --user daemon-reload
+	systemctl --user enable kanshi.service
+	systemctl --user start kanshi.service
+
+kanshi: kanshi-pkgs kanshi-cfg kanshi-srv
+
+# }}}
+
 # Kitty (terminal) {{{
 
 kitty-pkgs:
@@ -373,6 +394,7 @@ install: \
 	gnupg \
 	guis \
 	hledger \
+	kanshi \
 	kitty \
 	neovim \
 	network-manager \
