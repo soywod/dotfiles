@@ -6,6 +6,7 @@
 #waybar {
   background-color: #21242b;
   color: #bbc2cf;
+  border-bottom: 2px solid #3f444a;
 }
 
 #battery,
