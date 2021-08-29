@@ -96,8 +96,9 @@ docker:
 
 # Dropbox {{{
 
-dropbox-pkgs:
-	curl -Lo - https://www.dropbox.com/download?plat=lnx.x86_64 | tar xzf - -C ~
+dropbox-pkgs: yay
+	yay -S --needed --noconfirm \
+		dropbox \
 
 dropbox-srv:
 	mkdir -vp "${HOME}/.config/systemd/user"

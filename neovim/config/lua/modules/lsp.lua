@@ -11,7 +11,7 @@ lsp_status.config({
   indicator_warnings = '',
   indicator_errors = '',
   indicator_ok = '',
-  status_symbol = '[LSP]',
+  status_symbol = '[LSP] ',
 })
 
 function lsp_status_line()
