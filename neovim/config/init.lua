@@ -2,7 +2,6 @@
 
 local load_module = require('module-loader')
 
--- load_module('galaxyline')
 load_module('tree-sitter')
 load_module('telescope')
 load_module('compe')
@@ -10,7 +9,6 @@ load_module('lsp')
 
 load_module('emmet')
 load_module('ultisnips')
-load_module('prettier')
 
 load_module('abolish')
 load_module('commentary')
@@ -83,7 +81,7 @@ highlight VertSplit	      	      	      guifg=#3f444a guibg=NONE    gui=NONE
 highlight CursorLine        	      	    guifg=NONE    guibg=#21242b gui=NONE
 highlight CursorLineNr        	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight MatchParen          	      	  guifg=#ff6c6b guibg=#21242b gui=bold
-highlight SpecialComment      	      	  guifg=#bbc2cf guibg=NONE    gui=italic
+highlight SpecialComment      	      	  guifg=#5b6268 guibg=NONE    gui=italic
 highlight Delimiter   	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight Visual	      	      	        guifg=NONE	  guibg=#3f444a gui=NONE
 
@@ -100,22 +98,30 @@ highlight Repeat      	      	      	  guifg=#51afef guibg=NONE    gui=NONE
 highlight StorageClass	      	      	  guifg=#51afef guibg=NONE    gui=NONE
 highlight Structure	      	      	      guifg=#51afef guibg=NONE    gui=NONE
 
-highlight Special     	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight Tag		      	      	          guifg=#c678dd guibg=NONE    gui=NONE
-highlight TabLine             	      	  guifg=#bbc2cf guibg=#2e3440 gui=NONE
-highlight TabLineFill         	      	  guifg=#bbc2cf guibg=#2e3440 gui=NONE
-highlight TabLineSel          	      	  guifg=#2e3440 guibg=#bbc2cf gui=NONE
-highlight TelescopeBorder        	        guifg=#c678dd guibg=NONE    gui=NONE
-highlight TelescopeResultsBorder          guifg=#3f444a guibg=NONE    gui=NONE
-highlight TelescopeNormal        	        guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight TelescopeSelection	      	    guifg=#bbc2cf	guibg=#3f444a gui=NONE
-highlight TelescopeMatching              	guifg=#dfdfdf guibg=#c678dd gui=NONE
-highlight TelescopeSelectionCaret	      	guifg=#c678dd	guibg=#3f444a gui=NONE
-highlight TelescopePromptPrefix           guifg=#c678dd guibg=NONE    gui=bold
-highlight TelescopeMultiSelection	        guifg=#c678dd guibg=NONE    gui=NONE
-highlight Error               	      	  guifg=#ff6c6b guibg=NONE    gui=bold
-highlight ErrorMsg            	      	  guifg=#ff6c6b guibg=NONE    gui=bold
-highlight LspDiagnosticsUnderlineError	  guifg=#282c34 guibg=#ff6c6b gui=NONE
+highlight Special     	      	      	   guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Tag		      	      	           guifg=#c678dd guibg=NONE    gui=NONE
+highlight TabLine             	      	   guifg=#bbc2cf guibg=#2e3440 gui=NONE
+highlight TabLineFill         	      	   guifg=#bbc2cf guibg=#2e3440 gui=NONE
+highlight TabLineSel          	      	   guifg=#2e3440 guibg=#bbc2cf gui=NONE
+highlight TelescopeBorder        	         guifg=#c678dd guibg=NONE    gui=NONE
+highlight TelescopeResultsBorder           guifg=#3f444a guibg=NONE    gui=NONE
+highlight TelescopeNormal        	         guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight TelescopeSelection	      	     guifg=#bbc2cf guibg=#3f444a gui=NONE
+highlight TelescopeMatching              	 guifg=#dfdfdf guibg=#c678dd gui=NONE
+highlight TelescopeSelectionCaret	      	 guifg=#c678dd guibg=#3f444a gui=NONE
+highlight TelescopePromptPrefix            guifg=#c678dd guibg=NONE    gui=bold
+highlight TelescopeMultiSelection	         guifg=#c678dd guibg=NONE    gui=NONE
+highlight Error               	      	   guifg=#ff6c6b guibg=NONE    gui=bold
+highlight ErrorMsg            	      	   guifg=#ff6c6b guibg=NONE    gui=bold
+
+highlight LspDiagnosticsDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight LspDiagnosticsUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
+highlight LspDiagnosticsDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE
+highlight LspDiagnosticsUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE
+highlight LspDiagnosticsDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE
+highlight LspDiagnosticsUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
+highlight LspDiagnosticsDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE
+highlight LspDiagnosticsUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE
 ]]
 
 -- Emails

@@ -23,8 +23,9 @@ require('compe').setup({
   },
 })
 
-vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("\\<cr>")', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<tab>', 'pumvisible() ? "\\<c-n>" : "\\<tab>"', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "<s-tab>"', {noremap = true, silent = true, expr = true})
+local keymap_opts = {noremap = true, silent = true, expr = true}
+vim.api.nvim_set_keymap('i', '<cr>', 'compe#confirm("\\<cr>")', keymap_opts)
+vim.api.nvim_set_keymap('i', '<tab>', 'pumvisible() ? "\\<c-n>" : "\\<tab>"', keymap_opts)
+vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "<s-tab>"', keymap_opts)
 
 -- vim:foldmethod=marker
