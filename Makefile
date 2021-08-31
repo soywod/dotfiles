@@ -101,8 +101,8 @@ dropbox-pkgs: yay
 		dropbox \
 
 dropbox-srv:
-	mkdir -vp "${HOME}/.config/systemd/user"
-	cp -v "${PWD}/dropbox/service.ini" "${HOME}/.config/systemd/user/dropbox.service"
+	mkdir -vp "${HOME}/.config/systemd/user/dropbox.service.d"
+	cp -v "${PWD}/dropbox/service.ini" "${HOME}/.config/systemd/user/dropbox.service.d/override.conf"
 	systemctl --user daemon-reload
 	systemctl --user enable dropbox.service
 	systemctl --user start dropbox.service

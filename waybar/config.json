@@ -13,8 +13,7 @@
     "pulseaudio"
   ],
   "modules-center": [
-    "clock",
-    "tray"
+    "clock"
   ],
   "modules-right": [
     "sway/mode",
@@ -23,7 +22,8 @@
     "custom/dask",
     "custom/himalaya",
     "custom/binance",
-    "custom/weather"
+    "custom/weather",
+    "tray"
   ],
   "battery": {
     "states": {
