@@ -67,10 +67,10 @@ eval "$(stack --bash-completion-script stack)"
 export PATH="${HOME}/.cargo/bin:$PATH"
 
 # opam configuration
-test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+# test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
 
 # >>> coursier install directory >>>
-export PATH="${PATH}:${HOME}/.local/share/coursier/bin"
+# export PATH="${PATH}:${HOME}/.local/share/coursier/bin"
 # <<< coursier install directory <<<
 
 # PAM GnuPG
@@ -81,3 +81,6 @@ export PASSWORD_STORE_DIR="${HOME}/Dropbox/password-store"
 
 # Ledger journal file path
 export LEDGER_FILE="${HOME}/Dropbox/hledger.journal"
+
+# Swan config
+# source ~/.swan.sh

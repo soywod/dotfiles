@@ -29,7 +29,8 @@ vim.cmd('packadd! nvim-lspconfig')
 local lsp = require('lspconfig')
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true;
+require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 function hover()
   if next(vim.lsp.buf_get_clients()) == nil then
@@ -123,19 +124,12 @@ local on_attach = function(client, bufnr)
     ]], true)
   end
 
-  vim.api.nvim_exec([[
-    augroup lsp-diagnostics
-      autocmd! * <buffer>
-      autocmd CursorHold <buffer> lua vim.lsp.diagnostic.show_position_diagnostics()
-    augroup END
-  ]], true)
-
   local buf_map = vim.api.nvim_buf_set_keymap
   local buf_map_opts = {noremap = true, silent = true}
   buf_map(bufnr, 'n', 'K'    , '<cmd>lua hover()<cr>', buf_map_opts)
   buf_map(bufnr, 'n', '<c-]>', '<cmd>lua definition()<cr>', buf_map_opts)
-  buf_map(bufnr, 'n', '<a-p>', '<cmd>lua vim.lsp.diagnostic.goto_prev({enable_popup = false})<cr>', buf_map_opts)
-  buf_map(bufnr, 'n', '<a-n>', '<cmd>lua vim.lsp.diagnostic.goto_next({enable_popup = false})<cr>', buf_map_opts)
+  buf_map(bufnr, 'n', '<a-p>', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>', buf_map_opts)
+  buf_map(bufnr, 'n', '<a-n>', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>', buf_map_opts)
   buf_map(bufnr, 'n', '<a-R>', '<cmd>lua vim.lsp.buf.rename()<cr>', buf_map_opts)
 end
 
@@ -171,7 +165,7 @@ local linters = {
 local formatters = {
   prettier = {
     command = 'node_modules/.bin/prettier',
-    rootPatterns = {'package.json', '.prettierrc.js'},
+    rootPatterns = {'.prettierrc', '.prettierrc.js'},
     args = {'--stdin-filepath', '%filepath'},
   }
 }
@@ -256,6 +250,15 @@ lsp.tsserver.setup({
 -- {{{ OCaml
 
 lsp.ocamllsp.setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
+
+-- }}}
+
+-- {{{ GraphQL
+
+lsp.graphql.setup({
   capabilities = capabilities,
   on_attach = on_attach,
 })

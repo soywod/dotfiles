@@ -1,21 +1,21 @@
--- Modules
+-- Packages
 
-local load_module = require('module-loader')
+local use = require('use-pkg')
 
-load_module('tree-sitter')
-load_module('telescope')
-load_module('compe')
-load_module('lsp')
+use('telescope')
+use('ultisnips')
+use('cmp')
 
-load_module('emmet')
-load_module('ultisnips')
-
-load_module('abolish')
-load_module('commentary')
-load_module('gnupg')
-load_module('repeat')
-load_module('surround')
-load_module('ledger')
+use('treesitter')
+use('lsp')
+use('emmet')
+use('abolish')
+use('commentary')
+use('gnupg')
+use('repeat')
+use('surround')
+use('ledger')
+use('neogit')
 
 -- Vim settings
 

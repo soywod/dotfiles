@@ -73,3 +73,24 @@
 [submodule "neovim/plugins/vim-markdown"]
 	path = neovim/plugins/vim-markdown
 	url = https://github.com/plasticboy/vim-markdown.git
+[submodule "neovim/plugins/neogit"]
+	path = neovim/plugins/neogit
+	url = https://github.com/TimUntersberger/neogit.git
+[submodule "neovim/plugins/nvim-cmp"]
+	path = neovim/plugins/nvim-cmp
+	url = https://github.com/hrsh7th/nvim-cmp.git
+[submodule "neovim/plugins/cmp-buffer"]
+	path = neovim/plugins/cmp-buffer
+	url = https://github.com/hrsh7th/cmp-buffer.git
+[submodule "neovim/plugins/cmp-nvim-lsp"]
+	path = neovim/plugins/cmp-nvim-lsp
+	url = https://github.com/hrsh7th/cmp-nvim-lsp.git
+[submodule "neovim/plugins/cmp-path"]
+	path = neovim/plugins/cmp-path
+	url = https://github.com/hrsh7th/cmp-path.git
+[submodule "neovim/plugins/cmp-nvim-ultisnips"]
+	path = neovim/plugins/cmp-nvim-ultisnips
+	url = https://github.com/quangnguyen30192/cmp-nvim-ultisnips.git
+[submodule "neovim/plugins/cmp-nvim-lua"]
+	path = neovim/plugins/cmp-nvim-lua
+	url = https://github.com/hrsh7th/cmp-nvim-lua.git
