@@ -1,5 +1,5 @@
 --- Cmp module.
--- Cmp is a completion engine.
+-- Module for better completion.
 -- https://github.com/hrsh7th/nvim-cmp
 -- @module pkgs.cmp
 -- @author soywod <clement.douin@posteo.net>
@@ -32,10 +32,7 @@ cmp.setup({
         feedkeys('<c-r>=UltiSnips#ExpandSnippet()<cr>')
       elseif vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
         feedkeys('<c-r>=UltiSnips#JumpForwards()<cr>')
-      elseif vim.fn.pumvisible() == 1 then
-        if vim.fn.complete_info()["selected"] == -1 then
-          cmp.select_next_item()
-        end
+      elseif vim.fn.pumvisible() == 1 and vim.fn.complete_info()["selected"] > -1 then
         cmp.confirm({behavior = cmp.ConfirmBehavior.Replace, select = true})
       else
         fallback()

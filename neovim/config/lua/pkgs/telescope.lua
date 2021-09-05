@@ -1,5 +1,6 @@
 --- Telescope module.
--- Telescope is a fuzzy finder over lists.
+-- Module for fuzzy finding eveything.
+-- https://github.com/nvim-telescope/telescope.nvim
 -- @module pkgs.telescope
 -- @author soywod <clement.douin@posteo.net>
 
@@ -18,29 +19,18 @@ local fp = require('utils.fp')
 --   * the first item is the binding key (used with ALT)
 --   * the rest are options passed to the telescope.builtin function
 -- @table mappings
--- @field find_files find files picker
--- @field file_browser browse files picker
--- @field oldfiles old files picker
--- @field live_grep grep picker
--- @field buffers buffers picker
--- @field lsp_document_diagnostics LSP document diagnostics picker
--- @field lsp_workspace_diagnostics LSP workspace diagnostics picker
--- @field lsp_document_symbols LSP document symbols picker
--- @field lsp_workspace_symbols LSP workspace symbols picker
--- @field lsp_references LSP references picker
--- @field lsp_code_actions LSP code actions picker
 local mappings = {
-  find_files = {'f', previewer = false},
-  file_browser = {'F', previewer = false},
-  oldfiles = {'h', previewer = false},
-  live_grep = {'g', previewer = false},
-  buffers = {'b', previewer = false},
-  lsp_document_diagnostics = {'d', previewer = false},
-  lsp_workspace_diagnostics = {'D', previewer = false},
-  lsp_document_symbols = {'w', previewer = false},
-  lsp_workspace_symbols = {'W', previewer = false},
-  lsp_references = {'r', previewer = false},
-  lsp_code_actions = {'c', previewer = false},
+  find_files = {'f', previewer = false}, -- find file picker
+  file_browser = {'F', previewer = false}, -- browse file picker
+  oldfiles = {'h', previewer = false}, -- old file picker
+  live_grep = {'g', previewer = false}, -- grep picker
+  buffers = {'b', previewer = false}, -- buffer picker
+  lsp_document_diagnostics = {'d', previewer = false}, -- LSP document diagnostic picker
+  lsp_workspace_diagnostics = {'D', previewer = false}, -- LSP workspace diagnostic picker
+  lsp_document_symbols = {'w', previewer = false}, -- LSP document symbol picker
+  lsp_workspace_symbols = {'W', previewer = false}, -- LSP workspace symbol picker
+  lsp_references = {'r', previewer = false}, -- LSP reference picker
+  lsp_code_actions = {'c', previewer = false}, -- LSP code action picker
 }
 
 telescope.setup({

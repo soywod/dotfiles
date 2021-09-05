@@ -1,4 +1,11 @@
+--- Neogit module.
+-- Module for managing git projects.
+-- https://github.com/TimUntersberger/neogit
+-- @module pkgs.neogit
+-- @author soywod <clement.douin@posteo.net>
+
 vim.cmd('packadd! plenary.nvim')
 vim.cmd('packadd! neogit')
 
-require('neogit').setup({})
+local neogit = require('neogit')
+neogit.setup({})

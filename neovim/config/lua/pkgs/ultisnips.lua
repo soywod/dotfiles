@@ -1,4 +1,6 @@
 --- UltiSnips module.
+--- Module for expanding UltiSnips snippets.
+-- https://github.com/SirVer/ultisnips
 -- @module pkgs.ultisnips
 -- @author soywod <clement.douin@posteo.net>
 

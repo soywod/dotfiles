@@ -1,3 +1,9 @@
+--- Tree sitter module.
+-- Module for enabling tree sitter features.
+-- https://github.com/tree-sitter/tree-sitter
+-- @module pkgs.treesitter
+-- @author soywod <clement.douin@posteo.net>
+
 vim.cmd('packadd! nvim-treesitter')
 
 require('nvim-treesitter.configs').setup({

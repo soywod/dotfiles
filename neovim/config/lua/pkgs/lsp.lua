@@ -1,3 +1,9 @@
+--- LSP module.
+-- Module for managing LSP clients.
+-- https://github.com/neovim/nvim-lspconfig
+-- @module pkgs.lsp
+-- @author soywod <clement.douin@posteo.net>
+
 -- LSP status line
 
 vim.cmd('packadd! lsp-status.nvim')
