@@ -94,3 +94,9 @@
 [submodule "neovim/plugins/cmp-nvim-lua"]
 	path = neovim/plugins/cmp-nvim-lua
 	url = https://github.com/hrsh7th/cmp-nvim-lua.git
+[submodule "neovim/plugins/diffview.nvim"]
+	path = neovim/plugins/diffview.nvim
+	url = https://github.com/sindrets/diffview.nvim.git
+[submodule "neovim/plugins/gitsigns.nvim"]
+	path = neovim/plugins/gitsigns.nvim
+	url = https://github.com/lewis6991/gitsigns.nvim.git

@@ -8,4 +8,14 @@ vim.cmd('packadd! plenary.nvim')
 vim.cmd('packadd! neogit')
 
 local neogit = require('neogit')
-neogit.setup({})
+
+neogit.setup({
+  signs = {
+    section = {'+', '-'},
+    item = {'+', '-'},
+    hunk = {'', ''},
+  },
+  integrations = {
+    diffview = true
+  },
+})

@@ -15,6 +15,10 @@ use('gnupg')
 use('repeat')
 use('surround')
 use('ledger')
+
+use('galaxyline')
+use('gitsigns')
+use('diffview')
 use('neogit')
 
 -- Vim settings
@@ -44,6 +48,7 @@ vim.o.termguicolors = true
 vim.o.undofile = true
 vim.o.updatetime = 300
 vim.o.writebackup = false
+vim.opt.fillchars = vim.opt.fillchars + 'diff:╱'
 vim.wo.breakindent = true
 vim.wo.breakindentopt = 'sbr'
 vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
@@ -72,7 +77,7 @@ highlight StatusLineNC	      	      	  guifg=#5b6268 guibg=#21242b gui=NONE
 highlight Identifier  	      	      	  guifg=#a9a1e1 guibg=NONE    gui=NONE
 highlight Pmenu				                    guifg=#bbc2cf guibg=#21242b gui=NONE
 highlight PmenuSel              	        guifg=#bbc2cf guibg=#2257a0 gui=NONE
-highlight Title		      	      	        guifg=#ff6c6b guibg=NONE    gui=NONE
+highlight Title		      	      	        guifg=#282c34 guibg=NONE    gui=NONE
 highlight NonText	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight Comment	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight Folded              	      	  guifg=#5b6268 guibg=NONE    gui=NONE
@@ -97,12 +102,13 @@ highlight PreProc     	      	      	  guifg=#51afef guibg=NONE    gui=NONE
 highlight Repeat      	      	      	  guifg=#51afef guibg=NONE    gui=NONE
 highlight StorageClass	      	      	  guifg=#51afef guibg=NONE    gui=NONE
 highlight Structure	      	      	      guifg=#51afef guibg=NONE    gui=NONE
+highlight FoldColumn	      	      	    guifg=NONE guibg=NONE    gui=NONE
 
 highlight Special     	      	      	   guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight Tag		      	      	           guifg=#c678dd guibg=NONE    gui=NONE
-highlight TabLine             	      	   guifg=#bbc2cf guibg=#2e3440 gui=NONE
-highlight TabLineFill         	      	   guifg=#bbc2cf guibg=#2e3440 gui=NONE
-highlight TabLineSel          	      	   guifg=#2e3440 guibg=#bbc2cf gui=NONE
+highlight TabLine             	      	   guifg=#bbc2cf guibg=#282c34 gui=NONE
+highlight TabLineFill         	      	   guifg=#bbc2cf guibg=#282c34 gui=NONE
+highlight TabLineSel          	      	   guifg=#282c34 guibg=#c678dd gui=NONE
 highlight TelescopeBorder        	         guifg=#c678dd guibg=NONE    gui=NONE
 highlight TelescopeResultsBorder           guifg=#3f444a guibg=NONE    gui=NONE
 highlight TelescopeNormal        	         guifg=#bbc2cf guibg=NONE    gui=NONE
@@ -113,6 +119,18 @@ highlight TelescopePromptPrefix            guifg=#c678dd guibg=NONE    gui=bold
 highlight TelescopeMultiSelection	         guifg=#c678dd guibg=NONE    gui=NONE
 highlight Error               	      	   guifg=#ff6c6b guibg=NONE    gui=bold
 highlight ErrorMsg            	      	   guifg=#ff6c6b guibg=NONE    gui=bold
+highlight Success guifg=#98be65 guibg=NONE gui=NONE
+
+highlight DiffAdd guifg=NONE guibg=#323938 gui=NONE
+highlight DiffAddAsDelete guifg=NONE guibg=#323938 gui=NONE
+highlight DiffChange guifg=NONE guibg=NONE gui=NONE
+highlight DiffAddAsDelete guifg=NONE guibg=#3c3239 gui=NONE
+highlight! link DiffText Visual
+highlight! link DiffDelete Comment
+
+highlight GitSignsAdd guifg=#98be65 guibg=NONE gui=NONE
+highlight GitSignsChange guifg=#51afef guibg=NONE gui=NONE
+highlight GitSignsDelete guifg=#ff6c6b guibg=NONE gui=NONE
 
 highlight LspDiagnosticsDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight LspDiagnosticsUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
@@ -122,6 +140,52 @@ highlight LspDiagnosticsDefaultWarning       guifg=#da8548 guibg=NONE    gui=NON
 highlight LspDiagnosticsUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
 highlight LspDiagnosticsDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE
 highlight LspDiagnosticsUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE
+
+highlight! link SignColumn Comment
+
+highlight DiffviewFilePanelDeletions       guifg=#ff6c6b guibg=NONE gui=NONE
+highlight DiffviewFilePanelInsertions       guifg=#98be65 guibg=NONE gui=NONE
+  
+highlight! link DiffviewFilePanelFileName Normal
+highlight! link DiffviewFilePanelTitle Comment
+highlight! link DiffviewFilePanelCounter Comment
+]]
+
+-- Neogit
+vim.cmd [[
+
+highlight NeogitStashes guifg=#98be65 guibg=NONE gui=NONE
+highlight NeogitDiffContextHighlight guifg=NONE guibg=#23272e gui=NONE
+highlight NeogitHunkHeaderHighlight guifg=#5b6268 guibg=#23272e gui=NONE
+
+highlight NeogitDiffAddHighlight guifg=#98be65 guibg=#23272e gui=NONE
+highlight NeogitDiffDeleteHighlight guifg=#ff6c6b guibg=#23272e gui=NONE
+
+highlight! link NeogitHunkHeader Normal
+highlight! link NeogitFold Comment
+highlight! link NeogitDiffAdd Comment
+highlight! link NeogitDiffDelete Comment
+
+highlight! link NeogitHeadRegion Comment
+
+highlight! link NeogitUnmergedInto Error
+highlight! link NeogitUnpulledFrom Error
+highlight! link NeogitUntrackedfiles Error
+highlight! link NeogitUntrackedfilesRegion Error
+highlight! link NeogitUnstagedchanges Error
+highlight! link NeogitUnstagedchangesRegion Error
+highlight! link NeogitUnmergedchanges Error
+highlight! link NeogitUnmergedchangesRegion Error
+highlight! link NeogitUnpulledchanges Error
+highlight! link NeogitUnpulledchangesRegion Error
+
+highlight! link NeogitStash Success
+highlight! link NeogitStagedchanges Success
+highlight! link NeogitStagedchangesRegion Success
+highlight! link NeogitStashesRegion Success
+
+
+
 ]]
 
 -- Emails
