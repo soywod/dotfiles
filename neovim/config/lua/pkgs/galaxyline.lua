@@ -1,6 +1,8 @@
 vim.cmd('packadd! nvim-web-devicons')
 vim.cmd('packadd! galaxyline.nvim')
 
+local lsp_status = require('lsp-status')
+
 local devicons_opts = {
   default = true,
 }
@@ -22,7 +24,7 @@ local theme = {
   orange = '#da8548',
   magenta = '#c678dd',
   blue = '#51afef',
-  red = '#ff6c6b'
+  red = '#ff6c6b',
 }
 
 local section = require('galaxyline').section
@@ -42,7 +44,7 @@ section.left[2] = {
     condition = cond.buffer_not_empty,
     separator = ' ',
     separator_highlight = {'NONE', theme.bg},
-    highlight = {theme.blue, theme.bg, 'bold'}
+    highlight = {theme.blue, theme.bg, 'bold'},
   }
 }
 
@@ -77,9 +79,24 @@ section.left[6] = {
   }
 }
 
-section.mid[1] = {
+section.left[7] = {
   ShowLspClient = {
-    provider = 'GetLspClient',
+    provider = function()
+      local output = ""
+      for _, message in ipairs(lsp_status.messages()) do
+        if message.progress then
+          output = message.title
+          if message.message then
+            output = output..': '..message.message
+          end
+          return output
+        end
+      end
+      if vim.b.lsp_current_function and vim.b.lsp_current_function ~= '' then
+        output = output..'λ('..vim.b.lsp_current_function..')'
+      end
+      return output
+    end,
     condition = function ()
       local tbl = {['dashboard'] = true,['']=true}
       if tbl[vim.bo.filetype] then
@@ -87,8 +104,8 @@ section.mid[1] = {
       end
       return true
     end,
-    icon = '  LSP:',
-    highlight = {theme.fg_alt, theme.bg}
+    icon = '  LSP: ',
+    highlight = {theme.fg_alt, theme.bg},
   }
 }
 
@@ -116,7 +133,7 @@ section.right[3] = {
     condition = cond.buffer_not_empty,
     separator = ' ',
     separator_highlight = {'NONE', theme.bg},
-    highlight = {theme.cyan, theme.bg}
+    highlight = {theme.cyan, theme.bg},
   }
 }
 
@@ -168,7 +185,7 @@ section.short_line_left[1] = {
     provider = 'FileTypeName',
     separator = ' ',
     separator_highlight = {'NONE', theme.bg},
-    highlight = {theme.blue, theme.bg, 'bold'}
+    highlight = {theme.blue, theme.bg, 'bold'},
   }
 }
 
@@ -176,14 +193,14 @@ section.short_line_left[2] = {
   SFileName = {
     provider =  'SFileName',
     condition = cond.buffer_not_empty,
-    highlight = {theme.fg, theme.bg, 'bold'}
+    highlight = {theme.fg, theme.bg, 'bold'},
   }
 }
 
 section.short_line_right[1] = {
   BufferIcon = {
     provider= 'BufferIcon',
-    highlight = {theme.fg, theme.bg}
+    highlight = {theme.fg, theme.bg},
   }
 }
 

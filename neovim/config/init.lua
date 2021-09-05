@@ -42,7 +42,6 @@ vim.o.showbreak = '~'
 vim.o.smartcase = true
 vim.o.splitbelow = true
 vim.o.splitright = true
-vim.o.statusline = '%m%{luaeval("lsp_status_line()")}%=%r%y'
 vim.o.tabstop = 2
 vim.o.termguicolors = true
 vim.o.undofile = true
@@ -55,6 +54,7 @@ vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.wo.foldmethod = 'expr'
 vim.wo.number = true
 vim.wo.relativenumber = true
+vim.wo.signcolumn = 'yes'
 
 -- Theme
 -- https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el
