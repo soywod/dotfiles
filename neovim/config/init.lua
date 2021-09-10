@@ -2,10 +2,10 @@
 
 local use = require('use-pkg')
 
+use('icons')
 use('telescope')
 use('ultisnips')
 use('cmp')
-
 use('treesitter')
 use('lsp')
 use('emmet')
@@ -15,11 +15,11 @@ use('gnupg')
 use('repeat')
 use('surround')
 use('ledger')
-
 use('galaxyline')
 use('gitsigns')
 use('diffview')
 use('neogit')
+use('barbar')
 
 -- Vim settings
 
@@ -70,14 +70,14 @@ highlight Constant    	      	      	  guifg=#a9a1e1 guibg=NONE    gui=NONE
 highlight Type		      	      	        guifg=#ecbe7b guibg=NONE    gui=NONE
 highlight Typedef	      	      	        guifg=#ecbe7b guibg=NONE    gui=NONE
 highlight Function    	      	      	  guifg=#c678dd guibg=NONE    gui=NONE
-highlight IncSearch              	        guifg=#dfdfdf guibg=#c678dd gui=NONE
-highlight Search              	      	  guifg=#dfdfdf guibg=#c678dd gui=NONE
+highlight IncSearch              	        guifg=#282c34 guibg=#ecbe7b gui=NONE
+highlight Search              	      	  guifg=#282c34 guibg=#ecbe7b gui=NONE
 highlight StatusLine          	      	  guifg=#bbc2cf guibg=#21242b gui=NONE
 highlight StatusLineNC	      	      	  guifg=#5b6268 guibg=#21242b gui=NONE
 highlight Identifier  	      	      	  guifg=#a9a1e1 guibg=NONE    gui=NONE
 highlight Pmenu				                    guifg=#bbc2cf guibg=#21242b gui=NONE
 highlight PmenuSel              	        guifg=#bbc2cf guibg=#2257a0 gui=NONE
-highlight Title		      	      	        guifg=#282c34 guibg=NONE    gui=NONE
+highlight Title		      	      	        guifg=#c678dd guibg=NONE    gui=NONE
 highlight NonText	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight Comment	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight Folded              	      	  guifg=#5b6268 guibg=NONE    gui=NONE
@@ -107,13 +107,13 @@ highlight FoldColumn	      	      	    guifg=NONE guibg=NONE    gui=NONE
 highlight Special     	      	      	   guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight Tag		      	      	           guifg=#c678dd guibg=NONE    gui=NONE
 highlight TabLine             	      	   guifg=#bbc2cf guibg=#282c34 gui=NONE
-highlight TabLineFill         	      	   guifg=#bbc2cf guibg=#282c34 gui=NONE
+highlight TabLineFill         	      	   guifg=#bbc2cf guibg=#23272e gui=NONE
 highlight TabLineSel          	      	   guifg=#282c34 guibg=#c678dd gui=NONE
 highlight TelescopeBorder        	         guifg=#c678dd guibg=NONE    gui=NONE
 highlight TelescopeResultsBorder           guifg=#3f444a guibg=NONE    gui=NONE
 highlight TelescopeNormal        	         guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight TelescopeSelection	      	     guifg=#bbc2cf guibg=#3f444a gui=NONE
-highlight TelescopeMatching              	 guifg=#dfdfdf guibg=#c678dd gui=NONE
+highlight TelescopeMatching              	 guifg=#282c34 guibg=#ecbe7b gui=NONE
 highlight TelescopeSelectionCaret	      	 guifg=#c678dd guibg=#3f444a gui=NONE
 highlight TelescopePromptPrefix            guifg=#c678dd guibg=NONE    gui=bold
 highlight TelescopeMultiSelection	         guifg=#c678dd guibg=NONE    gui=NONE
@@ -185,7 +185,17 @@ highlight! link NeogitStagedchangesRegion Success
 highlight! link NeogitStashesRegion Success
 
 
-
+highlight BufferCurrent guifg=#c678dd guibg=NONE gui=NONE
+highlight BufferCurrentMod guifg=#c678dd guibg=NONE gui=bold,italic
+highlight BufferCurrentSign guifg=#c678dd guibg=NONE gui=NONE
+highlight BufferVisible guifg=#5b6268 guibg=NONE gui=NONE
+highlight BufferVisibleMod guifg=#5b6268 guibg=NONE gui=bold,italic
+highlight BufferVisibleSign guifg=#5b6268 guibg=NONE gui=NONE
+highlight BufferInactive guifg=#5b6268 guibg=NONE gui=NONE
+highlight BufferInactiveMod guifg=#5b6268 guibg=NONE gui=bold,italic
+highlight BufferInactiveSign guifg=#5b6268 guibg=NONE gui=NONE
+highlight BufferTabpage guifg=NONE guibg=#282c34 gui=NONE
+highlight BufferTabpageFill guifg=NONE guibg=#282c34 gui=NONE
 ]]
 
 -- Emails

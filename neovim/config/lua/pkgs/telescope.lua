@@ -22,7 +22,7 @@ local fp = require('utils.fp')
 local mappings = {
   find_files = {'f', previewer = false}, -- find file picker
   file_browser = {'F', previewer = false}, -- browse file picker
-  oldfiles = {'h', previewer = false}, -- old file picker
+  oldfiles = {'o', previewer = false}, -- old file picker
   live_grep = {'g', previewer = false}, -- grep picker
   buffers = {'b', previewer = false}, -- buffer picker
   lsp_document_diagnostics = {'d', previewer = false}, -- LSP document diagnostic picker

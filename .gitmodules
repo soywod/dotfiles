@@ -100,3 +100,6 @@
 [submodule "neovim/plugins/gitsigns.nvim"]
 	path = neovim/plugins/gitsigns.nvim
 	url = https://github.com/lewis6991/gitsigns.nvim.git
+[submodule "neovim/plugins/barbar.nvim"]
+	path = neovim/plugins/barbar.nvim
+	url = https://github.com/romgrk/barbar.nvim.git
