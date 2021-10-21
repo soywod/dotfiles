@@ -2,10 +2,10 @@ local M = {}
 
 M.setup = function()
   vim.api.nvim_exec([[
-    augroup autocompletion
-      autocmd! * <buffer>
-      autocmd CursorHoldI <buffer> lua require('lsp-completion').complete()
-    augroup END
+  augroup autocompletion
+    autocmd! * <buffer>
+    autocmd CursorHoldI <buffer> lua require('lsp-completion').complete()
+  augroup END
   ]], true)
 end
 

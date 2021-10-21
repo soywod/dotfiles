@@ -61,18 +61,6 @@ use_plugin({
       end
     end
 
-    vim.lsp.handlers["textDocument/formatting"] = function(err, _, result, _, bufnr)
-      if err ~= nil or result == nil then return end
-      if not vim.api.nvim_buf_get_option(bufnr, 'modified') then
-        local view = vim.fn.winsaveview()
-        vim.lsp.util.apply_text_edits(result, bufnr)
-        vim.fn.winrestview(view)
-        if bufnr == vim.api.nvim_get_current_buf() then
-          vim.api.nvim_command('noautocmd :update')
-        end
-      end
-    end
-
     vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
       vim.lsp.diagnostic.on_publish_diagnostics, {
         virtual_text = false,
@@ -148,9 +136,6 @@ use_plugin({
     lsp.tsserver.setup({
       capabilities = capabilities,
       on_attach = function(client)
-        -- if client.config.flags then
-        --   client.config.flags.allow_incremental_sync = true
-        -- end
         client.resolved_capabilities.document_formatting = false
         on_attach(client)
       end,
@@ -214,14 +199,18 @@ use_plugin({
     })
 
     vim.cmd([[
-    highlight LspDiagnosticsDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE
-    highlight LspDiagnosticsUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
-    highlight LspDiagnosticsDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE
-    highlight LspDiagnosticsUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE
-    highlight LspDiagnosticsDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE
-    highlight LspDiagnosticsUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
-    highlight LspDiagnosticsDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE
-    highlight LspDiagnosticsUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE
+    highlight DiagnosticInformation          guifg=#bbc2cf guibg=NONE    gui=NONE
+    highlight DiagnosticDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE
+    highlight DiagnosticUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
+    highlight DiagnosticHint                 guifg=#46d9ff guibg=NONE    gui=NONE
+    highlight DiagnosticDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE
+    highlight DiagnosticUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE
+    highlight DiagnosticWarning              guifg=#da8548 guibg=NONE    gui=NONE
+    highlight DiagnosticDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE
+    highlight DiagnosticUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
+    highlight DiagnosticError                guifg=#ff6c6b guibg=NONE    gui=NONE
+    highlight DiagnosticDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE
+    highlight DiagnosticUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE
     ]])
   end
 })
@@ -369,7 +358,7 @@ vim.o.statusline = '%m%{luaeval("lsp_statusline()")}%=%r%y'
 vim.o.tabstop = 2
 vim.o.termguicolors = true
 vim.o.undofile = true
-vim.o.updatetime = 300
+vim.o.updatetime = 150
 vim.o.writebackup = false
 vim.wo.breakindent = true
 vim.wo.breakindentopt = 'sbr'
@@ -452,4 +441,5 @@ highlight mailURL        guifg=#51afef guibg=NONE    gui=NONE
 
 -- }}}
 
+-- Previous commit: f6e662bbe
 -- vim:foldmethod=marker:foldlevel=1
