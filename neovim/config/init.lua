@@ -1,59 +1,13 @@
 local use_plugin = require('plugin-manager').setup().use
 
-use_plugin('jamessan/vim-gnupg')
+-- {{{ Plugins
 
-use_plugin('tpope/vim-surround')
-use_plugin('tpope/vim-abolish')
-use_plugin('tpope/vim-commentary')
-use_plugin('tpope/vim-repeat')
-
-use_plugin('junegunn/fzf')
-use_plugin({
-  'junegunn/fzf.vim',
-  config = function()
-    -- Config
-    vim.g.fzf_preview_window = {}
-    vim.g.fzf_layout = {down = '~40%'}
-
-    -- Mapping
-    vim.api.nvim_set_keymap('n', '<a-f>', ':Files<cr>', {noremap = true, silent = true})
-    vim.api.nvim_set_keymap('n', '<a-b>', ':Buffers<cr>', {noremap = true, silent = true})
-    vim.api.nvim_set_keymap('n', '<a-o>', ':History<cr>', {noremap = true, silent = true})
-    vim.api.nvim_set_keymap('n', '<a-g>', ':Rg ', {noremap = true})
-
-    -- Theming
-    vim.cmd('highlight fzf1 guifg=#c678dd guibg=#21242b gui=NONE')
-    vim.cmd('highlight fzf2 guifg=#bbc2cf guibg=#21242b gui=NONE')
-    vim.cmd('highlight! link fzf3 fzf2')
-  end
-})
-
-use_plugin({
-  'sirver/ultisnips',
-  config = function()
-  -- Config
-  vim.g.UltiSnipsExpandTrigger = '<noop>'
-  vim.g.UltiSnipsJumpBackwardTrigger = '<noop>'
-  vim.g.UltiSnipsJumpForwardTrigger = '<noop>'
-  vim.g.UltiSnipsEditSplit = 'vertical'
-
-  -- Mapping
-  vim.api.nvim_set_keymap('n', '<a-s>', ':UltiSnipsEdit<cr>', {noremap = true, silent = true})
-end,
-})
+-- {{{ LSP status line
 
 use_plugin({
   'nvim-lua/lsp-status.nvim',
   config = function()
     local lsp_status = require('lsp-status')
-
-    _G.lsp_statusline = function()
-      if #vim.lsp.buf_get_clients() > 0 then
-        return lsp_status.status()
-      else
-        return ''
-      end
-    end
 
     lsp_status.register_progress()
     lsp_status.config({
@@ -64,22 +18,35 @@ use_plugin({
       indicator_ok = '',
       status_symbol = '[LSP] ',
     })
+
+    -- This function is attached to the global scope to be accessible from the
+    -- statusline.
+    _G.lsp_statusline = function()
+      if #vim.lsp.buf_get_clients() > 0 then
+        return lsp_status.status()
+      else
+        return ''
+      end
+    end
   end
 })
 
--- LSP
+-- }}}
+
+-- {{{ LSP
+
 use_plugin({
   'neovim/nvim-lspconfig',
   config = function()
     local lsp = require('lspconfig')
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities.textDocument.completion.completionItem.insertReplaceSupport = true
-    capabilities.textDocument.completion.completionItem.preselectSupport = true
+    -- capabilities.textDocument.completion.completionItem.insertReplaceSupport = true
+    -- capabilities.textDocument.completion.completionItem.preselectSupport = true
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
     function hover()
-      if next(vim.lsp.buf_get_clients()) == nil then
+      if #vim.lsp.buf_get_clients() > 0 then
         vim.cmd('execute printf("h %s", expand("<cword>"))')
       else
         vim.lsp.buf.hover()
@@ -87,14 +54,14 @@ use_plugin({
     end
 
     function definitions()
-      if next(vim.lsp.buf_get_clients()) == nil then
+      if #vim.lsp.buf_get_clients() > 0 then
         vim.cmd('execute printf("tag %s", expand("<cword>"))')
       else
         vim.cmd('Definitions')
       end
     end
 
-    local format_async = function(err, _, result, _, bufnr)
+    vim.lsp.handlers["textDocument/formatting"] = function(err, _, result, _, bufnr)
       if err ~= nil or result == nil then return end
       if not vim.api.nvim_buf_get_option(bufnr, 'modified') then
         local view = vim.fn.winsaveview()
@@ -106,21 +73,12 @@ use_plugin({
       end
     end
 
-    _G.lsp_organize_imports = function()
-      local params = {
-        command = "_typescript.organizeImports",
-        arguments = {vim.api.nvim_buf_get_name(0)},
-        title = ""
-      }
-      vim.lsp.buf.execute_command(params)
-    end
-
-    vim.lsp.handlers["textDocument/formatting"] = format_async
     vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-      virtual_text = false,
-      signs = false,
-    })
+      vim.lsp.diagnostic.on_publish_diagnostics, {
+        virtual_text = false,
+        signs = false,
+      }
+    )
 
     local on_attach = function(client, bufnr)
       require('lsp-completion').setup()
@@ -130,20 +88,20 @@ use_plugin({
 
       if client.resolved_capabilities.document_formatting then
         vim.api.nvim_exec([[
-          augroup lsp-formatting
-            autocmd! * <buffer>
-            autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting()
-          augroup END
+        augroup lsp-formatting
+          autocmd! * <buffer>
+          autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting()
+        augroup END
         ]], true)
       end
 
       if client.resolved_capabilities.document_highlight then
         vim.api.nvim_exec([[
-          augroup lsp-highlight
-            autocmd! * <buffer>
-            autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-            autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-          augroup END
+        augroup lsp-highlight
+          autocmd! * <buffer>
+          autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
+          autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+        augroup END
         ]], true)
       end
 
@@ -159,7 +117,6 @@ use_plugin({
       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-W>', ':WorkspaceSymbols<cr>', {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-d>', ':Diagnostics<cr>', {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-D>', ':DiagnosticsAll<cr>', {noremap = true, silent = true})
-      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<c-space>', '\\<c-x>\\<c-o>', {noremap = true, silent = true, expr = true})
     end
 
     lsp.bashls.setup({
@@ -191,9 +148,9 @@ use_plugin({
     lsp.tsserver.setup({
       capabilities = capabilities,
       on_attach = function(client)
-        if client.config.flags then
-          client.config.flags.allow_incremental_sync = true
-        end
+        -- if client.config.flags then
+        --   client.config.flags.allow_incremental_sync = true
+        -- end
         client.resolved_capabilities.document_formatting = false
         on_attach(client)
       end,
@@ -209,17 +166,7 @@ use_plugin({
       on_attach = on_attach,
     })
 
-    lsp.texlab.setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
     lsp.zls.setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    lsp.ccls.setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
@@ -266,19 +213,48 @@ use_plugin({
       },
     })
 
-    -- Theming
-    vim.cmd('highlight LspDiagnosticsDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE')
-    vim.cmd('highlight LspDiagnosticsUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE')
-    vim.cmd('highlight LspDiagnosticsDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE')
-    vim.cmd('highlight LspDiagnosticsUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE')
-    vim.cmd('highlight LspDiagnosticsDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE')
-    vim.cmd('highlight LspDiagnosticsUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE')
-    vim.cmd('highlight LspDiagnosticsDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE')
-    vim.cmd('highlight LspDiagnosticsUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE')
+    vim.cmd([[
+    highlight LspDiagnosticsDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE
+    highlight LspDiagnosticsUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
+    highlight LspDiagnosticsDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE
+    highlight LspDiagnosticsUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE
+    highlight LspDiagnosticsDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE
+    highlight LspDiagnosticsUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
+    highlight LspDiagnosticsDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE
+    highlight LspDiagnosticsUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE
+    ]])
   end
 })
 
--- LSP + FZF
+-- }}}
+
+-- {{{ FZF
+
+use_plugin('junegunn/fzf')
+use_plugin({
+  'junegunn/fzf.vim',
+  config = function()
+    -- Config
+    vim.g.fzf_preview_window = {}
+    vim.g.fzf_layout = {down = '~40%'}
+
+    -- Mapping
+    vim.api.nvim_set_keymap('n', '<a-f>', ':Files<cr>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<a-b>', ':Buffers<cr>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<a-o>', ':History<cr>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<a-g>', ':Rg ', {noremap = true})
+
+    -- Theming
+    vim.cmd('highlight fzf1 guifg=#c678dd guibg=#21242b gui=NONE')
+    vim.cmd('highlight fzf2 guifg=#bbc2cf guibg=#21242b gui=NONE')
+    vim.cmd('highlight! link fzf3 fzf2')
+  end
+})
+
+-- }}}
+
+-- {{{ LSP + FZF
+
 use_plugin({
   'gfanto/fzf-lsp.nvim',
   config = function()
@@ -286,7 +262,10 @@ use_plugin({
   end
 })
 
--- Tree-sitter
+-- }}}
+
+-- {{{ Tree-sitter
+
 use_plugin({
   'nvim-treesitter/nvim-treesitter',
   config = function()
@@ -326,16 +305,45 @@ use_plugin({
   end
 })
 
--- Mapping
+-- }}}
 
-vim.api.nvim_set_keymap('n', '<a-e>', ':Explore<cr>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<a-/>', ':Lines<cr>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('i', '<tab>', 'pumvisible() ? "\\<c-n>" : "\\<tab>"', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "\\<s-tab>"', {noremap = true, silent = true, expr = true})
-vim.api.nvim_set_keymap('n', '<a-m>', ':Himalaya<cr>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<a-t>', ':Unfog<cr>', {noremap = true, silent = true})
+-- {{{ UltiSnips
 
--- Config
+use_plugin({
+  'sirver/ultisnips',
+  config = function()
+  -- Config
+  vim.g.UltiSnipsExpandTrigger = '<noop>'
+  vim.g.UltiSnipsJumpBackwardTrigger = '<noop>'
+  vim.g.UltiSnipsJumpForwardTrigger = '<noop>'
+  vim.g.UltiSnipsEditSplit = 'vertical'
+
+  -- Mapping
+  vim.api.nvim_set_keymap('n', '<a-s>', ':UltiSnipsEdit<cr>', {noremap = true, silent = true})
+end,
+})
+
+-- }}}
+
+-- {{{ Tpope suite
+
+use_plugin('tpope/vim-surround')
+use_plugin('tpope/vim-abolish')
+use_plugin('tpope/vim-commentary')
+use_plugin('tpope/vim-repeat')
+
+-- }}}
+
+-- {{{ GnuPG
+
+use_plugin('jamessan/vim-gnupg')
+
+-- }}}
+
+-- }}}
+
+-- {{{ Config
+
 vim.bo.expandtab = true
 vim.bo.shiftwidth = 2
 vim.bo.tabstop = 2
@@ -371,7 +379,21 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 vim.wo.signcolumn = 'yes'
 
--- Theming
+-- }}}
+
+-- {{{ Keymap
+
+vim.api.nvim_set_keymap('n', '<a-e>', ':Explore<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-/>', ':Lines<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<tab>', 'pumvisible() ? "\\<c-n>" : "\\<tab>"', {noremap = true, silent = true, expr = true})
+vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "\\<s-tab>"', {noremap = true, silent = true, expr = true})
+vim.api.nvim_set_keymap('n', '<a-m>', ':Himalaya<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-t>', ':Unfog<cr>', {noremap = true, silent = true})
+
+-- }}}
+
+-- {{{ Theme
+
 vim.cmd([[syntax on
 highlight Boolean        guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight Character      guifg=#98be65 guibg=NONE    gui=NONE
@@ -428,52 +450,6 @@ highlight Visual         guifg=NONE    guibg=#3f444a gui=NONE
 highlight mailURL        guifg=#51afef guibg=NONE    gui=NONE
 ]])
 
-  -- Completion
-  -- use({
-  --   'hrsh7th/nvim-cmp',
-  --   requires = 'SirVer/ultisnips',
-  --   commit = '5bed2dc',
-  --   config = function()
-  --     local cmp = require('cmp')
-  --     local cmp_keymap = require('cmp.utils.keymap')
+-- }}}
 
-  --     cmp.setup({
-  --       snippet = {
-  --         expand = function(args)
-  --           vim.fn['UltiSnips#Anon'](args.body)
-  --         end,
-  --       },
-  --       mapping = {
-  --         ['<s-tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'}),
-  --         ['<tab>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'}),
-  --         ['<cr>'] = cmp.mapping(function(fallback)
-  --           if vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
-  --             vim.fn.feedkeys(cmp_keymap.t('<c-r>=UltiSnips#JumpForwards()<cr>'))
-  --           elseif vim.fn["UltiSnips#CanExpandSnippet"]() == 1 then
-  --             vim.fn.feedkeys(cmp_keymap.t('<c-r>=UltiSnips#ExpandSnippet()<cr>'))
-  --           elseif vim.fn.pumvisible() == 1 and vim.fn.complete_info()["selected"] > -1 then
-  --             cmp.confirm({behavior = cmp.ConfirmBehavior.Replace, select = true})
-  --           else
-  --             fallback()
-  --           end
-  --         end, {'i', 's'}),
-  --       },
-  --       sources = {
-  --         {name = 'nvim_lsp'},
-  --         {name = 'nvim_lua'},
-  --         {name = 'ultisnips'},
-  --         {name = 'path'},
-  --         {name = 'buffer'},
-  --       },
-  --     })
-  --   end,
-  -- })
-  -- use({'quangnguyen30192/cmp-nvim-ultisnips', requires = 'hrsh7th/nvim-cmp'})
-  -- use({'hrsh7th/cmp-nvim-lsp', requires = 'hrsh7th/nvim-cmp'})
-  -- use({'hrsh7th/cmp-nvim-lua', requires = 'hrsh7th/nvim-cmp'})
-  -- use({'hrsh7th/cmp-path', requires = 'hrsh7th/nvim-cmp'})
-  -- use({'hrsh7th/cmp-buffer', requires = 'hrsh7th/nvim-cmp'})
-
-
--- end)
-
+-- vim:foldmethod=marker:foldlevel=1
