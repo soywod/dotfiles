@@ -42,6 +42,31 @@ use_plugin({
 end,
 })
 
+use_plugin({
+  'nvim-lua/lsp-status.nvim',
+  config = function()
+    local lsp_status = require('lsp-status')
+
+    _G.lsp_statusline = function()
+      if #vim.lsp.buf_get_clients() > 0 then
+        return lsp_status.status()
+      else
+        return ''
+      end
+    end
+
+    lsp_status.register_progress()
+    lsp_status.config({
+      indicator_errors = '  ',
+      indicator_warnings = '  ',
+      indicator_info = '  ',
+      indicator_hint = '  ',
+      indicator_ok = '',
+      status_symbol = '[LSP] ',
+    })
+  end
+})
+
 -- LSP
 use_plugin({
   'neovim/nvim-lspconfig',
@@ -99,6 +124,7 @@ use_plugin({
 
     local on_attach = function(client, bufnr)
       require('lsp-completion').setup()
+      require('lsp-status').on_attach(client)
 
       vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -320,17 +346,18 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.expandtab = true
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
-vim.o.runtimepath = vim.o.runtimepath..',~/Code/himalaya/vim'
-vim.o.runtimepath = vim.o.runtimepath..',~/Code/unfog.vim'
 vim.o.hidden = true
 vim.o.pumheight = 12
 vim.o.ruler = false
+vim.o.runtimepath = vim.o.runtimepath..',~/Code/himalaya/vim'
+vim.o.runtimepath = vim.o.runtimepath..',~/Code/unfog.vim'
 vim.o.shiftwidth = 2
 vim.o.shortmess = 'ctT'
 vim.o.showbreak = '~'
 vim.o.smartcase = true
 vim.o.splitbelow = true
 vim.o.splitright = true
+vim.o.statusline = '%m%{luaeval("lsp_statusline()")}%=%r%y'
 vim.o.tabstop = 2
 vim.o.termguicolors = true
 vim.o.undofile = true
