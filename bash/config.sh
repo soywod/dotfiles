@@ -43,7 +43,7 @@ export HISTSIZE=-1
 export HISTTIMEFORMAT="[%F %T] "
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-export FZF_DEFAULT_OPTS='--color fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C,pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B'
+export FZF_DEFAULT_OPTS='--color fg:#5b6268,bg:#282c34,hl:reverse:#ecbe7b,fg+:regular:#bbc2cf,bg+:#282c34,hl+:regular:reverse:#ecbe7b,pointer:#c678dd,info:#5b6268,spinner:#c678dd,header:#c678dd,prompt:regular:#46d9ff,marker:#ecbe7b'
 
 export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/Documents/service-account-file.json"
 export GPG_TTY=`tty`
@@ -84,3 +84,4 @@ export LEDGER_FILE="${HOME}/Dropbox/hledger.journal"
 
 # Swan config
 # source ~/.swan.sh
+source "/home/soywod/.rover/env"

@@ -19,7 +19,7 @@ alias gd='git diff'
 alias glog='git log --oneline --decorate --graph'
 alias gpull='git pull origin $(git rev-parse --abbrev-ref HEAD)'
 alias gpush='git push origin $(git rev-parse --abbrev-ref HEAD)'
-alias gfpush='gpush --force'
+alias gfpush='gpush --force-with-lease'
 alias gss='git status'
 alias grm='git pull origin master --rebase'
 
