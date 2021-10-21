@@ -1,41 +1,344 @@
--- Packages
+local use_plugin = require('plugin').setup().use
 
-local use = require('use-pkg')
+use_plugin('jamessan/vim-gnupg')
 
-use('icons')
-use('telescope')
-use('ultisnips')
-use('cmp')
-use('treesitter')
-use('lsp')
-use('emmet')
-use('abolish')
-use('commentary')
-use('gnupg')
-use('repeat')
-use('surround')
-use('ledger')
-use('galaxyline')
-use('gitsigns')
-use('diffview')
-use('neogit')
-use('barbar')
+use_plugin('tpope/vim-surround')
+use_plugin('tpope/vim-abolish')
+use_plugin('tpope/vim-commentary')
+use_plugin('tpope/vim-repeat')
 
--- Vim settings
+use_plugin('junegunn/fzf')
+use_plugin({
+  'junegunn/fzf.vim',
+  config = function()
+    -- Config
+    vim.g.fzf_preview_window = {}
+    vim.g.fzf_layout = {down = '~40%'}
 
+    -- Mapping
+    vim.api.nvim_set_keymap('n', '<a-f>', ':Files<cr>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<a-b>', ':Buffers<cr>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<a-o>', ':History<cr>', {noremap = true, silent = true})
+    vim.api.nvim_set_keymap('n', '<a-g>', ':Rg ', {noremap = true})
+
+    -- Theming
+    vim.cmd('highlight fzf1 guifg=#c678dd guibg=#21242b gui=NONE')
+    vim.cmd('highlight fzf2 guifg=#bbc2cf guibg=#21242b gui=NONE')
+    vim.cmd('highlight! link fzf3 fzf2')
+  end
+})
+
+use_plugin({
+  'sirver/ultisnips',
+  config = function()
+  -- Config
+  vim.g.UltiSnipsExpandTrigger = '<noop>'
+  vim.g.UltiSnipsJumpBackwardTrigger = '<noop>'
+  vim.g.UltiSnipsJumpForwardTrigger = '<noop>'
+  vim.g.UltiSnipsEditSplit = 'vertical'
+
+  -- Mapping
+  vim.api.nvim_set_keymap('n', '<a-s>', ':UltiSnipsEdit<cr>', {noremap = true, silent = true})
+end,
+})
+
+-- LSP
+use_plugin({
+  'neovim/nvim-lspconfig',
+  config = function()
+    local lsp = require('lspconfig')
+
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities.textDocument.completion.completionItem.insertReplaceSupport = true
+    capabilities.textDocument.completion.completionItem.preselectSupport = true
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+    function hover()
+      if next(vim.lsp.buf_get_clients()) == nil then
+        vim.cmd('execute printf("h %s", expand("<cword>"))')
+      else
+        vim.lsp.buf.hover()
+      end
+    end
+
+    function definitions()
+      if next(vim.lsp.buf_get_clients()) == nil then
+        vim.cmd('execute printf("tag %s", expand("<cword>"))')
+      else
+        vim.cmd('Definitions')
+      end
+    end
+
+    local format_async = function(err, _, result, _, bufnr)
+      if err ~= nil or result == nil then return end
+      if not vim.api.nvim_buf_get_option(bufnr, 'modified') then
+        local view = vim.fn.winsaveview()
+        vim.lsp.util.apply_text_edits(result, bufnr)
+        vim.fn.winrestview(view)
+        if bufnr == vim.api.nvim_get_current_buf() then
+          vim.api.nvim_command('noautocmd :update')
+        end
+      end
+    end
+
+    _G.lsp_organize_imports = function()
+      local params = {
+        command = "_typescript.organizeImports",
+        arguments = {vim.api.nvim_buf_get_name(0)},
+        title = ""
+      }
+      vim.lsp.buf.execute_command(params)
+    end
+
+    vim.lsp.handlers["textDocument/formatting"] = format_async
+    vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics, {
+      virtual_text = false,
+      signs = false,
+    })
+
+    local on_attach = function(client, bufnr)
+      vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+      if client.resolved_capabilities.document_formatting then
+        vim.api.nvim_exec([[
+          augroup lsp-formatting
+            autocmd! * <buffer>
+            autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting()
+          augroup END
+        ]], true)
+      end
+
+      if client.resolved_capabilities.document_highlight then
+        vim.api.nvim_exec([[
+          augroup lsp-highlight
+            autocmd! * <buffer>
+            autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
+            autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+          augroup END
+        ]], true)
+      end
+
+
+      require('lsp-completion').setup()
+      -- _G.autocomplete = function()
+      --   local col = vim.api.nvim_win_get_cursor(0)[2]
+      --   local space_behind_cursor = (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
+      --   if not space_behind_cursor then
+      --     vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<c-x><c-o>", true, true, true))
+      --   end
+      -- end
+
+      -- vim.api.nvim_exec([[
+      --   augroup autocompletion
+      --     autocmd! * <buffer>
+      --     autocmd CursorHoldI <buffer> lua autocomplete()
+      --   augroup END
+      -- ]], true)
+
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K'    , '<cmd>lua hover()<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<c-]>', '<cmd>lua definitions()<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-p>', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-n>', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-R>', '<cmd>lua vim.lsp.buf.rename()<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<c-}>', ':TypeDefinitions<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-c>', ':CodeActions<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-r>', ':References<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-w>', ':DocumentSymbols<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-W>', ':WorkspaceSymbols<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-d>', ':Diagnostics<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<a-D>', ':DiagnosticsAll<cr>', {noremap = true, silent = true})
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<c-space>', '\\<c-x>\\<c-o>', {noremap = true, silent = true, expr = true})
+    end
+
+    lsp.bashls.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lsp.jsonls.setup({
+      capabilities = capabilities,
+      on_attach = function(client)
+        client.resolved_capabilities.document_formatting = false
+        on_attach(client)
+      end,
+    })
+
+    lsp.cssls.setup({
+      capabilities = capabilities,
+      on_attach = function(client)
+        client.resolved_capabilities.document_formatting = false
+        on_attach(client)
+      end,
+    })
+
+    lsp.rust_analyzer.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lsp.tsserver.setup({
+      capabilities = capabilities,
+      on_attach = function(client)
+        if client.config.flags then
+          client.config.flags.allow_incremental_sync = true
+        end
+        client.resolved_capabilities.document_formatting = false
+        on_attach(client)
+      end,
+    })
+
+    lsp.ocamllsp.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lsp.graphql.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lsp.texlab.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lsp.zls.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    lsp.ccls.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+
+    local eslint_with_prettier = {
+      lintCommand = "eslint_d -f visualstudio --stdin --stdin-filename ${INPUT}",
+      lintStdin = true,
+      lintFormats = {"%f(%l,%c): %tarning %m", "%f(%l,%c): %rror %m"},
+      lintIgnoreExitCode = true,
+      formatCommand = "eslint_d -f visualstudio --fix-to-stdout --stdin --stdin-filename=${INPUT}",
+      formatStdin = true,
+    }
+
+    local prettier = {
+      lintIgnoreExitCode = true,
+      formatCommand = "npx prettier --stdin-filepath ${INPUT}",
+      formatStdin = true,
+    }
+
+    lsp.efm.setup({
+      root_dir = function()
+        return vim.fn.getcwd()
+      end,
+      on_attach = function(client)
+        client.resolved_capabilities.document_formatting = true
+        client.resolved_capabilities.goto_definition = false
+        on_attach(client)
+      end,
+      filetypes = {
+        "javascript",
+        "javascriptreact",
+        "json",
+        "typescript",
+        "typescriptreact",
+      },
+      settings = {
+        languages = {
+          javascript = {eslint_with_prettier},
+          javascriptreact = {eslint_with_prettier},
+          json = {prettier},
+          typescript = {prettier},
+          typescriptreact = {eslint_with_prettier},
+        }
+      },
+    })
+
+    -- Theming
+    vim.cmd('highlight LspDiagnosticsDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE')
+    vim.cmd('highlight LspDiagnosticsUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE')
+    vim.cmd('highlight LspDiagnosticsDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE')
+    vim.cmd('highlight LspDiagnosticsUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE')
+    vim.cmd('highlight LspDiagnosticsDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE')
+    vim.cmd('highlight LspDiagnosticsUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE')
+    vim.cmd('highlight LspDiagnosticsDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE')
+    vim.cmd('highlight LspDiagnosticsUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE')
+  end
+})
+
+-- LSP + FZF
+use_plugin({
+  'gfanto/fzf-lsp.nvim',
+  config = function()
+    require('fzf_lsp').setup()
+  end
+})
+
+-- Tree-sitter
+use_plugin({
+  'nvim-treesitter/nvim-treesitter',
+  config = function()
+    require('nvim-treesitter.configs').setup({
+      ensure_installed = {
+        'bash',
+        'css',
+        'graphql',
+        'html',
+        'javascript',
+        'json',
+        'latex',
+        'lua',
+        'ocaml',
+        'php',
+        'rust',
+        'toml',
+        'tsx',
+        'typescript',
+        'zig',
+      },
+      highlight = {
+        enable = true,
+      },
+      indent = {
+        enable = true,
+      },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = '<a-v>',
+          node_incremental = '<a-v>',
+          node_decremental = '<a-V>',
+        },
+      },
+    })
+  end
+})
+
+-- Mapping
+
+vim.api.nvim_set_keymap('n', '<a-e>', ':Explore<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-/>', ':Lines<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<tab>', 'pumvisible() ? "\\<c-n>" : "\\<tab>"', {noremap = true, silent = true, expr = true})
+vim.api.nvim_set_keymap('i', '<s-tab>', 'pumvisible() ? "\\<c-p>" : "\\<s-tab>"', {noremap = true, silent = true, expr = true})
+vim.api.nvim_set_keymap('n', '<a-m>', ':Himalaya<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<a-t>', ':Unfog<cr>', {noremap = true, silent = true})
+
+-- Config
 vim.bo.expandtab = true
 vim.bo.shiftwidth = 2
 vim.bo.tabstop = 2
 vim.o.background = 'dark'
 vim.o.clipboard = 'unnamedplus'
+vim.o.completefunc = 'grepletion#completefunc'
 vim.o.completeopt = 'menuone,noselect'
 vim.o.expandtab = true
 vim.o.foldlevelstart = 99
+vim.o.runtimepath = vim.o.runtimepath..',~/Code/himalaya/vim'
+vim.o.runtimepath = vim.o.runtimepath..',~/Code/unfog.vim'
 vim.o.hidden = true
 vim.o.pumheight = 12
 vim.o.ruler = false
-vim.o.runtimepath = vim.o.runtimepath..',~/Code/himalaya/vim'
-vim.o.runtimepath = vim.o.runtimepath..',~/Code/unfog.vim'
 vim.o.shiftwidth = 2
 vim.o.shortmess = 'ctT'
 vim.o.showbreak = '~'
@@ -47,7 +350,6 @@ vim.o.termguicolors = true
 vim.o.undofile = true
 vim.o.updatetime = 300
 vim.o.writebackup = false
-vim.opt.fillchars = vim.opt.fillchars + 'diff:╱'
 vim.wo.breakindent = true
 vim.wo.breakindentopt = 'sbr'
 vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
@@ -56,175 +358,109 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 vim.wo.signcolumn = 'yes'
 
--- Theme
--- https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el
+-- Theming
+vim.cmd([[syntax on
+highlight Boolean        guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Character      guifg=#98be65 guibg=NONE    gui=NONE
+highlight Comment        guifg=#5b6268 guibg=NONE    gui=NONE
+highlight Conditional    guifg=#51afef guibg=NONE    gui=NONE
+highlight Constant       guifg=#a9a1e1 guibg=NONE    gui=NONE
+highlight CursorLine     guifg=NONE    guibg=#21242b gui=NONE
+highlight CursorLineNr   guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Define         guifg=#51afef guibg=NONE    gui=NONE
+highlight Delimiter      guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Directory      guifg=#51afef guibg=NONE    gui=bold
+highlight Error          guifg=#ff6c6b guibg=NONE    gui=bold
+highlight ErrorMsg       guifg=#ff6c6b guibg=NONE    gui=bold
+highlight Exception      guifg=#51afef guibg=NONE    gui=NONE
+highlight Float          guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight FoldColumn     guifg=NONE    guibg=NONE    gui=NONE
+highlight Folded         guifg=#5b6268 guibg=NONE    gui=NONE
+highlight Function       guifg=#c678dd guibg=NONE    gui=NONE
+highlight Identifier     guifg=#a9a1e1 guibg=NONE    gui=NONE
+highlight IncSearch      guifg=#282c34 guibg=#ecbe7b gui=NONE
+highlight Include        guifg=#51afef guibg=NONE    gui=NONE
+highlight Keyword        guifg=#51afef guibg=NONE    gui=NONE
+highlight Label          guifg=#51afef guibg=NONE    gui=NONE
+highlight LineNr         guifg=#5b6268 guibg=NONE    gui=NONE
+highlight MatchParen     guifg=#ff6c6b guibg=#21242b gui=bold
+highlight NonText        guifg=#5b6268 guibg=NONE    gui=NONE
+highlight Normal         guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Number         guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight Operator       guifg=#51afef guibg=NONE    gui=NONE
+highlight Pmenu          guifg=#bbc2cf guibg=#21242b gui=NONE
+highlight PmenuSel       guifg=#bbc2cf guibg=#2257a0 gui=NONE
+highlight PreProc        guifg=#51afef guibg=NONE    gui=NONE
+highlight Repeat         guifg=#51afef guibg=NONE    gui=NONE
+highlight Search         guifg=#282c34 guibg=#ecbe7b gui=NONE
+highlight SignColumn     guifg=#5b6268 guibg=NONE    gui=NONE
+highlight Special        guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight SpecialComment guifg=#5b6268 guibg=NONE    gui=italic
+highlight Statement      guifg=#51afef guibg=NONE    gui=NONE
+highlight StatusLine     guifg=#bbc2cf guibg=#21242b gui=NONE
+highlight StatusLineNC   guifg=#5b6268 guibg=#21242b gui=NONE
+highlight StorageClass   guifg=#51afef guibg=NONE    gui=NONE
+highlight String         guifg=#98be65 guibg=NONE    gui=NONE
+highlight Structure      guifg=#51afef guibg=NONE    gui=NONE
+highlight Success        guifg=#98be65 guibg=NONE    gui=NONE
+highlight TabLine        guifg=#bbc2cf guibg=#282c34 gui=NONE
+highlight TabLineFill    guifg=#bbc2cf guibg=#23272e gui=NONE
+highlight TabLineSel     guifg=#282c34 guibg=#c678dd gui=NONE
+highlight Tag            guifg=#c678dd guibg=NONE    gui=NONE
+highlight Title          guifg=#c678dd guibg=NONE    gui=NONE
+highlight Type           guifg=#ecbe7b guibg=NONE    gui=NONE
+highlight Typedef        guifg=#ecbe7b guibg=NONE    gui=NONE
+highlight VertSplit      guifg=#3f444a guibg=NONE    gui=NONE
+highlight Visual         guifg=NONE    guibg=#3f444a gui=NONE
+highlight mailURL        guifg=#51afef guibg=NONE    gui=NONE
+]])
 
-vim.cmd [[syntax on
-highlight Normal													guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight Character   	      	      	  guifg=#98be65 guibg=NONE    gui=NONE
-highlight String	      	      	  	    guifg=#98be65 guibg=NONE    gui=NONE
-highlight Boolean			  	                guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight Number      	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight Float	      	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight Constant    	      	      	  guifg=#a9a1e1 guibg=NONE    gui=NONE
-highlight Type		      	      	        guifg=#ecbe7b guibg=NONE    gui=NONE
-highlight Typedef	      	      	        guifg=#ecbe7b guibg=NONE    gui=NONE
-highlight Function    	      	      	  guifg=#c678dd guibg=NONE    gui=NONE
-highlight IncSearch              	        guifg=#282c34 guibg=#ecbe7b gui=NONE
-highlight Search              	      	  guifg=#282c34 guibg=#ecbe7b gui=NONE
-highlight StatusLine          	      	  guifg=#bbc2cf guibg=#21242b gui=NONE
-highlight StatusLineNC	      	      	  guifg=#5b6268 guibg=#21242b gui=NONE
-highlight Identifier  	      	      	  guifg=#a9a1e1 guibg=NONE    gui=NONE
-highlight Pmenu				                    guifg=#bbc2cf guibg=#21242b gui=NONE
-highlight PmenuSel              	        guifg=#bbc2cf guibg=#2257a0 gui=NONE
-highlight Title		      	      	        guifg=#c678dd guibg=NONE    gui=NONE
-highlight NonText	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
-highlight Comment	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
-highlight Folded              	      	  guifg=#5b6268 guibg=NONE    gui=NONE
-highlight LineNr	      	      	        guifg=#5b6268 guibg=NONE    gui=NONE
-highlight VertSplit	      	      	      guifg=#3f444a guibg=NONE    gui=NONE
-highlight CursorLine        	      	    guifg=NONE    guibg=#21242b gui=NONE
-highlight CursorLineNr        	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight MatchParen          	      	  guifg=#ff6c6b guibg=#21242b gui=bold
-highlight SpecialComment      	      	  guifg=#5b6268 guibg=NONE    gui=italic
-highlight Delimiter   	      	      	  guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight Visual	      	      	        guifg=NONE	  guibg=#3f444a gui=NONE
+  -- Completion
+  -- use({
+  --   'hrsh7th/nvim-cmp',
+  --   requires = 'SirVer/ultisnips',
+  --   commit = '5bed2dc',
+  --   config = function()
+  --     local cmp = require('cmp')
+  --     local cmp_keymap = require('cmp.utils.keymap')
 
-highlight Statement	      	      	      guifg=#51afef guibg=NONE    gui=NONE
-highlight Conditional 	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight Define      	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight Exception   	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight Include     	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight Keyword     	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight Label	      	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight Operator    	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight PreProc     	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight Repeat      	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight StorageClass	      	      	  guifg=#51afef guibg=NONE    gui=NONE
-highlight Structure	      	      	      guifg=#51afef guibg=NONE    gui=NONE
-highlight FoldColumn	      	      	    guifg=NONE guibg=NONE    gui=NONE
-
-highlight Special     	      	      	   guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight Tag		      	      	           guifg=#c678dd guibg=NONE    gui=NONE
-highlight TabLine             	      	   guifg=#bbc2cf guibg=#282c34 gui=NONE
-highlight TabLineFill         	      	   guifg=#bbc2cf guibg=#23272e gui=NONE
-highlight TabLineSel          	      	   guifg=#282c34 guibg=#c678dd gui=NONE
-highlight TelescopeBorder        	         guifg=#c678dd guibg=NONE    gui=NONE
-highlight TelescopeResultsBorder           guifg=#3f444a guibg=NONE    gui=NONE
-highlight TelescopeNormal        	         guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight TelescopeSelection	      	     guifg=#bbc2cf guibg=#3f444a gui=NONE
-highlight TelescopeMatching              	 guifg=#282c34 guibg=#ecbe7b gui=NONE
-highlight TelescopeSelectionCaret	      	 guifg=#c678dd guibg=#3f444a gui=NONE
-highlight TelescopePromptPrefix            guifg=#c678dd guibg=NONE    gui=bold
-highlight TelescopeMultiSelection	         guifg=#c678dd guibg=NONE    gui=NONE
-highlight Error               	      	   guifg=#ff6c6b guibg=NONE    gui=bold
-highlight ErrorMsg            	      	   guifg=#ff6c6b guibg=NONE    gui=bold
-highlight Success guifg=#98be65 guibg=NONE gui=NONE
-
-highlight DiffAdd guifg=NONE guibg=#323938 gui=NONE
-highlight DiffAddAsDelete guifg=NONE guibg=#323938 gui=NONE
-highlight DiffChange guifg=NONE guibg=NONE gui=NONE
-highlight DiffAddAsDelete guifg=NONE guibg=#3c3239 gui=NONE
-highlight! link DiffText Visual
-highlight! link DiffDelete Comment
-
-highlight GitSignsAdd guifg=#98be65 guibg=NONE gui=NONE
-highlight GitSignsChange guifg=#51afef guibg=NONE gui=NONE
-highlight GitSignsDelete guifg=#ff6c6b guibg=NONE gui=NONE
-
-highlight LspDiagnosticsDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight LspDiagnosticsUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
-highlight LspDiagnosticsDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE
-highlight LspDiagnosticsUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE
-highlight LspDiagnosticsDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE
-highlight LspDiagnosticsUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
-highlight LspDiagnosticsDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE
-highlight LspDiagnosticsUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE
-
-highlight! link SignColumn Comment
-
-highlight DiffviewFilePanelDeletions       guifg=#ff6c6b guibg=NONE gui=NONE
-highlight DiffviewFilePanelInsertions       guifg=#98be65 guibg=NONE gui=NONE
-  
-highlight! link DiffviewFilePanelFileName Normal
-highlight! link DiffviewFilePanelTitle Comment
-highlight! link DiffviewFilePanelCounter Comment
-]]
-
--- Neogit
-vim.cmd [[
-
-highlight NeogitStashes guifg=#98be65 guibg=NONE gui=NONE
-highlight NeogitDiffContextHighlight guifg=NONE guibg=#23272e gui=NONE
-highlight NeogitHunkHeaderHighlight guifg=#5b6268 guibg=#23272e gui=NONE
-
-highlight NeogitDiffAddHighlight guifg=#98be65 guibg=#23272e gui=NONE
-highlight NeogitDiffDeleteHighlight guifg=#ff6c6b guibg=#23272e gui=NONE
-
-highlight! link NeogitHunkHeader Normal
-highlight! link NeogitFold Comment
-highlight! link NeogitDiffAdd Comment
-highlight! link NeogitDiffDelete Comment
-
-highlight! link NeogitHeadRegion Comment
-
-highlight! link NeogitUnmergedInto Error
-highlight! link NeogitUnpulledFrom Error
-highlight! link NeogitUntrackedfiles Error
-highlight! link NeogitUntrackedfilesRegion Error
-highlight! link NeogitUnstagedchanges Error
-highlight! link NeogitUnstagedchangesRegion Error
-highlight! link NeogitUnmergedchanges Error
-highlight! link NeogitUnmergedchangesRegion Error
-highlight! link NeogitUnpulledchanges Error
-highlight! link NeogitUnpulledchangesRegion Error
-
-highlight! link NeogitStash Success
-highlight! link NeogitStagedchanges Success
-highlight! link NeogitStagedchangesRegion Success
-highlight! link NeogitStashesRegion Success
+  --     cmp.setup({
+  --       snippet = {
+  --         expand = function(args)
+  --           vim.fn['UltiSnips#Anon'](args.body)
+  --         end,
+  --       },
+  --       mapping = {
+  --         ['<s-tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'}),
+  --         ['<tab>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'}),
+  --         ['<cr>'] = cmp.mapping(function(fallback)
+  --           if vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
+  --             vim.fn.feedkeys(cmp_keymap.t('<c-r>=UltiSnips#JumpForwards()<cr>'))
+  --           elseif vim.fn["UltiSnips#CanExpandSnippet"]() == 1 then
+  --             vim.fn.feedkeys(cmp_keymap.t('<c-r>=UltiSnips#ExpandSnippet()<cr>'))
+  --           elseif vim.fn.pumvisible() == 1 and vim.fn.complete_info()["selected"] > -1 then
+  --             cmp.confirm({behavior = cmp.ConfirmBehavior.Replace, select = true})
+  --           else
+  --             fallback()
+  --           end
+  --         end, {'i', 's'}),
+  --       },
+  --       sources = {
+  --         {name = 'nvim_lsp'},
+  --         {name = 'nvim_lua'},
+  --         {name = 'ultisnips'},
+  --         {name = 'path'},
+  --         {name = 'buffer'},
+  --       },
+  --     })
+  --   end,
+  -- })
+  -- use({'quangnguyen30192/cmp-nvim-ultisnips', requires = 'hrsh7th/nvim-cmp'})
+  -- use({'hrsh7th/cmp-nvim-lsp', requires = 'hrsh7th/nvim-cmp'})
+  -- use({'hrsh7th/cmp-nvim-lua', requires = 'hrsh7th/nvim-cmp'})
+  -- use({'hrsh7th/cmp-path', requires = 'hrsh7th/nvim-cmp'})
+  -- use({'hrsh7th/cmp-buffer', requires = 'hrsh7th/nvim-cmp'})
 
 
-highlight BufferCurrent guifg=#c678dd guibg=NONE gui=NONE
-highlight BufferCurrentMod guifg=#c678dd guibg=NONE gui=bold,italic
-highlight BufferCurrentSign guifg=#c678dd guibg=NONE gui=NONE
-highlight BufferVisible guifg=#5b6268 guibg=NONE gui=NONE
-highlight BufferVisibleMod guifg=#5b6268 guibg=NONE gui=bold,italic
-highlight BufferVisibleSign guifg=#5b6268 guibg=NONE gui=NONE
-highlight BufferInactive guifg=#5b6268 guibg=NONE gui=NONE
-highlight BufferInactiveMod guifg=#5b6268 guibg=NONE gui=bold,italic
-highlight BufferInactiveSign guifg=#5b6268 guibg=NONE gui=NONE
-highlight BufferTabpage guifg=NONE guibg=#282c34 gui=NONE
-highlight BufferTabpageFill guifg=NONE guibg=#282c34 gui=NONE
-]]
+-- end)
 
--- Emails
-
-vim.cmd [[
-highlight! link mailSubject mailHeaderKey
-highlight! link mailEmail mailURL
-
-highlight mailURL guifg=#51afef guibg=NONE gui=NONE
-]]
-
--- TODO: sort
--- highlight SpecialChar 	      	      	  guifg=#da8548 guibg=NONE    gui=NONE
--- highlight LspDiagnosticsFloatingError	  guifg=NONE	guibg=NONE    gui=NONE
--- highlight LspDiagnosticsFloatingHint	  guifg=NONE	guibg=NONE    gui=NONE
--- highlight LspDiagnosticsFloatingWarning	  guifg=NONE	guibg=NONE    gui=NONE
--- highlight LspDiagnosticsUnderlineHint	  guifg=#3b4252 guibg=#b48ead gui=NONE
--- highlight LspDiagnosticsUnderlineInfo	  guifg=#3b4252	guibg=#b48ead gui=NONE
--- highlight LspDiagnosticsUnderlineWarning  guifg=#3b4252 guibg=#ebcb8b gui=NONE
--- highlight LspReferenceRead	          guifg=NONE	guibg=#434c5e gui=NONE
--- highlight LspReferenceText                guifg=NONE    guibg=#434c5e gui=NONE
--- highlight LspReferenceWrite	          guifg=NONE    guibg=#434c5e gui=NONE
--- highlight Todo		      	      	  guifg=#ebcb8b guibg=NONE    gui=NONE
--- highlight Warning			  guifg=#3b4252 guibg=#ebcb8b gui=NONE
--- highlight WarningMsg			  guifg=#ebcb8b guibg=NONE    gui=bold
-
--- Mappings
-
-local map_opts = {noremap = true, silent = true}
-vim.api.nvim_set_keymap('n', '<a-m>', ":Himalaya<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-t>', ":Unfog<cr>", map_opts)
-vim.api.nvim_set_keymap('n', '<a-e>', ":Explore<cr>", map_opts)

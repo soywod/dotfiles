@@ -103,3 +103,9 @@
 [submodule "neovim/plugins/barbar.nvim"]
 	path = neovim/plugins/barbar.nvim
 	url = https://github.com/romgrk/barbar.nvim.git
+[submodule "neovim/plugins/coq_nvim"]
+	path = neovim/plugins/coq_nvim
+	url = https://github.com/ms-jpq/coq_nvim.git
+[submodule "neovim/plugins/coq.artifacts"]
+	path = neovim/plugins/coq.artifacts
+	url = https://github.com/ms-jpq/coq.artifacts.git
