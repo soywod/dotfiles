@@ -12,9 +12,7 @@
     "backlight",
     "pulseaudio"
   ],
-  "modules-center": [
-    "clock"
-  ],
+  "modules-center": ["clock"],
   "modules-right": [
     "sway/mode",
     "custom/github",
@@ -36,34 +34,25 @@
     "format-full": "",
     "format-charging": " {capacity}%",
     "format-plugged": " {capacity}%",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
+    "format-icons": ["", "", "", "", ""]
   },
   "temperature": {
+    "interval": 1,
     "tooltip": false,
     "hwmon-path": "/sys/devices/virtual/hwmon/hwmon5/temp1_input",
     "thermal-zone": 0,
     "critical-threshold": 80,
     "format": "{icon} {temperatureC}°C",
     "format-critical": "{icon} {temperatureC}°C",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
+    "format-icons": ["", "", "", "", ""]
   },
   "cpu": {
+    "interval": 1,
     "tooltip": false,
     "format": " {usage}%"
   },
   "memory": {
+    "interval": 1,
     "format": "︁ {percentage}%",
     "tooltip-format": "{used:0.1f}GiB/{avail:0.1f}GiB"
   },
@@ -124,7 +113,8 @@
     "return-type": "json"
   },
   "network": {
-    "interface": "wlp2*",
+    "interval": 1,
+    "interface": "wlp*",
     "format-wifi": "︁ {signalStrength}%",
     "tooltip-format-wifi": "IP: {ipaddr}\nSSID: {essid}",
     "format-ethernet": "",
