@@ -1,4 +1,4 @@
-local use_plugin = require('plugin').setup().use
+local use_plugin = require('plugin-manager').setup().use
 
 use_plugin('jamessan/vim-gnupg')
 
@@ -98,6 +98,8 @@ use_plugin({
     })
 
     local on_attach = function(client, bufnr)
+      require('lsp-completion').setup()
+
       vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
       if client.resolved_capabilities.document_formatting then
@@ -118,23 +120,6 @@ use_plugin({
           augroup END
         ]], true)
       end
-
-
-      require('lsp-completion').setup()
-      -- _G.autocomplete = function()
-      --   local col = vim.api.nvim_win_get_cursor(0)[2]
-      --   local space_behind_cursor = (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
-      --   if not space_behind_cursor then
-      --     vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<c-x><c-o>", true, true, true))
-      --   end
-      -- end
-
-      -- vim.api.nvim_exec([[
-      --   augroup autocompletion
-      --     autocmd! * <buffer>
-      --     autocmd CursorHoldI <buffer> lua autocomplete()
-      --   augroup END
-      -- ]], true)
 
       vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K'    , '<cmd>lua hover()<cr>', {noremap = true, silent = true})
       vim.api.nvim_buf_set_keymap(bufnr, 'n', '<c-]>', '<cmd>lua definitions()<cr>', {noremap = true, silent = true})
@@ -333,6 +318,7 @@ vim.o.clipboard = 'unnamedplus'
 vim.o.completefunc = 'grepletion#completefunc'
 vim.o.completeopt = 'menuone,noselect'
 vim.o.expandtab = true
+vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.runtimepath = vim.o.runtimepath..',~/Code/himalaya/vim'
 vim.o.runtimepath = vim.o.runtimepath..',~/Code/unfog.vim'

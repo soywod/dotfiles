@@ -3,7 +3,7 @@ local handlers = {}
 
 M.setup = function()
   vim.cmd([[
-    command! PluginUpdateAll lua require('plugin').update_all()
+    command! PluginUpdateAll lua require('plugin-manager').update_all()
   ]])
   return M
 end
