@@ -252,9 +252,9 @@ neovim-pkgs:
 		neovim \
 
 neovim-cfg:
+	mkdir -vp "${HOME}/.config/nvim"
 	mkdir -vp "${HOME}/.local/share/nvim/site/pack/plugins/start"
-	ln -vsfn "${PWD}/neovim/config" "${HOME}/.config/nvim"
-	ln -vsfn "${PWD}/neovim/plugins" "${HOME}/.local/share/nvim/site/pack/plugins/opt"
+	ln -vsfn "${PWD}/neovim/init.vim" "${HOME}/.config/nvim/init.vim"
 	ln -vsfn "${PWD}/neovim/snippets" "${HOME}/.config/nvim/UltiSnips"
 	sudo ln -vsf "${PWD}/neovim/editor.sh" "/etc/profile.d/"
 
@@ -407,4 +407,4 @@ install: \
 
 # }}}
 
-# vim:foldmethod=marker
+# vim:foldmethod=marker:foldlevel=0
