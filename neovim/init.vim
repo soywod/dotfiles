@@ -56,6 +56,81 @@ EOF
 
   " {{{ CoC
   call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
+
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1] =~# '\s'
+  endfunction
+
+  function! s:show_documentation()
+    if (index(['vim', 'help'], &filetype) >= 0)
+      execute 'h ' . expand('<cword>')
+    elseif (coc#rpc#ready())
+      call CocActionAsync('doHover')
+    else
+      execute '!' . &keywordprg . ' ' . expand('<cword>')
+    endif
+  endfunction
+
+  function! s:definition()
+    if (index(['vim', 'help'], &filetype) >= 0)
+      execute printf('tag %s', expand('<cword>'))
+    elseif (coc#rpc#ready())
+      call CocActionAsync('jumpDefinition')
+    endif
+  endfunction
+
+  inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
+  inoremap <silent> <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  inoremap <silent> <expr> <C-Space> coc#refresh()
+
+  nnoremap <silent> <a-p> <Plug>(coc-diagnostic-prev)
+  nnoremap <silent> <a-n> <Plug>(coc-diagnostic-next)
+  nnoremap <silent> <a-r> <Plug>(coc-references)
+  nnoremap <silent> <a-R> <Plug>(coc-rename)
+  nnoremap <silent> <a-c> <Plug>(coc-codeaction)
+
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
+  nnoremap <silent> <c-]>   <SID>definition()<CR>
+
+  highlight CocErrorSign                   guifg=#ff6c6b guibg=NONE    gui=NONE
+  highlight CocHintSign                    guifg=#46d9ff guibg=NONE    gui=NONE
+  highlight CocInfoSign                    guifg=#bbc2cf guibg=NONE    gui=NONE
+  highlight CocWarningSign                 guifg=#da8548 guibg=NONE    gui=NONE
+  highlight DiagnosticDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE
+  highlight DiagnosticDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE
+  highlight DiagnosticDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE
+  highlight DiagnosticDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE
+  highlight DiagnosticError                guifg=#ff6c6b guibg=NONE    gui=NONE
+  highlight DiagnosticHint                 guifg=#46d9ff guibg=NONE    gui=NONE
+  highlight DiagnosticInformation          guifg=#bbc2cf guibg=NONE    gui=NONE
+  highlight DiagnosticUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE
+  highlight DiagnosticUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE
+  highlight DiagnosticUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
+  highlight DiagnosticUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
+  highlight DiagnosticWarning              guifg=#da8548 guibg=NONE    gui=NONE
+  " }}}
+
+  " {{{ FZF
+  call minpac#add('junegunn/fzf')
+  call minpac#add('junegunn/fzf.vim')
+  call minpac#add('antoinemadec/coc-fzf')
+
+  let g:fzf_preview_window = {}
+  let g:fzf_layout = {'down': '~40%'}
+
+  nnoremap <silent> <a-w> :CocFzfList outline<CR>
+  nnoremap <silent> <a-W> :CocFzfList symbols<CR>
+  nnoremap <silent> <a-g> :Rg 
+  nnoremap <silent> <a-f> :Files<CR>
+  nnoremap <silent> <a-h> :History<CR>
+  nnoremap <silent> <a-b> :Buffers<CR>
+  nnoremap <silent> <a-l> :Lines<CR>
+
+  highlight fzf1 guifg=#c678dd guibg=#21242b gui=NONE
+  highlight fzf2 guifg=#bbc2cf guibg=#21242b gui=NONE
+  highlight fzf3 guifg=#bbc2cf guibg=#21242b gui=NONE
   " }}}
 endfunction
 
@@ -105,63 +180,15 @@ set undofile
 set updatetime=150
 " }}}
 
-" {{{ Mapping
-let mapleader = " "
-
+" {{{ Mappings
 nnoremap <silent> <a-e> :Explore<CR>
 nnoremap <silent> <a-m> :Himalaya<CR>
 nnoremap <silent> <a-t> :Unfgo<CR>
-
-inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<Tab>" : coc#refresh()
-inoremap <silent> <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-inoremap <silent> <expr> <C-Space> coc#refresh()
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-nmap <silent> <a-p> <Plug>(coc-diagnostic-prev)
-nmap <silent> <a-n> <Plug>(coc-diagnostic-next)
-
-nmap <silent> <Leader>d  <Plug>(coc-definition)
-nmap <silent> <Leader>td <Plug>(coc-type-definition)
-nmap <silent> <Leader>i  <Plug>(coc-implementation)
-nmap <silent> <Leader>r  <Plug>(coc-references)
-nmap <silent> <Leader>c  <Plug>(coc-codeaction)
-nmap <silent> <Leader>f  :call CocActionAsync('format')<CR>
-nmap <silent> <Leader>sd :CocList outline<CR>
-nmap <silent> <Leader>sw :CocList symbols<CR>
-nmap <silent> <Leader>R <Plug>(coc-rename)
-
-nnoremap <silent> <a-f> :CocList files<CR>
-nnoremap <silent> <a-b> :CocList buffers<CR>
-nnoremap <silent> <a-o> :CocList mru<CR>
-nnoremap <silent> <a-g> :CocList grep<CR>
-
-nnoremap <silent> <nowait> <Leader>p  :<C-u>CocPrev<CR>
-nnoremap <silent> <nowait> <Leader>n  :<C-u>CocNext<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
 " }}}
 
 " {{{ Theme
 highlight Boolean                        guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight Character                      guifg=#98be65 guibg=NONE    gui=NONE
-highlight CocErrorSign                   guifg=#ff6c6b guibg=NONE    gui=NONE
-highlight CocHintSign                    guifg=#46d9ff guibg=NONE    gui=NONE
-highlight CocInfoSign                    guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight CocWarningSign                 guifg=#da8548 guibg=NONE    gui=NONE
 highlight Comment                        guifg=#5b6268 guibg=NONE    gui=NONE
 highlight Conditional                    guifg=#51afef guibg=NONE    gui=NONE
 highlight Constant                       guifg=#a9a1e1 guibg=NONE    gui=NONE
@@ -169,18 +196,6 @@ highlight CursorLine                     guifg=NONE    guibg=#21242b gui=NONE
 highlight CursorLineNr                   guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight Define                         guifg=#51afef guibg=NONE    gui=NONE
 highlight Delimiter                      guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight DiagnosticDefaultError         guifg=#ff6c6b guibg=NONE    gui=NONE
-highlight DiagnosticDefaultHint          guifg=#46d9ff guibg=NONE    gui=NONE
-highlight DiagnosticDefaultInformation   guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight DiagnosticDefaultWarning       guifg=#da8548 guibg=NONE    gui=NONE
-highlight DiagnosticError                guifg=#ff6c6b guibg=NONE    gui=NONE
-highlight DiagnosticHint                 guifg=#46d9ff guibg=NONE    gui=NONE
-highlight DiagnosticInformation          guifg=#bbc2cf guibg=NONE    gui=NONE
-highlight DiagnosticUnderlineError       guifg=#282c34 guibg=#ff6c6b gui=NONE
-highlight DiagnosticUnderlineHint        guifg=#282c34 guibg=#46d9ff gui=NONE
-highlight DiagnosticUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
-highlight DiagnosticUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
-highlight DiagnosticWarning              guifg=#da8548 guibg=NONE    gui=NONE
 highlight Directory                      guifg=#51afef guibg=NONE    gui=bold
 highlight Error                          guifg=#ff6c6b guibg=NONE    gui=bold
 highlight ErrorMsg                       guifg=#ff6c6b guibg=NONE    gui=bold
