@@ -14,19 +14,20 @@ audio:
 
 bash-pkgs:
 	sudo pacman -S --needed --noconfirm \
+		bash \
 		bash-completion \
 
 bash-pkgs-aur: yay
 	yay -S --needed --noconfirm \
 		bash-git-prompt \
 
-bash-cfg:
+bash-conf:
 	ln -vsf "${PWD}/bash/aliases.sh" "${HOME}/.bash_aliases"
 	ln -vsf "${PWD}/bash/completion.sh" "${HOME}/.bash_completion"
 	ln -vsf "${PWD}/bash/config.sh" "${HOME}/.bashrc"
 	ln -vsf "${PWD}/bash/profile.sh" "${HOME}/.profile"
 
-bash: bash-pkgs bash-pkgs-aur bash-cfg
+bash: bash-pkgs bash-pkgs-aur bash-conf
 
 # }}}
 
@@ -37,10 +38,10 @@ bluez-pkgs:
 		bluez \
 		bluez-utils \
 
-bluez-cfg:
+bluez-conf:
 	sudo ln -vsf "${PWD}/bluez/toggle.sh" /usr/local/bin/dotfiles--bluetooth-toggle
 
-bluez: bluez-pkgs bluez-cfg
+bluez: bluez-pkgs bluez-conf
 
 # }}}
 
@@ -61,12 +62,12 @@ capture-pkgs:
 		wf-recorder \
 		wl-clipboard \
 
-capture-cfg:
+capture-conf:
 	sudo ln -sf "${PWD}/capture/screen-capture.sh" /usr/local/bin/dotfiles--screen-capture
 	sudo ln -sf "${PWD}/capture/selection-capture.sh" /usr/local/bin/dotfiles--selection-capture
 	sudo ln -sf "${PWD}/capture/selection-record.sh" /usr/local/bin/dotfiles--selection-record
 
-capture: capture-pkgs capture-cfg
+capture: capture-pkgs capture-conf
 
 # }}}
 
@@ -76,12 +77,12 @@ cronie-pkgs:
 	sudo pacman -S --needed --noconfirm \
 		cronie \
 
-cronie-cfg:
+cronie-conf:
 	sudo cp -vf "${PWD}/cronie/config.crontab" "/var/spool/cron/${USER}"
 	sudo chown "${USER}:${USER}" "/var/spool/cron/${USER}"
 	sudo systemctl restart cronie.service
 
-cronie: cronie-pkgs cronie-cfg
+cronie: cronie-pkgs cronie-conf
 
 # }}}
 
@@ -119,7 +120,7 @@ dunst-pkgs:
 		libnotify \
 		dunst \
 
-dunst-cfg:
+dunst-conf:
 	mkdir -vp "${HOME}/.config/dunst"
 	ln -vsf "${PWD}/dunst/config.cfg" "${HOME}/.config/dunst/dunstrc"
 	sudo ln -vsf "${PWD}/dunst/notification.sh" /usr/local/bin/dotfiles--notification-play-sound
@@ -131,7 +132,7 @@ dunst-srv:
 	systemctl --user enable dunst.service
 	systemctl --user start dunst.service
 
-dunst: dunst-pkgs dunst-cfg dunst-srv
+dunst: dunst-pkgs dunst-conf dunst-srv
 
 # }}}
 
@@ -153,7 +154,7 @@ gammastep-pkgs:
 	sudo pacman -S --needed --noconfirm \
 		gammastep \
 
-gammastep-cfg:
+gammastep-conf:
 	mkdir -vp "${HOME}/.config/gammastep"
 	ln -vsf "${PWD}/gammastep/config.ini" "${HOME}/.config/gammastep/config.ini"
 
@@ -164,7 +165,7 @@ gammastep-srv:
 	systemctl --user enable gammastep.service
 	systemctl --user start gammastep.service
 
-gammastep: gammastep-pkgs gammastep-cfg gammastep-srv
+gammastep: gammastep-pkgs gammastep-conf gammastep-srv
 
 # }}}
 
@@ -174,12 +175,12 @@ gnupg-pkgs:
 	sudo pacman -S --needed --noconfirm \
 		gnupg \
 
-gnupg-cfg:
+gnupg-conf:
 	mkdir -vp "${HOME}/.gnupg"
 	ln -vsf "${PWD}/gnupg/config.cfg" "${HOME}/.gnupg/gpg-agent.conf"
 	sudo ln -vsf "${PWD}/gnupg/password-to-clipboard.sh" /usr/local/bin/dotfiles--password-to-clipboard
 
-gnupg: gnupg-pkgs gnupg-cfg
+gnupg: gnupg-pkgs gnupg-conf
 
 # }}}
 
@@ -216,7 +217,7 @@ kanshi-pkgs:
 	sudo pacman -S --needed --noconfirm \
 		kanshi \
 
-kanshi-cfg:
+kanshi-conf:
 	mkdir -vp "${HOME}/.config/kanshi"
 	ln -vsf "${PWD}/kanshi/config.cfg" "${HOME}/.config/kanshi/config"
 
@@ -227,7 +228,7 @@ kanshi-srv:
 	systemctl --user enable kanshi.service
 	systemctl --user start kanshi.service
 
-kanshi: kanshi-pkgs kanshi-cfg kanshi-srv
+kanshi: kanshi-pkgs kanshi-conf kanshi-srv
 
 # }}}
 
@@ -237,11 +238,11 @@ kitty-pkgs:
 	sudo pacman -S --needed --noconfirm \
 		kitty \
 
-kitty-cfg:
+kitty-conf:
 	mkdir -vp "${HOME}/.config/kitty"
 	ln -vsf "${PWD}/kitty/config.cfg" "${HOME}/.config/kitty/kitty.conf"
 
-kitty: kitty-pkgs kitty-cfg
+kitty: kitty-pkgs kitty-conf
 
 # }}}
 
@@ -251,14 +252,14 @@ neovim-pkgs:
 	sudo pacman -S --needed --noconfirm \
 		neovim \
 
-neovim-cfg:
+neovim-conf:
 	mkdir -vp "${HOME}/.config/nvim"
 	mkdir -vp "${HOME}/.local/share/nvim/site/pack/plugins/start"
 	ln -vsfn "${PWD}/neovim/init.vim" "${HOME}/.config/nvim/init.vim"
 	ln -vsfn "${PWD}/neovim/snippets" "${HOME}/.config/nvim/UltiSnips"
 	sudo ln -vsf "${PWD}/neovim/editor.sh" "/etc/profile.d/"
 
-neovim: neovim-pkgs neovim-cfg
+neovim: neovim-pkgs neovim-conf
 
 # }}}
 
@@ -301,7 +302,7 @@ sway-pkgs:
 		xorg-xwayland \
 		sway \
 
-sway-cfg:
+sway-conf:
 	mkdir -vp "${HOME}/.config/sway"
 	ln -vsf "${PWD}/sway/config.cfg" "${HOME}/.config/sway/config"
 
@@ -311,7 +312,7 @@ sway-srv:
 	cp -v "${PWD}/sway/service.ini" "${HOME}/.config/systemd/user/sway.service"
 	systemctl --user daemon-reload
 
-sway: rofi sway-pkgs sway-cfg sway-srv
+sway: rofi sway-pkgs sway-conf sway-srv
 
 # }}}
 
@@ -335,12 +336,12 @@ waybar-pkgs:
 		waybar \
 		fmt \
 
-waybar-cfg:
+waybar-conf:
 	mkdir -vp "${HOME}/.config/waybar"
 	ln -vsf "${PWD}/waybar/config.json" "${HOME}/.config/waybar/config"
 	ln -vsf "${PWD}/waybar/style.css" "${HOME}/.config/waybar/style.css"
 
-waybar: waybar-pkgs waybar-cfg
+waybar: waybar-pkgs waybar-conf
 
 # }}}
 
