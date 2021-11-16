@@ -26,10 +26,12 @@ function! s:load_plugins(...) abort
       'bash',
       'css',
       'graphql',
+      'haskell',
       'html',
       'javascript',
       'json',
       'lua',
+      'nix',
       'php',
       'rust',
       'toml',
@@ -73,9 +75,10 @@ EOF
   endfunction
 
   function! s:definition()
+    echom 'coucou'
     if (index(['vim', 'help'], &filetype) >= 0)
       execute printf('tag %s', expand('<cword>'))
-    elseif (coc#rpc#ready())
+    elseif coc#rpc#ready() == 1
       call CocActionAsync('jumpDefinition')
     endif
   endfunction
@@ -85,14 +88,14 @@ EOF
   inoremap <silent> <expr> <CR> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
   inoremap <silent> <expr> <C-Space> coc#refresh()
 
-  nnoremap <silent> <a-p> <Plug>(coc-diagnostic-prev)
-  nnoremap <silent> <a-n> <Plug>(coc-diagnostic-next)
-  nnoremap <silent> <a-r> <Plug>(coc-references)
-  nnoremap <silent> <a-R> <Plug>(coc-rename)
-  nnoremap <silent> <a-c> <Plug>(coc-codeaction)
+  nmap <silent> <a-p> <Plug>(coc-diagnostic-prev)
+  nmap <silent> <a-n> <Plug>(coc-diagnostic-next)
+  nmap <silent> <a-r> <Plug>(coc-references)
+  nmap <silent> <a-R> <Plug>(coc-rename)
+  nmap <silent> <a-c> <Plug>(coc-codeaction)
 
-  nnoremap <silent> K :call <SID>show_documentation()<CR>
-  nnoremap <silent> <c-]>   <SID>definition()<CR>
+  nnoremap <silent> K     :call <SID>show_documentation()<CR>
+  nnoremap <silent> <C-]> :call <SID>definition()<CR>
 
   highlight CocErrorSign                   guifg=#ff6c6b guibg=NONE    gui=NONE
   highlight CocHintSign                    guifg=#46d9ff guibg=NONE    gui=NONE
@@ -110,6 +113,8 @@ EOF
   highlight DiagnosticUnderlineInformation guifg=#3f444a guibg=#bbc2cf gui=NONE
   highlight DiagnosticUnderlineWarning     guifg=#282c34 guibg=#da8548 gui=NONE
   highlight DiagnosticWarning              guifg=#da8548 guibg=NONE    gui=NONE
+  highlight CocRustTypeHint                guifg=#5b6268 guibg=NONE    gui=NONE
+  highlight CocRustChainingHint            guifg=#5b6268 guibg=NONE    gui=italic
   " }}}
 
   " {{{ FZF
@@ -122,7 +127,7 @@ EOF
 
   nnoremap <silent> <a-w> :CocFzfList outline<CR>
   nnoremap <silent> <a-W> :CocFzfList symbols<CR>
-  nnoremap <silent> <a-g> :Rg 
+  nnoremap <silent> <a-g> :Rg <CR>
   nnoremap <silent> <a-f> :Files<CR>
   nnoremap <silent> <a-h> :History<CR>
   nnoremap <silent> <a-b> :Buffers<CR>
@@ -151,6 +156,7 @@ set clipboard=unnamedplus
 set completeopt=menuone,noselect
 set expandtab
 set expandtab
+set fillchars+=diff:⁄
 set foldexpr=nvim_treesitter#foldexpr()
 set foldlevel=99
 set foldlevelstart=99
@@ -172,7 +178,7 @@ set signcolumn=yes
 set smartcase
 set splitbelow
 set splitright
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline=%m%r\ %{coc#status()}\ %{get(b:,'coc_current_function','')}%=%y\ %-10.(%l,%v%)\ %P%{FugitiveStatusline()}
 set tabstop=2
 set tabstop=2
 set termguicolors
@@ -196,6 +202,10 @@ highlight CursorLine                     guifg=NONE    guibg=#21242b gui=NONE
 highlight CursorLineNr                   guifg=#bbc2cf guibg=NONE    gui=NONE
 highlight Define                         guifg=#51afef guibg=NONE    gui=NONE
 highlight Delimiter                      guifg=#bbc2cf guibg=NONE    gui=NONE
+highlight DiffAdd                        guifg=NONE    guibg=#343c39 gui=NONE
+highlight DiffChange                     guifg=NONE    guibg=#343c39 gui=NONE
+highlight DiffDelete                     guifg=NONE    guibg=#40333a gui=NONE
+highlight DiffText                       guifg=NONE    guibg=#414c3f gui=NONE
 highlight Directory                      guifg=#51afef guibg=NONE    gui=bold
 highlight Error                          guifg=#ff6c6b guibg=NONE    gui=bold
 highlight ErrorMsg                       guifg=#ff6c6b guibg=NONE    gui=bold
