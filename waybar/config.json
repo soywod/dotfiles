@@ -19,7 +19,6 @@
     "custom/pacman",
     "custom/dask",
     "custom/himalaya",
-    "custom/binance",
     "custom/weather",
     "tray"
   ],
@@ -91,12 +90,6 @@
   "tray": {
     "icon-size": 25,
     "spacing": 10
-  },
-  "custom/binance": {
-    "exec": "sh -c '~/Code/binance/wallet.sh'",
-    "tooltip": true,
-    "interval": 60,
-    "format": ""
   },
   "sway/mode": {
     "format": "{}"
