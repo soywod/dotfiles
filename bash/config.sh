@@ -2,8 +2,17 @@ shopt -s autocd
 shopt -s checkjobs
 shopt -s checkwinsize
 shopt -s cdspell
+shopt -s histappend
 
 stty -ixon
+
+prompt_color() {
+  if [ -n "$IN_NIX_SHELL" ]; then
+    echo "33"
+  else
+    echo "31"
+  fi
+}
 
 export JAVA_HOME=/usr/lib/jvm/default
 export JAVA_SDK=$JAVA_HOME
@@ -12,7 +21,6 @@ export PATH=$PATH:$JAVA_HOME/bin
 export ANDROID_HOME=/opt/android-sdk/
 export ANDROID_SDK_ROOT=/opt/android-sdk/
 
-export PATH=$PATH:$HOME/.emacs.d/bin
 export PATH=$PATH:$HOME/.gem/ruby/2.6.0/bin
 export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:$HOME/.npm-global/bin
@@ -25,16 +33,13 @@ export PATH=$PATH:/opt/android-studio/gradle/gradle-4.4/bin
 export PATH=$PATH:/opt/flutter/bin
 export PATH=$PATH:/opt/platform-tools
 
-prompt_color() {
-  if [ -n "$IN_NIX_SHELL" ]; then
-    echo "33"
-  else
-    echo "31"
-  fi
-}
-
-export GIT_PROMPT_START="\[\e[36m\]\w\[\e[m\]"
-export GIT_PROMPT_END=" \[\e[`prompt_color`m\]➜\[\e[m\] "
+export GIT_PROMPT_FETCH_REMOTE_STATUS=0
+export GIT_PROMPT_IGNORE_SUBMODULES=1
+export GIT_PROMPT_WITH_VIRTUAL_ENV=0
+export GIT_PROMPT_SHOW_UNTRACKED_FILES="no"
+export GIT_PROMPT_START="_LAST_COMMAND_INDICATOR_ \[\e[36m\]\W\[\e[m\]"
+export GIT_PROMPT_END=" \[\e[$(prompt_color)m\]➜\[\e[m\] "
+export GIT_PROMPT_COMMAND_OK=""
 
 export HISTCONTROL=ignoreboth:erasedups
 export HISTFILE=~/.bash_eternal_history
@@ -48,16 +53,27 @@ export FZF_DEFAULT_OPTS='--color fg:#5b6268,bg:#282c34,hl:reverse:#ecbe7b,fg+:re
 export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/Documents/service-account-file.json"
 export GPG_TTY=`tty`
 
-if [ -f /usr/lib/bash-git-prompt/gitprompt.sh ]; then
-  source /usr/lib/bash-git-prompt/gitprompt.sh
+export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
+
+if [ -f "/usr/share/bash-completion/bash_completion" ]
+then
+	source "/usr/share/bash-completion/bash_completion"
 fi
 
-if [ -f /usr/share/bash-completion/bash_completion ]; then
-	source /usr/share/bash-completion/bash_completion
+if [ -f "/usr/lib/bash-git-prompt/gitprompt.sh" ]
+then
+  source "/usr/lib/bash-git-prompt/gitprompt.sh"
 fi
 
-if [ -f "${HOME}/.bash_aliases" ]; then
+if [ -f "${HOME}/.bash_aliases" ]
+then
 	source "${HOME}/.bash_aliases"
+fi
+
+# Nix
+if [ -f "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]
+then
+	source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 fi
 
 eval "$(stack --bash-completion-script stack)"
@@ -65,13 +81,6 @@ eval "$(stack --bash-completion-script stack)"
 [ -f "${HOME}/.fzf.bash" ] && source "${HOME}/.fzf.bash"
 
 export PATH="${HOME}/.cargo/bin:$PATH"
-
-# opam configuration
-# test -r ~/.opam/opam-init/init.sh && . ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
-
-# >>> coursier install directory >>>
-# export PATH="${PATH}:${HOME}/.local/share/coursier/bin"
-# <<< coursier install directory <<<
 
 # PAM GnuPG
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)

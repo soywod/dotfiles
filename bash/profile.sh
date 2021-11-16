@@ -7,3 +7,5 @@ then
   systemctl --user import-environment
   exec systemctl --wait --user start sway.service
 fi
+
+if [ -e /home/soywod/.nix-profile/etc/profile.d/nix.sh ]; then . /home/soywod/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
