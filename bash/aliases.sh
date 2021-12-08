@@ -25,7 +25,7 @@ alias grm='git pull origin master --rebase'
 
 alias vi='nvim'
 alias vim='nvim'
-alias vimc='nvim ~/.dotfiles/neovim/config/init.lua'
+alias vimc='nvim ~/.dotfiles/neovim/init.vim'
 alias vimd='nvim ~/.config/lexy/definitions.yml'
 alias k='nvim +K'
 
@@ -44,3 +44,7 @@ alias jedit="vim ~/Dropbox/ledger/journal.ledger"
 
 alias h="himalaya"
 alias o="xdg-open"
+
+alias t='nvim ~/Dropbox/todo.tbc'
+alias tcal="rg -N '(^.*?) :(\d{2}/\d{2}/\d{4}|\d{2}h\d{2})(.*$)' ~/Dropbox/todo.tbc -r '[\$2] \$1\$3' --colors 'match:none'"
+alias l='ledger --strict --empty --input-date-format="%d/%m/%y" --effective --file ~/Dropbox/ledger/auto-entrepreneur.ldg'

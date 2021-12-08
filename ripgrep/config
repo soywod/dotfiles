@@ -1,0 +1,8 @@
+--colors
+match:none
+
+--colors
+match:bg:yellow
+
+--colors
+match:fg:0x28,0x2c,0x34

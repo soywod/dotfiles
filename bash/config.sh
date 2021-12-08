@@ -14,6 +14,8 @@ prompt_color() {
   fi
 }
 
+export RIPGREP_CONFIG_PATH="${HOME}/.config/ripgrep/config"
+
 export JAVA_HOME=/usr/lib/jvm/default
 export JAVA_SDK=$JAVA_HOME
 export JAVA_SDK=$JAVA_HOME/jre

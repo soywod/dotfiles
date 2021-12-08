@@ -10,6 +10,8 @@ function! s:load_plugins(...) abort
   command! PackStatus call minpac#status()
   " }}}
 
+  call minpac#add('jamessan/vim-gnupg')
+
   " {{{ Tpope suite
   call minpac#add('tpope/vim-surround')
   call minpac#add('tpope/vim-abolish')
@@ -30,6 +32,7 @@ function! s:load_plugins(...) abort
       'html',
       'javascript',
       'json',
+      'ledger',
       'lua',
       'nix',
       'php',
@@ -147,6 +150,10 @@ else
   call s:load_plugins()
 endif
 
+augroup tabasco
+  autocmd BufNewFile,BufRead *.tbc setfiletype tabasco
+augroup end
+
 " {{{ Options
 syntax on
 set background=dark
@@ -154,7 +161,6 @@ set breakindent
 set breakindentopt=sbr
 set clipboard=unnamedplus
 set completeopt=menuone,noselect
-set expandtab
 set expandtab
 set fillchars+=diff:⁄
 set foldexpr=nvim_treesitter#foldexpr()
@@ -170,7 +176,7 @@ set pumheight=12
 set relativenumber
 set runtimepath+=,~/Code/himalaya/vim
 set runtimepath+=,~/Code/unfog.vim
-set shiftwidth=2
+set runtimepath+=,~/Code/tabasco/vim
 set shiftwidth=2
 set shortmess=ctT
 set showbreak=~
@@ -179,7 +185,6 @@ set smartcase
 set splitbelow
 set splitright
 set statusline=%m%r\ %{coc#status()}\ %{get(b:,'coc_current_function','')}%=%y\ %-10.(%l,%v%)\ %P%{FugitiveStatusline()}
-set tabstop=2
 set tabstop=2
 set termguicolors
 set undofile
@@ -250,6 +255,14 @@ highlight Typedef                        guifg=#ecbe7b guibg=NONE    gui=NONE
 highlight VertSplit                      guifg=#3f444a guibg=NONE    gui=NONE
 highlight Visual                         guifg=NONE    guibg=#3f444a gui=NONE
 highlight mailURL                        guifg=#51afef guibg=NONE    gui=NONE
+
+highlight TabascoCategory guifg=#c678dd guibg=NONE gui=NONE
+highlight TabascoContext  guifg=#ff6c6b guibg=NONE gui=italic,bold
+highlight TabascoProject  guifg=#51afef guibg=NONE gui=italic
+highlight TabascoDuration guifg=#ecbe7b guibg=NONE gui=italic
+highlight TabascoDate     guifg=#ecbe7b guibg=NONE gui=italic
+highlight TabascoPending  guifg=#4db5bd guibg=NONE gui=italic
+
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0
