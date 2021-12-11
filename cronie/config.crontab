@@ -1,3 +1,0 @@
-*/5 * * * * /usr/local/bin/mailsync
-
-# vim:ft=crontab

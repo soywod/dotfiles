@@ -1,2 +1,0 @@
-waybar
-fmt
