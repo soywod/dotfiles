@@ -16,6 +16,7 @@ in
     
   imports = [
     ./hardware-configuration.nix
+    ./programs/ergodox/udev-rules.nix
     home-manager
   ];
   

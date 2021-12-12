@@ -9,6 +9,7 @@ in {
   imports = [
     (import ./programs/bash { inherit pkgs; })
     (import ./programs/dunst { inherit pkgs config; })
+    (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit pkgs; })
   ];
@@ -21,10 +22,10 @@ in {
       ripgrep
       mpv
       xdg-utils
-      qmk
       gimp
       inkscape
       tdesktop
+      wally-cli
     ];
     sessionPath = [
       "$HOME/.local/bin"
@@ -282,12 +283,12 @@ in {
         "type:keyboard" = {
           xkb_layout = "us,ru";
           xkb_variant = "dvorak-alt-intl,";
-          xkb_options = "grp:shifts_toggle";
+          xkb_options = "grp:shifts_toggle,numpad:mac,compose:caps,level3:ralt_switch";
           repeat_delay = "250";
           repeat_rate = "33";
         };
         "type:touchpad" = {
-          tap = "enabled";
+          tap = "disabled";
           natural_scroll = "disabled";
         };
       };
