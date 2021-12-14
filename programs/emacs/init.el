@@ -53,38 +53,39 @@
   (load-theme 'doom-one t)
   (doom-themes-org-config))
 
-(use-package nix-mode
-  :mode "\\.nix\\'")
-
 (use-package lsp-mode
-  :commands (lsp lsp-deferred)
+  :hook ((web-mode . lsp-deferred)
+	 (nix-mode . lsp-deferred))
   :init
   (setq lsp-keymap-prefix "C-c l")
-  (setq lsp-diagnostics-provider :flycheck)
   (setq lsp-signature-auto-activate t))
-(with-eval-after-load 'lsp-mode
-  (setq lsp-modeline-diagnostics-scope :workspace))
 
-(use-package typescript-mode
-  :mode "\\.ts\\'"
-  :hook (typescript-mode . lsp-deferred)
-  :config
-  (setq typescript-indent-level 2))
+(use-package web-mode
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.s?css\\'" . web-mode)
+         ("\\.[jt]sx?\\'" . web-mode)))
+  
+(use-package nix-mode
+  :mode ("\\.nix\\'" . nix-mode))
 
 (use-package rust-mode
   :hook (rust-mode . lsp-deferred)
-  ;; :bind
-  ;; ("C-c g" . rust-run)
-  ;; ("C-c t" . rust-test)
-  ;; ("C-c b" . cargo-process-build)
-  :init
-  (which-function-mode 1)
   :config
   (setq rust-format-on-save t))
 
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
+(use-package prettier-js
+  :requires (add-node-modules-path)
+  :after (web-mode)
+  :hook ((web-mode . add-node-modules-path)
+	 (web-mode . prettier-js-mode)))
+
 (use-package smartparens
-  :bind ("C-c s s" . sp-splice-sexp)
-  :bind ("C-c s r" . sp-rewrap-sexp))
+  :bind (("C-c s s" . sp-splice-sexp)
+	 ("C-c s r" . sp-rewrap-sexp)))
 
 (use-package bbdb
   :init

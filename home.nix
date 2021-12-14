@@ -26,12 +26,20 @@ in {
       inkscape
       tdesktop
       wally-cli
+      rnix-lsp
+      yarn
+      nodejs
+      nodePackages.typescript-language-server
+      cargo
+      rustc
+      rustfmt
+      rust-analyzer
     ];
     sessionPath = [
       "$HOME/.local/bin"
     ];
     sessionVariables = {
-      EDITOR = "emacs";
+      EDITOR = "emacsclient";
       GIT_PROMPT_FETCH_REMOTE_STATUS = 0;
       GIT_PROMPT_IGNORE_SUBMODULES = 1;
       GIT_PROMPT_WITH_VIRTUAL_ENV = 0;
