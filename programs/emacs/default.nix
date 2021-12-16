@@ -19,6 +19,12 @@
         smartparens
         magit
         bbdb
+        projectile
+        ivy
+        counsel
+        counsel-projectile
+        lsp-ivy
+        which-key
         elpaPackages.org
       ]));
   };

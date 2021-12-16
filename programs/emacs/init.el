@@ -11,6 +11,7 @@
 (setq disabled-command-function nil)
 (setq inhibit-startup-screen t)
 (setq visible-bell t)
+(setq flycheck-check-syntax-automatically '(mode-enabled save))
 
 ;; Backup
 
@@ -58,7 +59,8 @@
 	 (nix-mode . lsp-deferred))
   :init
   (setq lsp-keymap-prefix "C-c l")
-  (setq lsp-signature-auto-activate t))
+  (setq lsp-signature-auto-activate t)
+  :config (lsp-enable-which-key-integration t))
 
 (use-package web-mode
   :mode (("\\.html?\\'" . web-mode)
@@ -73,9 +75,16 @@
   :config
   (setq rust-format-on-save t))
 
+(use-package company
+  :config (setq company-idle-delay 0.5)
+  :bind (:map company-active-map ("<tab>" . company-select-next))
+  :bind (:map company-active-map ("<backtab>" . company-select-previous)))
+
 (use-package yasnippet
+  :hook ((lsp-mode . yas-minor-mode)
+	 (yas-minor-mode . yas-reload-all))
   :config
-  (yas-global-mode 1))
+  (setq yas-snippet-dirs '("/etc/nixos/programs/emacs/snippets")))
 
 (use-package prettier-js
   :requires (add-node-modules-path)
@@ -122,3 +131,41 @@
 (use-package magit)
 
 (use-package ledger-mode)
+
+(use-package ivy
+  :diminish
+  :init (ivy-mode 1)
+  :bind ("C-s" . swiper)
+  :bind (:map ivy-minibuffer-map ("TAB" . ivy-next-line))
+  :bind (:map ivy-minibuffer-map ("S-TAB" . ivy-previous-line))
+  :bind (:map ivy-switch-buffer-map ("TAB" . ivy-next-line))
+  :bind (:map ivy-switch-buffer-map ("S-TAB" . ivy-previous-line))
+  :bind (:map ivy-reverse-i-search-map ("S-TAB" . ivy-previous-line))
+  :bind (:map ivy-reverse-i-search-map ("TAB" . ivy-next-line)))
+
+(use-package counsel
+  :init (counsel-mode)  
+  :config (setq ivy-initial-inputs-alist nil)
+  :bind ("M-x" . 'counsel-M-x)
+  :bind ("C-x b" . 'counsel-ibuffer)
+  :bind ("C-x C-f" . 'counsel-find-file)
+  :bind (:map minibuffer-local-map ("C-r" . 'counsel-minibuffer-history)))
+
+(use-package projectile
+  :diminish projectile-mode
+  :init (projectile-mode)
+  :config (setq projectile-project-search-path '("~/code/"))
+  :custom (projectile-completion-system 'ivy)
+  :bind-keymap ("C-c p" . projectile-command-map))
+
+(use-package counsel-projectile
+  :after counsel
+  :after projectile
+  :init (counsel-projectile-mode))
+
+(use-package lsp-ivy
+  :commands lsp-ivy-workspace-symbol)
+
+(use-package which-key
+  :init (which-key-mode)
+  :config (setq which-key-idle-delay 0.5))

@@ -17,7 +17,6 @@ in {
   home = {
     packages = with pkgs; [
       brightnessctl
-      firefox
       gammastep
       ripgrep
       mpv
@@ -47,9 +46,32 @@ in {
       GIT_PROMPT_START = "_LAST_COMMAND_INDICATOR_ \\[\\e[36m\\]\\W\\[\\e[m\\]";
       GIT_PROMPT_END = " \\[\\e[31m\\]➜\\[\\e[m\\] ";
       GIT_PROMPT_COMMAND_OK = "";
-    };    
+      PASSWORD_STORE_DIR = "$HOME/documents/password-store";
+      MOZ_ENABLE_WAYLAND = "1";
+      XDG_CURRENT_DESKTOP = "sway";
+      XDG_SESSION_TYPE = "wayland";
+    };
+    file = {
+      ".signature".text = ''
+        Cordialement
+        Clément DOUIN
+        Développeur Web Full-Stack
+        https://soywod.me
+      '';
+    };
   };
 
+  programs.firefox = {
+    enable = true;
+    package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+      forceWayland = true;
+      extraNativeMessagingHosts = [ pkgs.passff-host ];
+      extraPolicies = {
+        ExtensionSettings = {};
+      };
+    };
+  };
+  
   programs.home-manager = {
     enable = true;
   };
@@ -291,9 +313,9 @@ in {
         "type:keyboard" = {
           xkb_layout = "us,ru";
           xkb_variant = "dvorak-alt-intl,";
-          xkb_options = "grp:shifts_toggle,numpad:mac,compose:caps,level3:ralt_switch";
-          repeat_delay = "250";
-          repeat_rate = "33";
+          xkb_options = "grp:shifts_toggle,numpad:mac,compose:ralt";
+          repeat_delay = "256";
+          repeat_rate = "32";
         };
         "type:touchpad" = {
           tap = "disabled";
@@ -326,7 +348,7 @@ in {
 
         "XF86AudioMute"    = "exec pactl set-sink-mute   @DEFAULT_SINK@ toggle";
         "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SINK@ toggle";
-
+        
         "XF86AudioPrev" = "exec playerctl previous";
         "XF86AudioPlay" = "exec playerctl play-pause";
         "XF86AudioNext" = "exec playerctl next";
@@ -371,6 +393,13 @@ in {
 
   programs.gpg = {
     enable = true;
+  };
+
+  programs.password-store = {
+    enable = true;
+    settings = {
+      PASSWORD_STORE_DIR = "~/documents/password-store";
+    };
   };
   
   services.gpg-agent = {
