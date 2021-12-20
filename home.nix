@@ -17,7 +17,8 @@ in {
   home = {
     packages = with pkgs; [
       brightnessctl
-      gammastep
+      pulseaudio
+      p7zip
       ripgrep
       mpv
       xdg-utils
@@ -26,6 +27,7 @@ in {
       tdesktop
       wally-cli
       rnix-lsp
+      ledger
       yarn
       nodejs
       nodePackages.typescript-language-server
@@ -33,6 +35,9 @@ in {
       rustc
       rustfmt
       rust-analyzer
+      gcc
+      binutils
+      glibc.static
     ];
     sessionPath = [
       "$HOME/.local/bin"
@@ -414,6 +419,11 @@ in {
   services.dropbox = {
     enable = true;
     path = "${config.home.homeDirectory}/documents";
+  };
+
+  services.gammastep = {
+    enable = true;
+    provider = "geoclue2";
   };
 
   systemd.user.services.dropbox.Service.Environment = [

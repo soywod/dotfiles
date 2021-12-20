@@ -125,23 +125,20 @@
   (setq org-capture-templates
 	'(("i" "Inbox" entry (file "~/documents/org/inbox.org") "* TODO %i%?")
 	  ("a" "Agenda" entry (file "~/documents/org/agenda.org") "* TODO %i%? \n %U"))))
-  ;; (setq-default org-display-custom-times t)
-  ;; (setq org-time-stamp-custom-formats '("<%d/%m/%Y>" . "<%d/%m/%Y %H:%M>")))
 
 (use-package magit)
 
 (use-package ledger-mode)
 
 (use-package ivy
-  :diminish
-  :init (ivy-mode 1)
+  :init (ivy-mode)
   :bind ("C-s" . swiper)
-  :bind (:map ivy-minibuffer-map ("TAB" . ivy-next-line))
-  :bind (:map ivy-minibuffer-map ("S-TAB" . ivy-previous-line))
-  :bind (:map ivy-switch-buffer-map ("TAB" . ivy-next-line))
-  :bind (:map ivy-switch-buffer-map ("S-TAB" . ivy-previous-line))
-  :bind (:map ivy-reverse-i-search-map ("S-TAB" . ivy-previous-line))
-  :bind (:map ivy-reverse-i-search-map ("TAB" . ivy-next-line)))
+  :bind (:map ivy-minibuffer-map ("<tab>" . ivy-next-line))
+  :bind (:map ivy-switch-buffer-map ("<tab>" . ivy-next-line))
+  :bind (:map ivy-reverse-i-search-map ("<tab>" . ivy-next-line))
+  :bind (:map ivy-minibuffer-map ("<backtab>" . ivy-previous-line))
+  :bind (:map ivy-switch-buffer-map ("<backtab>" . ivy-previous-line))
+  :bind (:map ivy-reverse-i-search-map ("<backtab>" . ivy-previous-line)))
 
 (use-package counsel
   :init (counsel-mode)  
@@ -152,15 +149,13 @@
   :bind (:map minibuffer-local-map ("C-r" . 'counsel-minibuffer-history)))
 
 (use-package projectile
-  :diminish projectile-mode
   :init (projectile-mode)
-  :config (setq projectile-project-search-path '("~/code/"))
+  :config (setq projectile-project-search-path (cddr (directory-files "~/code" t)))
   :custom (projectile-completion-system 'ivy)
   :bind-keymap ("C-c p" . projectile-command-map))
 
 (use-package counsel-projectile
-  :after counsel
-  :after projectile
+  :after (counsel projectile)
   :init (counsel-projectile-mode))
 
 (use-package lsp-ivy

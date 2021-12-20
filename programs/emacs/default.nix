@@ -12,6 +12,7 @@
         web-mode
         nix-mode
         rust-mode
+        ledger-mode
         company
         yasnippet
         add-node-modules-path

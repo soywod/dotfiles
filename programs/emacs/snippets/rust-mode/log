@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: log
+# key: log
+# --
+println!("$1: {:?}", ${2:$1});$0

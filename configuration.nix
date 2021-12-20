@@ -61,8 +61,10 @@ in
     };
   };
   
-  hardware.opengl = {
-    enable = true;
+  hardware = {
+    opengl = {
+      enable = true;
+    };
   };
 
   services.getty.autologinUser = "soywod";
@@ -96,6 +98,10 @@ in
       gtkUsePortal = true;
     };
   };
-    
+
+  services.geoclue2 = {
+    enable = true;
+  };
+  
   system.stateVersion = "21.05";
 }
