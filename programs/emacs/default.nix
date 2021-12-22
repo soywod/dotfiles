@@ -13,9 +13,9 @@
         nix-mode
         rust-mode
         ledger-mode
+        direnv
         company
         yasnippet
-        add-node-modules-path
         prettier-js
         smartparens
         magit

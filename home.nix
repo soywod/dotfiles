@@ -18,6 +18,7 @@ in {
     packages = with pkgs; [
       brightnessctl
       pulseaudio
+      ghostscript
       p7zip
       ripgrep
       mpv
@@ -28,9 +29,6 @@ in {
       wally-cli
       rnix-lsp
       ledger
-      yarn
-      nodejs
-      nodePackages.typescript-language-server
       cargo
       rustc
       rustfmt
