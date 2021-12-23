@@ -26,6 +26,15 @@ in {
         source = ./selection-record.sh;
       };
     };
+    sessionVariables = {
+      GIT_PROMPT_FETCH_REMOTE_STATUS = 0;
+      GIT_PROMPT_IGNORE_SUBMODULES = 1;
+      GIT_PROMPT_WITH_VIRTUAL_ENV = 0;
+      GIT_PROMPT_SHOW_UNTRACKED_FILES = "no";
+      GIT_PROMPT_START = "_LAST_COMMAND_INDICATOR_ \\[\\e[36m\\]\\W\\[\\e[m\\]";
+      GIT_PROMPT_END = " \\[\\e[\\$(case \\$IN_NIX_SHELL in pure) echo 36;; impure) echo 33;; *) echo 31;; esac)m\\]➜\\[\\e[m\\] ";
+      GIT_PROMPT_COMMAND_OK = "";
+    };
   };
 
   programs.bash = {

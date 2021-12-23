@@ -42,13 +42,6 @@ in {
     ];
     sessionVariables = {
       EDITOR = "emacsclient";
-      GIT_PROMPT_FETCH_REMOTE_STATUS = 0;
-      GIT_PROMPT_IGNORE_SUBMODULES = 1;
-      GIT_PROMPT_WITH_VIRTUAL_ENV = 0;
-      GIT_PROMPT_SHOW_UNTRACKED_FILES = "no";
-      GIT_PROMPT_START = "_LAST_COMMAND_INDICATOR_ \\[\\e[36m\\]\\W\\[\\e[m\\]";
-      GIT_PROMPT_END = " \\[\\e[31m\\]➜\\[\\e[m\\] ";
-      GIT_PROMPT_COMMAND_OK = "";
       PASSWORD_STORE_DIR = "$HOME/documents/password-store";
       MOZ_ENABLE_WAYLAND = "1";
       XDG_CURRENT_DESKTOP = "sway";

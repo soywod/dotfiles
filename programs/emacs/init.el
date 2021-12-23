@@ -5,8 +5,7 @@
 (set-fringe-mode 10)
 (set-face-attribute 'default nil :font "JetBrains Mono" :height 150)
 (global-set-key (kbd "C-c c") 'org-capture)
-(global-set-key (kbd "C-c a") 'org-agenda-list)
-(global-set-key (kbd "C-c t") 'org-todo-list)
+(global-set-key (kbd "C-c a") 'org-agenda)
 
 (setq disabled-command-function nil)
 (setq inhibit-startup-screen t)
@@ -69,6 +68,7 @@
   :hook (lsp-mode . electric-pair-mode))
 
 (use-package web-mode
+  :mode ("\\.json\\'" . web-mode)
   :mode ("\\.html?\\'" . web-mode)
   :mode ("\\.s?css\\'" . web-mode)
   :mode ("\\.[jt]sx?\\'" . web-mode)
@@ -111,24 +111,26 @@
 (use-package org
   :config
   (setq org-agenda-files
-	      '("~/documents/org/inbox.org"
-	        "~/documents/org/tasks.org"
-  	      "~/documents/org/agenda.org"
-	        "~/documents/org/habits.org"))
+	'("~/documents/org/inbox.org"
+	  "~/documents/org/tasks.org"
+  	  "~/documents/org/agenda.org"
+	  "~/documents/org/habits.org"))
   (setq org-refile-use-outline-path 'file)
   (setq org-refile-targets
-	      '(("~/documents/org/tasks.org" :maxlevel . 3)
-	        ("~/documents/org/someday.org" :level . 1)
-	        ("~/documents/org/agenda.org" :level . 1)
-  	      ("~/documents/org/habits.org" :level . 1)))
+	'(("~/documents/org/tasks.org" :maxlevel . 3)
+	  ("~/documents/org/someday.org" :level . 1)
+	  ("~/documents/org/agenda.org" :level . 1)
+  	  ("~/documents/org/habits.org" :level . 1)))
   (setq org-todo-keywords
-	      '((sequence "TODO(t)" "PENDING(p)" "|" "CANCELLED(c)" "DONE(d)")))
+	'((sequence "TODO(t)" "PENDING(p)" "|" "CANCELLED(c)" "DONE(d)")))
   (setq org-todo-keyword-faces
-	      '(("TODO" . (:foreground "#c678dd" :weight bold))
-	        ("PENDING" . (:background "#3f444a" :foreground "#ff6c6b" :weight bold))))
+	'(("TODO" . (:foreground "#c678dd" :weight bold))
+	  ("PENDING" . (:background "#3f444a" :foreground "#ff6c6b" :weight bold))))
   (setq org-capture-templates
-	      '(("i" "Inbox" entry (file "~/documents/org/inbox.org") "* TODO %i%?")
-	        ("a" "Agenda" entry (file "~/documents/org/agenda.org") "* TODO %i%?"))))
+	'(("i" "Inbox" entry (file "~/documents/org/inbox.org") "* TODO %i%?")
+	  ("a" "Agenda" entry (file "~/documents/org/agenda.org") "* TODO %i%?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))")))
+  (setq org-agenda-custom-commands
+	'(("t" "Today" tags-todo "+LEVEL=1+CATEGORY=\"tasks\"|+SCHEDULED<=\"<today>\"|+DEADLINE<=\"<today>\""))))
 
 (use-package magit)
 
