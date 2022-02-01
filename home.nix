@@ -1,21 +1,24 @@
 { config, lib, nixpkgs, pkgs, ... }:
 
 let
-  mod = config.wayland.windowManager.sway.config.modifier;
   theme = import ./theme.nix;
-in {
+in
+{
   nixpkgs.config.allowUnfree = true;
-    
+
   imports = [
     (import ./programs/bash { inherit pkgs; })
     (import ./programs/dunst { inherit pkgs config; })
     (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit pkgs; })
+    (import ./programs/himalaya { inherit config; })
   ];
 
   home = {
     packages = with pkgs; [
+      chromium
+      libreoffice
       brightnessctl
       pulseaudio
       ghostscript
@@ -27,15 +30,7 @@ in {
       inkscape
       tdesktop
       wally-cli
-      rnix-lsp
       ledger
-      cargo
-      rustc
-      rustfmt
-      rust-analyzer
-      gcc
-      binutils
-      glibc.static
     ];
     sessionPath = [
       "$HOME/.local/bin"
@@ -54,6 +49,13 @@ in {
         Développeur Web Full-Stack
         https://soywod.me
       '';
+      ".ledgerrc".text = ''
+        --file ${config.home.homeDirectory}/documents/ledger/auto-entrepreneur.ldg
+        --strict
+        --empty
+        --effective
+        --cleared
+      '';
     };
   };
 
@@ -63,11 +65,11 @@ in {
       forceWayland = true;
       extraNativeMessagingHosts = [ pkgs.passff-host ];
       extraPolicies = {
-        ExtensionSettings = {};
+        ExtensionSettings = { };
       };
     };
   };
-  
+
   programs.home-manager = {
     enable = true;
   };
@@ -108,7 +110,7 @@ in {
             format-full = "";
             format-charging = " {capacity}%";
             format-plugged = " {capacity}%";
-            format-icons = ["" "" "" "" ""];
+            format-icons = [ "" "" "" "" "" ];
           };
           temperature = {
             interval = 1;
@@ -117,7 +119,7 @@ in {
             critical-threshold = 80;
             format = "{icon} {temperatureC}°C";
             format-critical = "{icon} {temperatureC}°C";
-            format-icons = ["" "" "" "" ""];
+            format-icons = [ "" "" "" "" "" ];
           };
           cpu = {
             interval = 1;
@@ -135,7 +137,7 @@ in {
             format = " {percentage_free}%";
             tooltip-format = "{used}/{total}";
           };
-          
+
           network = {
             interval = 1;
             interface = "wlp*";
@@ -157,7 +159,7 @@ in {
             format-icons = {
               headphone = "";
               headset = "";
-              default = ["" ""];
+              default = [ "" "" ];
             };
           };
           clock = {
@@ -229,9 +231,10 @@ in {
       git_protocol = "ssh";
     };
   };
-  
+
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "Clément DOUIN";
     userEmail = "clement.douin@posteo.net";
     signing = {
@@ -246,6 +249,13 @@ in {
     };
   };
 
+  gtk = {
+    enable = true;
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+  };
+  
   programs.kitty = {
     enable = true;
     settings = {
@@ -301,7 +311,7 @@ in {
         }
       ];
       fonts = {
-        names = ["JetBrains Mono"];
+        names = [ "JetBrains Mono" ];
         style = "Medium";
         size = 12.0;
       };
@@ -322,37 +332,41 @@ in {
         eDP-1 = {
           resolution = "1920x1200@60Hz";
           position = "0 0";
-          bg = "~/documents/wallpapers/nixos.svg fill";
+          bg = "${config.home.homeDirectory}/documents/wallpapers/nixos.svg fill";
         };
       };
-      keybindings = lib.mkOptionDefault {
-        "XF86MonBrightnessDown"              = "exec brightnessctl set 5%-";
-        "Shift+XF86MonBrightnessDown"        = "exec brightnessctl set 1%";
-        "Shift+${mod}+XF86MonBrightnessDown" = "exec brightnessctl set 1%-";
+      keybindings =
+        let
+          mod = config.wayland.windowManager.sway.config.modifier;
+        in
+        lib.mkOptionDefault {
+          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
+          "Shift+XF86MonBrightnessDown" = "exec brightnessctl set 1%";
+          "Shift+${mod}+XF86MonBrightnessDown" = "exec brightnessctl set 1%-";
 
-        "XF86MonBrightnessUp"              = "exec brightnessctl set  5%+";
-        "Shift+XF86MonBrightnessUp"        = "exec brightnessctl set 100%";
-        "Shift+${mod}+XF86MonBrightnessUp" = "exec brightnessctl set  1%+";
+          "XF86MonBrightnessUp" = "exec brightnessctl set  5%+";
+          "Shift+XF86MonBrightnessUp" = "exec brightnessctl set 100%";
+          "Shift+${mod}+XF86MonBrightnessUp" = "exec brightnessctl set  1%+";
 
-        "XF86AudioLowerVolume"              = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
-        "Shift+XF86AudioLowerVolume"        = "exec pactl set-sink-volume @DEFAULT_SINK@  1%";
-        "Shift+${mod}+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -1%";
+          "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+          "Shift+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@  1%";
+          "Shift+${mod}+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -1%";
 
-        "XF86AudioRaiseVolume"              = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-        "Shift+XF86AudioRaiseVolume"        = "exec pactl set-sink-volume @DEFAULT_SINK@ 100%";
-        "Shift+${mod}+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +1%";
+          "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+          "Shift+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ 100%";
+          "Shift+${mod}+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +1%";
 
-        "XF86AudioMute"    = "exec pactl set-sink-mute   @DEFAULT_SINK@ toggle";
-        "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SINK@ toggle";
-        
-        "XF86AudioPrev" = "exec playerctl previous";
-        "XF86AudioPlay" = "exec playerctl play-pause";
-        "XF86AudioNext" = "exec playerctl next";
-        
-        "Print"              = "exec selection-capture";
-        "Shift+Print"        = "exec selection-record";
-        "Shift+${mod}+Print" = "exec screen-capture";
-      };
+          "XF86AudioMute" = "exec pactl set-sink-mute   @DEFAULT_SINK@ toggle";
+          "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SINK@ toggle";
+
+          "XF86AudioPrev" = "exec playerctl previous";
+          "XF86AudioPlay" = "exec playerctl play-pause";
+          "XF86AudioNext" = "exec playerctl next";
+
+          "Print" = "exec selection-capture";
+          "Shift+Print" = "exec selection-record";
+          "Shift+${mod}+Print" = "exec screen-capture";
+        };
       colors = {
         background = theme.bg;
         focused = {
@@ -385,6 +399,9 @@ in {
         };
       };
     };
+    extraConfig = ''
+      titlebar_border_thickness 2
+    '';
   };
 
   programs.gpg = {
@@ -394,10 +411,10 @@ in {
   programs.password-store = {
     enable = true;
     settings = {
-      PASSWORD_STORE_DIR = "~/documents/password-store";
+      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/password-store";
     };
   };
-  
+
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
@@ -418,7 +435,6 @@ in {
   };
 
   systemd.user.services.dropbox.Service.Environment = [
-    "HOME=${config.home.homeDirectory}/.dropbox-hm"
     "DISPLAY=:0"
   ];
 

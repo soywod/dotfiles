@@ -10,7 +10,7 @@ in
     ./programs/ergodox/udev-rules.nix
     home-manager
   ];
-
+  
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
@@ -19,7 +19,7 @@ in
       keep-derivations = true
     '';
   };
-      
+
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
@@ -31,7 +31,7 @@ in
     useDHCP = false;
     interfaces.wlp0s20f3.useDHCP = true;
   };
-  
+
   time.timeZone = "Europe/Paris";
 
   i18n = {
@@ -54,13 +54,13 @@ in
 
     fontconfig = {
       defaultFonts = {
-        serif = ["Noto Serif"];
-        sansSerif = ["Noto Sans"];
-        monospace = ["JetBrains Mono" "Font Awesome"];
+        serif = [ "Noto Serif" ];
+        sansSerif = [ "Noto Sans" ];
+        monospace = [ "JetBrains Mono" "Font Awesome" ];
       };
     };
   };
-  
+
   hardware = {
     opengl = {
       enable = true;
@@ -72,10 +72,10 @@ in
   users.users.soywod = {
     isNormalUser = true;
     hashedPassword = "$6$LMKJHJSxnGOwEwuF$KJQLQcOkXlHWkGWp7Z4/eXetRoVnuiSOv2Rl6BNtEhpgpX2b/Ky5ELHYL3Q0kQbERSKiMWfEmDXLAOX6fAivg0";
-    extraGroups = ["wheel" "networkmanager" "video"];
+    extraGroups = [ "wheel" "networkmanager" "video" ];
     shell = pkgs.bash;
   };
-  
+
   security = {
     sudo.wheelNeedsPassword = false;
     rtkit.enable = true;
@@ -102,6 +102,6 @@ in
   services.geoclue2 = {
     enable = true;
   };
-  
+
   system.stateVersion = "21.05";
 }

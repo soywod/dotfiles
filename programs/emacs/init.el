@@ -1,3 +1,4 @@
+
 (scroll-bar-mode -1)
 (tool-bar-mode -1)   
 (tooltip-mode -1)
@@ -10,13 +11,15 @@
 (setq disabled-command-function nil)
 (setq inhibit-startup-screen t)
 (setq visible-bell t)
+(setq completion-styles '(flex))
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Backup
 
-(setq version-control t     ;; Use version numbers for backups.
-      kept-new-versions 10  ;; Number of newest versions to keep.
-      kept-old-versions 0   ;; Number of oldest versions to keep.
+(setq version-control t	;; Use version numbers for backups.
+      kept-new-versions 10 ;; Number of newest versions to keep.
+      kept-old-versions 0  ;; Number of oldest versions to keep.
       delete-old-versions t ;; Don't ask to delete excess backup versions.
       backup-by-copying t)  ;; Copy all files, don't rename them.
 (setq vc-make-backup-files t)
@@ -30,10 +33,10 @@
 
 (setq gnus-select-method
       '(nnimap "posteo"
-	             (nnimap-address "posteo.de")
-	             (nnimap-server-port 143)
-	             (nnimap-stream starttls)
-	             (nnimap-authinfo-file "~/.authinfo.gpg")))
+	       (nnimap-address "posteo.de")
+	       (nnimap-server-port 143)
+	       (nnimap-stream starttls)
+	       (nnimap-authinfo-file "~/.authinfo.gpg")))
 
 (setq gnus-message-archive-group "nnimap+posteo:Sent")
 (setq gnus-gcc-mark-as-read t)
@@ -60,53 +63,78 @@
 (use-package direnv
   :config (direnv-mode))
 
+(use-package ledger-mode
+  :mode "\\.ldg\\'")
+
 (use-package lsp-mode
-  :config (setq lsp-keymap-prefix "C-c l")
-  :config (setq lsp-signature-auto-activate t)
-  :config (setq lsp-enable-on-type-formatting nil)
+  :init (setq lsp-keymap-prefix "C-c l")
+  :init (setq lsp-signature-auto-activate nil)
+  :init (setq lsp-enable-on-type-formatting nil)
+  :init (setq lsp-completion-provider :none)
+  :init (setq lsp-eldoc-enable-hover nil)
   :config (lsp-enable-which-key-integration t)
   :hook (lsp-mode . electric-pair-mode))
 
+(use-package flycheck
+  :delight)
+
+(use-package prettier-js
+  :delight)
+
 (use-package web-mode
-  :mode ("\\.json\\'" . web-mode)
-  :mode ("\\.html?\\'" . web-mode)
-  :mode ("\\.s?css\\'" . web-mode)
-  :mode ("\\.[jt]sx?\\'" . web-mode)
-  :hook (web-mode . lsp-deferred)
-  :hook (web-mode . default-web-indent-mode))
+  :delight
+  :mode "\\.[jt]sx?\\'"
+  :hook (web-mode . default-web-indent-mode)
+  :hook (web-mode . prettier-js-mode)
+  :hook (web-mode . emmet-mode)
+  :hook (web-mode . lsp-deferred))
+
+(use-package scss-mode
+  :delight
+  :hook (scss-mode . default-web-indent-mode)
+  :hook (scss-mode . prettier-js-mode)
+  :hook (scss-mode . emmet-mode)
+  :hook (scss-mode . lsp-deferred))
+
+(use-package emmet-mode
+  :delight
+  :config (setq emmet-indent-after-insert nil)
+  :config (add-to-list 'emmet-jsx-major-modes 'web-mode)
+  :bind (:map emmet-mode-keymap ("C-j" . nil))
+  :bind (:map emmet-mode-keymap ("C-<return>" . emmet-expand-line))
+  :bind (:map emmet-mode-keymap ("M-RET" . emmet-expand-line)))
 
 (use-package nix-mode
+  :delight
   :mode ("\\.nix\\'" . nix-mode)
+  :hook (nix-mode . (lambda () (add-hook 'before-save-hook #'lsp-format-buffer nil 'local)))
   :hook (nix-mode . lsp-deferred))
 
 (use-package rust-mode
-  :hook (rust-mode . lsp-deferred)
-  :config (setq rust-format-on-save t))
-
-(use-package company
-  :config (setq company-idle-delay 0.25)
-  :config (setq company-minimum-prefix-length 1)
-  :bind (:map company-active-map ("<tab>" . company-select-next))
-  :bind (:map company-active-map ("<backtab>" . company-select-previous)))
+  :delight
+  :init (setq rust-format-on-save t)
+  :config (add-hook 'before-save-hook #'lsp-format-buffer nil 'local)
+  :hook (rust-mode . lsp-deferred))
 
 (use-package yasnippet
+  :delight yas-minor-mode
+  :config (setq yas-snippet-dirs '("/etc/nixos/programs/emacs/snippets"))
   :hook (lsp-mode . yas-minor-mode)
-  :hook (yas-minor-mode . yas-reload-all)
-  :config (setq yas-snippet-dirs '("/etc/nixos/programs/emacs/snippets")))
+  :hook (yas-minor-mode . yas-reload-all))
 
-(use-package prettier-js
-  :after (web-mode)
-  :hook (web-mode . prettier-js-mode))
+(use-package eldoc
+  :delight)
 
 (use-package smartparens
+  :delight
   :bind ("C-c s s" . sp-splice-sexp)
   :bind ("C-c s r" . sp-rewrap-sexp))
 
 (use-package bbdb
   :init (bbdb-initialize 'gnus 'message)
   :init (bbdb-mua-auto-update-init 'gnus 'message)
-  :config (setq bbdb-file "~/documents/contacts/bbdb")
-  :config (setq bbdb-mua-auto-update-p 'create))
+  :init (setq bbdb-file "~/documents/contacts/bbdb")
+  :init (setq bbdb-mua-auto-update-p 'create))
 
 (use-package org
   :config
@@ -128,25 +156,46 @@
 	  ("PENDING" . (:background "#3f444a" :foreground "#ff6c6b" :weight bold))))
   (setq org-capture-templates
 	'(("i" "Inbox" entry (file "~/documents/org/inbox.org") "* TODO %i%?")
-	  ("a" "Agenda" entry (file "~/documents/org/agenda.org") "* TODO %i%?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))")))
+	  ("a" "Agenda" entry (file "~/documents/org/agenda.org") "* TODO %i%?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \".\"))")))
   (setq org-agenda-custom-commands
-	'(("t" "Today" tags-todo "+LEVEL=1+CATEGORY=\"tasks\"|+SCHEDULED<=\"<today>\"|+DEADLINE<=\"<today>\""))))
+	'(("T" "Active tasks" tags-todo "+LEVEL=1+CATEGORY=\"tasks\"")
+	  ("A" "Today's agenda" agenda "" ((org-agenda-span 'day)
+					   (org-agenda-category-filter-preset '("-habits")))))))
 
 (use-package magit)
 
 (use-package ledger-mode)
 
+(use-package helm
+  :delight
+  :init (helm-mode)
+  :bind (:map helm-find-files-map ("TAB" . helm-ff-RET))
+  :bind ("M-x" . helm-M-x)
+  :bind ("C-x C-f" . helm-find-files))
+
+(use-package helm-lsp
+  :bind (:map lsp-mode-map ("C-c l a a" . helm-lsp-code-actions)))
+
+(use-package helm-projectile
+  :init (helm-projectile-on))
+
+(use-package abbrev
+  :delight)
+
 (use-package projectile
   :init (projectile-global-mode)
   :config (setq projectile-enable-caching nil)
   :config (setq projectile-project-search-path (cddr (directory-files "~/code" t)))
-  :custom (projectile-completion-system 'ivy)
   :bind-keymap ("C-c p" . projectile-command-map))
 
-(use-package counsel-projectile
-  :after (counsel projectile)
-  :init (counsel-projectile-mode))
-
 (use-package which-key
+  :delight
   :init (which-key-mode)
   :config (setq which-key-idle-delay 0.5))
+
+(defun custom/capitalize-first-char (&optional string)
+  "Capitalize only the first character of the input STRING."
+  (when (and string (> (length string) 0))
+    (let ((first-char (substring string nil 1))
+          (rest-str   (substring string 1)))
+      (concat (capitalize first-char) rest-str))))

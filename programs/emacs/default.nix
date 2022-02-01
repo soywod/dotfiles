@@ -13,19 +13,21 @@
         nix-mode
         rust-mode
         ledger-mode
+        emmet-mode
         direnv
-        company
         yasnippet
         prettier-js
         smartparens
         magit
         bbdb
         projectile
-        ivy
-        counsel
-        counsel-projectile
-        lsp-ivy
+        helm
+        helm-lsp
+        helm-projectile
+        helm-rg
         which-key
+        pass
+        delight
         elpaPackages.org
       ]));
   };
