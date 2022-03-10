@@ -1,4 +1,3 @@
-
 (scroll-bar-mode -1)
 (tool-bar-mode -1)   
 (tooltip-mode -1)
@@ -17,37 +16,14 @@
 
 ;; Backup
 
-(setq version-control t	;; Use version numbers for backups.
-      kept-new-versions 10 ;; Number of newest versions to keep.
-      kept-old-versions 0  ;; Number of oldest versions to keep.
-      delete-old-versions t ;; Don't ask to delete excess backup versions.
-      backup-by-copying t)  ;; Copy all files, don't rename them.
-(setq vc-make-backup-files t)
-(setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
-
-(setq calendar-week-start-day 1)
+(setq vc-make-backup-files nil)
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+(setq create-lockfiles nil)
 
 (setq user-full-name "Clément DOUIN")
 (setq user-mail-address	"clement.douin@posteo.net")
-(setq mail-user-agent 'gnus-user-agent)
-
-(setq gnus-select-method
-      '(nnimap "posteo"
-	       (nnimap-address "posteo.de")
-	       (nnimap-server-port 143)
-	       (nnimap-stream starttls)
-	       (nnimap-authinfo-file "~/.authinfo.gpg")))
-
-(setq gnus-message-archive-group "nnimap+posteo:Sent")
-(setq gnus-gcc-mark-as-read t)
-(setq nnmail-expiry-target "nnimap+posteo:Trash")
-(setq nnmail-expiry-wait 'immediate)
-(setq send-mail-function 'smtpmail-send-it)
-(setq message-send-mail-function 'smtpmail-send-it)
-(setq smtpmail-smtp-server "posteo.de")
-(setq smtpmail-smtp-service 587)
-(setq message-citation-line-function 'message-insert-formatted-citation-line)
-(setq message-citation-line-format "On %d/%m/%Y %H:%M, %N wrote:")
+(setq calendar-week-start-day 1)
 
 (defun default-web-indent-mode ()
   (setq indent-tabs-mode nil)
@@ -72,6 +48,7 @@
   :init (setq lsp-enable-on-type-formatting nil)
   :init (setq lsp-completion-provider :none)
   :init (setq lsp-eldoc-enable-hover nil)
+  :init (setq lsp-rust-analyzer-proc-macro-enable t)
   :config (lsp-enable-which-key-integration t)
   :hook (lsp-mode . electric-pair-mode))
 
@@ -160,6 +137,10 @@
   (setq org-agenda-custom-commands
 	'(("T" "Active tasks" tags-todo "+LEVEL=1+CATEGORY=\"tasks\"")
 	  ("A" "Today's agenda" agenda "" ((org-agenda-span 'day)
+					   (org-agenda-category-filter-preset '("-habits"))))
+	  ("W" "Week's agenda" agenda "" ((org-agenda-span 'week)
+					   (org-agenda-category-filter-preset '("-habits"))))
+	  ("M" "Month's agenda" agenda "" ((org-agenda-span 'month)
 					   (org-agenda-category-filter-preset '("-habits")))))))
 
 (use-package magit)
@@ -192,6 +173,10 @@
   :delight
   :init (which-key-mode)
   :config (setq which-key-idle-delay 0.5))
+
+(use-package himalaya
+  :if (file-exists-p "~/code/himalaya-emacs")
+  :load-path "~/code/himalaya-emacs")
 
 (defun custom/capitalize-first-char (&optional string)
   "Capitalize only the first character of the input STRING."
