@@ -9,7 +9,6 @@
   };
 
   accounts.email.accounts.posteo = {
-    himalaya.enable = true;
     primary = true;
     realName = "Clément DOUIN";
     userName = "clement.douin@posteo.net";
@@ -22,6 +21,14 @@
     smtp = {
       host = "posteo.de";
       port = 465;
+    };
+    himalaya = {
+      enable = true;
+      settings = {
+        signature = "~/.signature";
+        pgp-encrypt-cmd = "gpg -o - -eqar";
+        pgp-decrypt-cmd = "gpg -dq";
+      };
     };
   };
 }
