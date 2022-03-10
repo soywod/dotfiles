@@ -5,6 +5,11 @@ let
 in
 {
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+    }))
+  ];
 
   imports = [
     (import ./programs/bash { inherit pkgs; })
@@ -31,12 +36,15 @@ in
       tdesktop
       wally-cli
       ledger
+      libnotify
+      w3m
     ];
     sessionPath = [
       "$HOME/.local/bin"
     ];
     sessionVariables = {
-      EDITOR = "emacsclient";
+      EDITOR = "editor";
+      VISUAL = "editor";
       PASSWORD_STORE_DIR = "$HOME/documents/password-store";
       MOZ_ENABLE_WAYLAND = "1";
       XDG_CURRENT_DESKTOP = "sway";
@@ -319,7 +327,7 @@ in
         "type:keyboard" = {
           xkb_layout = "us,ru";
           xkb_variant = "dvorak-alt-intl,";
-          xkb_options = "grp:shifts_toggle,numpad:mac,compose:ralt";
+          xkb_options = "grp:shifts_toggle,numpad:mac,compose:ralt,ctrl:swapcaps";
           repeat_delay = "256";
           repeat_rate = "32";
         };
@@ -413,6 +421,19 @@ in
     settings = {
       PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/password-store";
     };
+  };
+
+  programs.neovim = {
+    enable = true;
+    package = pkgs.neovim-nightly;
+    viAlias = true;
+    vimAlias = true;
+    plugins = [ pkgs.vimPlugins.telescope-nvim ];
+    extraConfig = ''
+      set runtimepath+=,~/code/himalaya/vim
+      let g:himalaya_telescope_preview_enabled = 0
+      let g:himalaya_mailbox_picker = "native"
+    '';
   };
 
   services.gpg-agent = {

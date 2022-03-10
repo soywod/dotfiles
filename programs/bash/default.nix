@@ -16,6 +16,9 @@ in {
       wl-clipboard
     ];
     file = {
+      ".local/bin/editor" = {
+        source = ./editor.sh;
+      };
       ".local/bin/screen-capture" = {
         source = ./screen-capture.sh;
       };
@@ -60,7 +63,7 @@ in {
       gss="git status";
       grm="git pull origin master --rebase";
       u="unfog";
-      h="himalaya";
+      h="~/code/himalaya/target/debug/himalaya";
       o="xdg-open";
       l=''ledger --strict --empty --input-date-format="%d/%m/%y" --effective --cleared --file ~/documents/ledger/auto-entrepreneur.ldg'';
     };
