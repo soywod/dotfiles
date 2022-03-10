@@ -28,6 +28,7 @@
         which-key
         pass
         delight
+        yaml-mode
         elpaPackages.org
       ]));
   };

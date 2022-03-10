@@ -66,13 +66,15 @@ in
       enable = true;
     };
   };
-
+  
+  virtualisation.docker.enable = true;
+  
   services.getty.autologinUser = "soywod";
   home-manager.users.soywod = import ./home.nix;
   users.users.soywod = {
     isNormalUser = true;
     hashedPassword = "$6$LMKJHJSxnGOwEwuF$KJQLQcOkXlHWkGWp7Z4/eXetRoVnuiSOv2Rl6BNtEhpgpX2b/Ky5ELHYL3Q0kQbERSKiMWfEmDXLAOX6fAivg0";
-    extraGroups = [ "wheel" "networkmanager" "video" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "docker"];
     shell = pkgs.bash;
   };
 
