@@ -2,6 +2,11 @@
 
 let
   theme = import ./theme.nix;
+  tex = (pkgs.texlive.combine {
+    inherit (pkgs.texlive) scheme-small
+      collection-langfrench # french language
+      wrapfig capt-of siunitx invoice; # org-mode invoice pdf export
+  });
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -38,6 +43,7 @@ in
       ledger
       libnotify
       w3m
+      tex
     ];
     sessionPath = [
       "$HOME/.local/bin"

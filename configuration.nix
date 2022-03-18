@@ -20,9 +20,16 @@ in
     '';
   };
 
-  boot.loader = {
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernel.sysctl = {
+      "fs.inotify.max_user_watches" = 1048576;
+      "fs.inotify.max_user_instances" = 024;
+      "fs.inotify.max_queued_events" = 32768;
+    };
   };
 
   networking = {

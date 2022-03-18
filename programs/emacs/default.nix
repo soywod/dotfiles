@@ -29,7 +29,7 @@
         pass
         delight
         yaml-mode
-        elpaPackages.org
+        org
       ]));
   };
 

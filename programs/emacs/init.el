@@ -1,3 +1,6 @@
+(autoload 'org-invoice-report "org-invoice")
+(autoload 'org-dblock-write:invoice "org-invoice")
+
 (scroll-bar-mode -1)
 (tool-bar-mode -1)   
 (tooltip-mode -1)
@@ -31,6 +34,9 @@
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
+
+(use-package ox-latex
+  :config (add-to-list 'org-latex-classes '("letter" "\\documentclass{frletter}")))
 
 (use-package doom-themes
   :init (load-theme 'doom-one t)
@@ -176,7 +182,13 @@
 
 (use-package himalaya
   :if (file-exists-p "~/code/himalaya-emacs")
-  :load-path "~/code/himalaya-emacs")
+  :load-path "~/code/himalaya-emacs"
+  :config (setq himalaya-executable "/home/soywod/code/himalaya/target/debug/himalaya"))
+
+(use-package org-latex-invoice
+  :if (file-exists-p "~/code/org-latex-invoice")
+  :load-path "~/code/org-latex-invoice"
+  :config (setq org-invoice-default-level 1))
 
 (defun custom/capitalize-first-char (&optional string)
   "Capitalize only the first character of the input STRING."
