@@ -469,7 +469,13 @@ in
 
   services.gammastep = {
     enable = true;
+    tray = true;
     provider = "geoclue2";
+    settings = {
+      general = {
+        fade = false;
+      };
+    };
   };
 
   systemd.user.services.dropbox.Service.Environment = [
