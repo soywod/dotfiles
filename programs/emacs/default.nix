@@ -29,6 +29,7 @@
         pass
         delight
         yaml-mode
+        expand-region
         org
       ]));
   };

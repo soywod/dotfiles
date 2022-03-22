@@ -5,7 +5,7 @@ let
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-small
       collection-langfrench # french language
-      wrapfig capt-of siunitx invoice; # org-mode invoice pdf export
+      wrapfig lastpage; # org-mode invoice pdf export
   });
 in
 {
@@ -18,11 +18,11 @@ in
 
   imports = [
     (import ./programs/bash { inherit pkgs; })
-    (import ./programs/dunst { inherit pkgs config; })
+    (import ./programs/dunst { inherit config pkgs; })
     (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit pkgs; })
-    (import ./programs/himalaya { inherit config; })
+    (import ./programs/himalaya { inherit config pkgs; })
   ];
 
   home = {
@@ -44,6 +44,7 @@ in
       libnotify
       w3m
       tex
+      broot
     ];
     sessionPath = [
       "$HOME/.local/bin"
@@ -106,6 +107,7 @@ in
           "pulseaudio"
         ];
         modules-center = [
+          "custom/himalaya"
           "clock"
         ];
         modules-right = [
@@ -176,11 +178,18 @@ in
               default = [ "" "" ];
             };
           };
+          
+          "custom/himalaya" = {
+            exec = "${pkgs.coreutils}/bin/tail -fn 1 /tmp/himalaya-counter | ${pkgs.findutils}/bin/xargs -I {} ${pkgs.bash}/bin/bash -c 'if [ {} -gt 0 ]; then echo ; else echo; fi'";
+            format = "{} ";
+            tooltip = false;
+          };
           clock = {
             timezone = "Europe/Paris";
             tooltip = false;
             format = "{:%H:%M, %a %b %e}";
           };
+
           "sway/mode" = {
             format = "{}";
           };
@@ -331,9 +340,9 @@ in
       };
       input = {
         "type:keyboard" = {
-          xkb_layout = "us,ru";
-          xkb_variant = "dvorak-alt-intl,";
-          xkb_options = "grp:shifts_toggle,numpad:mac,compose:ralt,ctrl:swapcaps";
+          xkb_layout = "us,us,ru";
+          xkb_variant = ",dvorak-alt-intl,";
+          xkb_options = ",grp:shifts_toggle,numpad:mac,compose:ralt,ctrl:swapcaps,";
           repeat_delay = "256";
           repeat_rate = "32";
         };
@@ -353,34 +362,36 @@ in
         let
           mod = config.wayland.windowManager.sway.config.modifier;
         in
-        lib.mkOptionDefault {
-          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
-          "Shift+XF86MonBrightnessDown" = "exec brightnessctl set 1%";
-          "Shift+${mod}+XF86MonBrightnessDown" = "exec brightnessctl set 1%-";
+          lib.mkOptionDefault {
+            "${mod}+Tab" = "workspace back_and_forth";
+            
+            "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
+            "Shift+XF86MonBrightnessDown" = "exec brightnessctl set 1%";
+            "Shift+${mod}+XF86MonBrightnessDown" = "exec brightnessctl set 1%-";
 
-          "XF86MonBrightnessUp" = "exec brightnessctl set  5%+";
-          "Shift+XF86MonBrightnessUp" = "exec brightnessctl set 100%";
-          "Shift+${mod}+XF86MonBrightnessUp" = "exec brightnessctl set  1%+";
+            "XF86MonBrightnessUp" = "exec brightnessctl set  5%+";
+            "Shift+XF86MonBrightnessUp" = "exec brightnessctl set 100%";
+            "Shift+${mod}+XF86MonBrightnessUp" = "exec brightnessctl set  1%+";
 
-          "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
-          "Shift+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@  1%";
-          "Shift+${mod}+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -1%";
+            "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+            "Shift+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@  1%";
+            "Shift+${mod}+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -1%";
 
-          "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-          "Shift+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ 100%";
-          "Shift+${mod}+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +1%";
+            "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+            "Shift+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ 100%";
+            "Shift+${mod}+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +1%";
 
-          "XF86AudioMute" = "exec pactl set-sink-mute   @DEFAULT_SINK@ toggle";
-          "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SINK@ toggle";
+            "XF86AudioMute" = "exec pactl set-sink-mute   @DEFAULT_SINK@ toggle";
+            "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SINK@ toggle";
 
-          "XF86AudioPrev" = "exec playerctl previous";
-          "XF86AudioPlay" = "exec playerctl play-pause";
-          "XF86AudioNext" = "exec playerctl next";
+            "XF86AudioPrev" = "exec playerctl previous";
+            "XF86AudioPlay" = "exec playerctl play-pause";
+            "XF86AudioNext" = "exec playerctl next";
 
-          "Print" = "exec selection-capture";
-          "Shift+Print" = "exec selection-record";
-          "Shift+${mod}+Print" = "exec screen-capture";
-        };
+            "Print" = "exec selection-capture";
+            "Shift+Print" = "exec selection-record";
+            "Shift+${mod}+Print" = "exec screen-capture";
+          };
       colors = {
         background = theme.bg;
         focused = {

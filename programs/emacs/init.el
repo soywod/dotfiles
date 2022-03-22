@@ -58,6 +58,9 @@
   :config (lsp-enable-which-key-integration t)
   :hook (lsp-mode . electric-pair-mode))
 
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
 (use-package flycheck
   :delight)
 
