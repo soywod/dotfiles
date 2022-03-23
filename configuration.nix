@@ -1,8 +1,18 @@
-{ nixpkgs, pkgs, ... }:
+{ nixpkgs, pkgs, lib, ... }:
 
 let
   home-manager-tarball = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
   home-manager = import "${home-manager-tarball}/nixos";
+  font-awesome = pkgs.fetchFromGitHub {
+    owner = "FortAwesome";
+    repo = "Font-Awesome";
+    rev = "6.1.1";
+    sha256 = "BjK1PJQFWtKDvfQ2Vh7BoOPqYucyvOG+2Pu/Kh+JpAA=";
+    postFetch = ''
+      tar xf $downloadedFile --strip=1
+      install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
+    '';
+  };
 in
 {
   imports = [
@@ -55,8 +65,9 @@ in
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
-      font-awesome
       jetbrains-mono
+    ] ++ [
+      font-awesome
     ];
 
     fontconfig = {
