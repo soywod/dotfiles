@@ -48,6 +48,7 @@ in
       tex
       xournal
       filezilla
+      slack
     ];
     sessionPath = [
       "$HOME/.local/bin"
