@@ -50,19 +50,15 @@
 
 (use-package lsp-mode
   :init (setq lsp-keymap-prefix "C-c l")
-  :init (setq lsp-signature-auto-activate nil)
+  :init (setq lsp-log-io nil)
+  :init (setq lsp-enable-indentation nil)
   :init (setq lsp-enable-on-type-formatting nil)
   :init (setq lsp-completion-provider :none)
+  :init (setq lsp-diagnostics-provider :flymake)
   :init (setq lsp-eldoc-enable-hover nil)
   :init (setq lsp-rust-analyzer-proc-macro-enable t)
-  :config (lsp-enable-which-key-integration t)
-  :hook (lsp-mode . electric-pair-mode))
-
-(use-package expand-region
-  :bind ("C-=" . er/expand-region))
-
-(use-package flycheck
-  :delight)
+  :hook (lsp-mode . electric-pair-mode)
+  :hook (lsp-mode . lsp-enable-which-key-integration))
 
 (use-package prettier-js
   :delight)
@@ -70,6 +66,8 @@
 (use-package web-mode
   :delight
   :mode "\\.[jt]sx?\\'"
+  :init (setq lsp-typescript-format-enable nil)
+  :init (setq lsp-javascript-format-enable nil)
   :hook (web-mode . default-web-indent-mode)
   :hook (web-mode . prettier-js-mode)
   :hook (web-mode . emmet-mode)
@@ -79,7 +77,6 @@
   :delight
   :hook (scss-mode . default-web-indent-mode)
   :hook (scss-mode . prettier-js-mode)
-  :hook (scss-mode . emmet-mode)
   :hook (scss-mode . lsp-deferred))
 
 (use-package emmet-mode
@@ -115,12 +112,6 @@
   :delight
   :bind ("C-c s s" . sp-splice-sexp)
   :bind ("C-c s r" . sp-rewrap-sexp))
-
-(use-package bbdb
-  :init (bbdb-initialize 'gnus 'message)
-  :init (bbdb-mua-auto-update-init 'gnus 'message)
-  :init (setq bbdb-file "~/documents/contacts/bbdb")
-  :init (setq bbdb-mua-auto-update-p 'create))
 
 (use-package org
   :config
@@ -199,3 +190,22 @@
     (let ((first-char (substring string nil 1))
           (rest-str   (substring string 1)))
       (concat (capitalize first-char) rest-str))))
+
+;; Start rewriting config without use-package here:
+
+(require 'bbdb)
+(bbdb-initialize 'message)
+(bbdb-mua-auto-update-init 'gnus 'message)
+(setq bbdb-file "~/documents/contacts/bbdb")
+(setq bbdb-mua-auto-update-p 'query)
+
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C--") 'er/contract-region)
+
+(require 'flymake)
+(setq flymake-start-on-flymake-mode t)
+(setq flymake-start-on-save-buffer t)
+(setq flymake-no-changes-timeout nil)
+(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
