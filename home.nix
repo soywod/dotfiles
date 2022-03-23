@@ -46,7 +46,8 @@ in
       libnotify
       w3m
       tex
-      broot
+      xournal
+      filezilla
     ];
     sessionPath = [
       "$HOME/.local/bin"
