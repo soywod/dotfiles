@@ -94,6 +94,7 @@ in
 
   programs.waybar = {
     enable = true;
+    systemd.enable = true;
     settings = [
       {
         layer = "top";
@@ -207,6 +208,7 @@ in
       * {
         font-family: JetBrains Mono, Font Awesome;
         font-size: 1.2rem;
+        font-weight: bold;
       }
       
       #waybar {
@@ -331,11 +333,7 @@ in
       gaps.inner = 16;
       window.border = 2;
       floating.border = 2;
-      bars = [
-        {
-          command = "waybar";
-        }
-      ];
+      bars = [];
       fonts = {
         names = [ "JetBrains Mono" ];
         style = "Medium";
