@@ -10,10 +10,12 @@ let
 in
 {
   nixpkgs.config.allowUnfree = true;
+
   nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
-    }))
+    # For neovim nightly:
+    # (import (builtins.fetchTarball {
+    #   url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+    # }))
   ];
 
   imports = [
@@ -442,7 +444,8 @@ in
 
   programs.neovim = {
     enable = true;
-    package = pkgs.neovim-nightly;
+    # For neovim nightly:
+    # package = pkgs.neovim-nightly;
     viAlias = true;
     vimAlias = true;
     plugins = [ pkgs.vimPlugins.telescope-nvim ];
