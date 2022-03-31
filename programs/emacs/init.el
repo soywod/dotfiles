@@ -22,7 +22,7 @@
 ;; Custom functions
 
 (defun soywod/format-on-save-hook ()
-  (add-hook 'before-save-hook #'lsp-format-buffer nil 'local))
+  (add-hook 'before-save-hook 'eglot-format nil 'local))
 
 (defun soywod/capitalize-first-char (&optional string)
   "Capitalize only the first character of the input STRING."
@@ -66,7 +66,6 @@
 (delight 'abbrev-mode nil 'abbrev)
 
 (require 'eldoc)
-(setq lsp-eldoc-enable-hover nil)
 (delight 'eldoc-mode nil 'eldoc)
 
 (require 'which-key)
@@ -103,50 +102,47 @@
 
 (require 'ledger-mode)
 
-(require 'flycheck)
-(setq flycheck-check-syntax-automatically '(mode-enabled save))
-(define-key flycheck-mode-map (kbd "M-n") 'flycheck-next-error)
-(define-key flycheck-mode-map (kbd "M-p") 'flycheck-previous-error)
+(require 'flymake)
+(setq flymake-start-on-flymake-mode t)
+(setq flymake-start-on-save-buffer t)
+(setq flymake-no-changes-timeout nil)
+(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
 (require 'company)
 (define-key company-active-map (kbd "<tab>") nil) ; make snippets expand properly
 (delight 'company-mode nil 'company)
 
-(require 'lsp-mode)
-(setq lsp-keymap-prefix "C-c l")
-(setq lsp-log-io nil)
-(setq lsp-enable-indentation nil)
-(setq lsp-enable-on-type-formatting nil)
-(setq lsp-diagnostics-provider :flycheck)
-(setq lsp-lens-enable nil)
-(define-key lsp-mode-map (kbd "C-c l a a") 'helm-lsp-code-actions)
-(add-hook 'lsp-mode-hook 'electric-pair-mode)
-(add-hook 'lsp-mode-hook 'lsp-enable-which-key-integration)
-(add-hook 'lsp-mode-hook 'yas-minor-mode)
-(add-hook 'lsp-mode-hook 'smartparens-mode)
+(require 'eglot)
+(setq eglot-extend-to-xref t)
+(setq eglot-stay-out-of '(eldoc))
+(define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+(define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
+(define-key eglot-mode-map (kbd "C-c h") 'eldoc)
+(define-key eglot-mode-map (kbd "C-c t") 'eglot-code-actions)
+(define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 
 (require 'rust-mode)
-(setq lsp-rust-analyzer-proc-macro-enable t)
 (add-to-list 'auto-mode-alist '("\\.rust\\'" . rust-mode))
 (add-hook 'rust-mode-hook 'soywod/format-on-save-hook)
-(add-hook 'rust-mode-hook 'lsp-deferred)
+(add-hook 'rust-mode-hook 'eglot-ensure)
 
 (require 'nix-mode)
 (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-mode))
 (add-hook 'nix-mode-hook 'soywod/format-on-save-hook)
-(add-hook 'nix-mode-hook 'lsp-deferred)
+(add-hook 'nix-mode-hook 'eglot-ensure)
 
 (require 'web-mode)
 (setq lsp-typescript-format-enable nil)
 (setq lsp-javascript-format-enable nil)
 (add-to-list 'auto-mode-alist '("\\.[jt]sx?\\'" . web-mode))
 (add-hook 'web-mode-hook 'prettier-js-mode)
-(add-hook 'web-mode-hook 'lsp-deferred)
+(add-hook 'web-mode-hook 'eglot-ensure)
 
 ;; scss-mode
 (add-hook 'scss-mode-hook 'soywod/default-web-indent-mode)
 (add-hook 'scss-mode-hook 'prettier-js-mode)
-(add-hook 'scss-mode-hook 'lsp-deferred)
+(add-hook 'scss-mode-hook 'eglot-ensure)
 
 (require 'yasnippet)
 (setq yas-snippet-dirs '("/etc/nixos/programs/emacs/snippets"))

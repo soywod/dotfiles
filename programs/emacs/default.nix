@@ -14,7 +14,7 @@
     extraPackages = (epkgs:
       (with epkgs; [
         doom-themes
-        lsp-mode
+        eglot
         web-mode
         nix-mode
         rust-mode
@@ -35,6 +35,7 @@
         pass
         delight
         yaml-mode
+        markdown-mode
         expand-region
         org
       ]));
