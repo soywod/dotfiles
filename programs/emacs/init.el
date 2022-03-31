@@ -177,14 +177,12 @@
 (setq org-agenda-files
       '("~/documents/org/inbox.org"
 	"~/documents/org/tasks.org"
-  	"~/documents/org/agenda.org"
-	"~/documents/org/habits.org"))
+	"~/documents/org/agenda.org"))
 (setq org-refile-use-outline-path 'file)
-(setq org-refile-targets
-      '(("~/documents/org/tasks.org" :maxlevel . 3)
-	("~/documents/org/someday.org" :level . 1)
-	("~/documents/org/agenda.org" :level . 1)
-  	("~/documents/org/habits.org" :level . 1)))
+(setq org-refile-targets '(("~/documents/org/tasks.org" :maxlevel . 3)
+			   ("~/documents/org/someday.org" :level . 1)
+			   ("~/documents/org/agenda.org" :level . 1)
+  			   ("~/documents/org/habits.org" :level . 1)))
 (setq org-todo-keywords
       '((sequence "TODO(t)" "PENDING(p)" "|" "CANCELLED(c)" "DONE(d)")))
 (setq org-todo-keyword-faces
@@ -195,9 +193,7 @@
 	("a" "Agenda" entry (file "~/documents/org/agenda.org") "* TODO %i%?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \".\"))")))
 (setq org-agenda-custom-commands
       '(("T" "Active tasks" tags-todo "+LEVEL=1+CATEGORY=\"tasks\"")
-	("A" "Today's agenda" agenda "" ((org-agenda-span 'day)
-					 (org-agenda-category-filter-preset '("-habits"))))
-	("W" "Week's agenda" agenda "" ((org-agenda-span 'week)
-					(org-agenda-category-filter-preset '("-habits"))))
-	("M" "Month's agenda" agenda "" ((org-agenda-span 'month)
-					 (org-agenda-category-filter-preset '("-habits"))))))
+	("h" "Today's habits" tags-todo "+DEADLINE<=\"<today>\"" ((org-agenda-files '("~/documents/org/habits.org"))))
+	("A" "Today's agenda" agenda "" ((org-agenda-span 'day)))
+	("W" "Week's agenda" agenda "" ((org-agenda-span 'week)))
+	("M" "Month's agenda" agenda "" ((org-agenda-span 'month)))))
