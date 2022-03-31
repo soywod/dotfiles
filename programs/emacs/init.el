@@ -6,6 +6,7 @@
 (menu-bar-mode -1)
 (set-fringe-mode 10)
 (set-face-attribute 'default nil :font "JetBrains Mono" :height 150)
+(electric-pair-mode)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq disabled-command-function nil) ; activate all commands
 (setq inhibit-startup-screen t) ; deactivate startup screen
@@ -57,7 +58,6 @@
 ;; Packages
 
 (require 'delight)
-(delight 'emacs-lisp-mode "ELisp" :major)
 
 (require 'autorevert)
 (delight 'auto-revert-mode nil 'autorevert)
@@ -67,6 +67,10 @@
 
 (require 'eldoc)
 (delight 'eldoc-mode nil 'eldoc)
+
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C--") 'er/contract-region)
 
 (require 'which-key)
 (setq which-key-idle-delay 0.5)
@@ -93,8 +97,9 @@
 (delight 'helm-mode nil)
 
 (require 'smartparens)
-(define-key smartparens-mode-map (kbd "C-c s s") 'sp-splice-sexp)
-(define-key smartparens-mode-map (kbd "C-c s r") 'sp-rewrap-sexp)
+(global-set-key (kbd "C-c s s") 'sp-splice-sexp)
+(global-set-key (kbd "C-c s r") 'sp-rewrap-sexp)
+(global-set-key (kbd "C-c s k") 'sp-kill-hybrid-sexp)
 (delight 'smartparens-mode nil 'smartparens)
 
 (require 'magit)
