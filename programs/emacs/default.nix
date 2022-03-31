@@ -1,19 +1,25 @@
-{ ... }:
+{ nixpkgs, pkgs, ... }:
 
 {
-  services.emacs.enable = true;
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      # 30/03/2022
+      url = https://github.com/nix-community/emacs-overlay/archive/26da73dd9129d267f0c8c26b591ab91050c4cdc9.tar.gz;
+    }))
+  ];
+    
   programs.emacs = {
     enable = true;
+    package = pkgs.emacsGcc;
     extraPackages = (epkgs:
       (with epkgs; [
-        use-package
         doom-themes
         lsp-mode
         web-mode
         nix-mode
         rust-mode
         ledger-mode
-        emmet-mode
+        company
         direnv
         yasnippet
         prettier-js
@@ -33,6 +39,8 @@
         org
       ]));
   };
+  
+  services.emacs.enable = true;
 
   home.file = {
     ".emacs.d/init.el" = {

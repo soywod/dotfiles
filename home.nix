@@ -23,7 +23,7 @@ in
     (import ./programs/dunst { inherit config pkgs; })
     (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
-    (import ./programs/emacs { inherit pkgs; })
+    (import ./programs/emacs { inherit nixpkgs pkgs; })
     (import ./programs/himalaya { inherit config pkgs; })
   ];
 
@@ -51,12 +51,12 @@ in
       slack
     ];
     sessionPath = [
-      "$HOME/.local/bin"
+      "${config.home.homeDirectory}/.local/bin"
     ];
     sessionVariables = {
       EDITOR = "editor";
       VISUAL = "editor";
-      PASSWORD_STORE_DIR = "$HOME/documents/password-store";
+      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/password-store";
       MOZ_ENABLE_WAYLAND = "1";
       XDG_CURRENT_DESKTOP = "sway";
       XDG_SESSION_TYPE = "wayland";
