@@ -40,6 +40,17 @@
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
 
+(defun soywod/eglot-ensure ()
+  (eglot-ensure)
+  (setq eglot-ignored-server-capabilities '()))
+
+(defun soywod/eglot-ensure-without-formatting ()
+  (eglot-ensure)
+  (setq eglot-ignored-server-capabilities
+	'(:documentFormattingProvider
+	  :documentRangeFormattingProvider
+	  :documentOnTypeFormattingProvider)))
+
 ;; Theme
 
 (require 'doom-themes)
@@ -105,12 +116,7 @@
 (require 'magit)
 (delight 'magit-mode nil 'magit)
 
-(require 'ledger-mode)
-
 (require 'flymake)
-(setq flymake-start-on-flymake-mode t)
-(setq flymake-start-on-save-buffer t)
-(setq flymake-no-changes-timeout nil)
 (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
@@ -127,27 +133,34 @@
 (define-key eglot-mode-map (kbd "C-c t") 'eglot-code-actions)
 (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 
+(require 'web-mode)
+(require 'prettier-js)
+
+;; js-ts-mode
+(define-derived-mode js-ts-mode web-mode "js/ts")
+(add-to-list 'auto-mode-alist '("\\.[jt]sx?\\'" . js-ts-mode))
+(add-to-list 'eglot-server-programs '(js-ts-mode . ("typescript-language-server" "--stdio")))
+(add-hook 'js-ts-mode-hook 'soywod/default-web-indent-mode)
+(add-hook 'js-ts-mode-hook 'soywod/eglot-ensure-without-formatting)
+(add-hook 'js-ts-mode-hook 'prettier-js-mode)
+
+;; scss-mode
+(add-hook 'scss-mode-hook 'soywod/default-web-indent-mode)
+(add-hook 'scss-mode-hook 'soywod/eglot-ensure-without-formatting)
+(add-hook 'scss-mode-hook 'prettier-js-mode)
+
 (require 'rust-mode)
 (add-to-list 'auto-mode-alist '("\\.rust\\'" . rust-mode))
 (add-hook 'rust-mode-hook 'soywod/format-on-save-hook)
-(add-hook 'rust-mode-hook 'eglot-ensure)
+(add-hook 'rust-mode-hook 'soywod/eglot-ensure)
 
 (require 'nix-mode)
 (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-mode))
 (add-hook 'nix-mode-hook 'soywod/format-on-save-hook)
-(add-hook 'nix-mode-hook 'eglot-ensure)
+(add-hook 'nix-mode-hook 'soywod/eglot-ensure)
 
-(require 'web-mode)
-(setq lsp-typescript-format-enable nil)
-(setq lsp-javascript-format-enable nil)
-(add-to-list 'auto-mode-alist '("\\.[jt]sx?\\'" . web-mode))
-(add-hook 'web-mode-hook 'prettier-js-mode)
-(add-hook 'web-mode-hook 'eglot-ensure)
-
-;; scss-mode
-(add-hook 'scss-mode-hook 'soywod/default-web-indent-mode)
-(add-hook 'scss-mode-hook 'prettier-js-mode)
-(add-hook 'scss-mode-hook 'eglot-ensure)
+(require 'ledger-mode)
+(add-to-list 'auto-mode-alist '("\\.ldg\\'" . ledger-mode))
 
 (require 'yasnippet)
 (setq yas-snippet-dirs '("/etc/nixos/programs/emacs/snippets"))
@@ -156,11 +169,6 @@
 
 (require 'direnv)
 (direnv-mode)
-
-(require 'ledger-mode)
-(add-to-list 'auto-mode-alist '("\\.ldg\\'" . ledger-mode))
-
-(require 'prettier-js)
 
 (require 'ox-latex)
 (add-to-list 'org-latex-classes '("letter" "\\documentclass{frletter}"))
@@ -174,6 +182,7 @@
 (require 'org)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
+(setq org-startup-folded t)
 (setq org-agenda-files
       '("~/documents/org/inbox.org"
 	"~/documents/org/tasks.org"
