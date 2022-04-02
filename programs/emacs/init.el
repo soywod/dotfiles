@@ -6,7 +6,6 @@
 (menu-bar-mode -1)
 (set-fringe-mode 10)
 (set-face-attribute 'default nil :font "JetBrains Mono" :height 150)
-(electric-pair-mode)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq disabled-command-function nil) ; activate all commands
 (setq inhibit-startup-screen t) ; deactivate startup screen
@@ -70,13 +69,13 @@
 
 (require 'delight)
 
-(require 'autorevert)
+;; autorevert
 (delight 'auto-revert-mode nil 'autorevert)
 
-(require 'abbrev)
+;; abbrev
 (delight 'abbrev-mode nil 'abbrev)
 
-(require 'eldoc)
+;; eldoc
 (delight 'eldoc-mode nil 'eldoc)
 
 (require 'expand-region)
@@ -85,27 +84,29 @@
 
 (require 'which-key)
 (setq which-key-idle-delay 0.5)
-(which-key-mode)
+(add-hook 'after-init-hook 'which-key-mode)
 (delight 'which-key-mode nil 'which-key)
 
 (require 'projectile)
 (setq projectile-enable-caching nil)
 (setq projectile-project-search-path (cddr (directory-files "~/code" t)))
+(add-hook 'after-init-hook 'projectile-global-mode)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(projectile-global-mode)
 (delight 'projectile-mode (format " Proj[%s]" (projectile-project-name)) 'projectile)
 
-(require 'helm)
-(require 'helm-projectile)
-(require 'helm-lsp)
-(helm-mode)
-(helm-projectile-on)
-(define-key helm-find-files-map (kbd "<tab>") 'helm-ff-RET)
-(define-key helm-projectile-find-file-map (kbd "<tab>") 'helm-ff-RET)
-(define-key helm-generic-files-map (kbd "<tab>") 'helm-ff-RET)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(delight 'helm-mode nil)
+(require 'flx)
+(require 'ivy)
+(require 'counsel)
+(require 'swiper)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+(add-hook 'after-init-hook 'ivy-mode)
+(add-hook 'after-init-hook 'counsel-mode)
+(add-hook 'after-init-hook 'counsel-projectile-mode)
+(global-set-key (kbd "C-s") 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(delight 'ivy-mode nil 'ivy)
+(delight 'counsel-mode nil 'counsel)
 
 (require 'smartparens)
 (global-set-key (kbd "C-c s s") 'sp-splice-sexp)
@@ -116,28 +117,36 @@
 (require 'magit)
 (delight 'magit-mode nil 'magit)
 
+;; elisp
+(delight 'emacs-lisp-mode "ELisp" :major)
+
 (require 'flymake)
 (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
+;; elec-pair
+(add-hook 'after-init-hook 'electric-pair-mode)
+
 (require 'company)
-(define-key company-active-map (kbd "<tab>") nil) ; make snippets expand properly
+(add-hook 'after-init-hook 'global-company-mode)
+(define-key company-active-map (kbd "<tab>") nil) ; make yasnippets expand properly
 (delight 'company-mode nil 'company)
 
 (require 'eglot)
 (setq eglot-extend-to-xref t)
 (setq eglot-stay-out-of '(eldoc))
 (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+(define-key eglot-mode-map (kbd "C-c t") 'eglot-code-actions)
 (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
 (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
-(define-key eglot-mode-map (kbd "C-c t") 'eglot-code-actions)
 (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 
 (require 'web-mode)
 (require 'prettier-js)
+(delight 'prettier-js-mode nil 'prettier-js)
 
 ;; js-ts-mode
-(define-derived-mode js-ts-mode web-mode "js/ts")
+(define-derived-mode js-ts-mode web-mode "Js")
 (add-to-list 'auto-mode-alist '("\\.[jt]sx?\\'" . js-ts-mode))
 (add-to-list 'eglot-server-programs '(js-ts-mode . ("typescript-language-server" "--stdio")))
 (add-hook 'js-ts-mode-hook 'soywod/default-web-indent-mode)
@@ -164,7 +173,8 @@
 
 (require 'yasnippet)
 (setq yas-snippet-dirs '("/etc/nixos/programs/emacs/snippets"))
-(add-hook 'yas-minor-mode 'yas-reload-all)
+(add-hook 'after-init-hook 'yas-global-mode)
+(add-hook 'yas-minor-mode-hook 'yas-reload-all)
 (delight 'yas-minor-mode nil 'yasnippet)
 
 (require 'direnv)

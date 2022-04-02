@@ -17,6 +17,7 @@
         eglot
         web-mode
         nix-mode
+        flx
         rust-mode
         ledger-mode
         company
@@ -27,10 +28,10 @@
         magit
         bbdb
         projectile
-        helm
-        helm-lsp
-        helm-projectile
-        helm-rg
+        ivy
+        counsel
+        counsel-projectile
+        swiper
         which-key
         pass
         delight
