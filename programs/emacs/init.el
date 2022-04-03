@@ -1,11 +1,12 @@
 ;; Global config
 
 (scroll-bar-mode -1)
-(tool-bar-mode -1)   
+(tool-bar-mode -1) 
 (tooltip-mode -1)
 (menu-bar-mode -1)
 (set-fringe-mode 10)
 (set-face-attribute 'default nil :font "JetBrains Mono" :height 150)
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq disabled-command-function nil) ; activate all commands
 (setq inhibit-startup-screen t) ; deactivate startup screen
@@ -96,17 +97,37 @@
 
 (require 'flx)
 (require 'ivy)
-(require 'counsel)
-(require 'swiper)
 (setq ivy-use-virtual-buffers t)
 (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
 (add-hook 'after-init-hook 'ivy-mode)
-(add-hook 'after-init-hook 'counsel-mode)
-(add-hook 'after-init-hook 'counsel-projectile-mode)
-(global-set-key (kbd "C-s") 'swiper)
 (global-set-key (kbd "C-c C-r") 'ivy-resume)
+(set-face-attribute 'ivy-current-match nil :weight 'bold :background "#2257a0" :foreground nil)
+(set-face-attribute 'ivy-minibuffer-match-face-1 nil :weight 'bold :background nil :foreground "#51afef")
+(set-face-attribute 'ivy-minibuffer-match-face-2 nil :weight 'bold :background nil :foreground "#51afef")
+(set-face-attribute 'ivy-minibuffer-match-face-3 nil :weight 'bold :background nil :foreground "#51afef")
+(set-face-attribute 'ivy-minibuffer-match-face-4 nil :weight 'bold :background nil :foreground "#51afef")
+(set-face-attribute 'ivy-virtual nil :slant 'normal :background nil :foreground "#bbc2cf")
 (delight 'ivy-mode nil 'ivy)
+
+(require 'counsel)
+(add-hook 'after-init-hook 'counsel-mode)
 (delight 'counsel-mode nil 'counsel)
+
+(require 'counsel-projectile)
+(add-hook 'after-init-hook 'counsel-projectile-mode)
+
+(require 'swiper)
+(global-set-key (kbd "C-s") 'swiper)
+(global-set-key (kbd "C-r") 'swiper-backward)
+(set-face-attribute 'swiper-line-face nil :weight 'bold :background "#2257a0" :foreground nil)
+(set-face-attribute 'swiper-match-face-1 nil :background nil :foreground nil)
+(set-face-attribute 'swiper-match-face-2 nil :weight 'bold :background "#51afef" :foreground "#282c34")
+(set-face-attribute 'swiper-match-face-3 nil :weight 'bold :background "#51afef" :foreground "#282c34")
+(set-face-attribute 'swiper-match-face-4 nil :weight 'bold :background "#51afef" :foreground "#282c34")
+(set-face-attribute 'swiper-background-match-face-1 nil :background nil :foreground nil)
+(set-face-attribute 'swiper-background-match-face-2 nil :background "#51afef" :foreground "#282c34")
+(set-face-attribute 'swiper-background-match-face-3 nil :background "#51afef" :foreground "#282c34")
+(set-face-attribute 'swiper-background-match-face-4 nil :background "#51afef" :foreground "#282c34")
 
 (require 'smartparens)
 (global-set-key (kbd "C-c s s") 'sp-splice-sexp)
@@ -174,7 +195,7 @@
 (require 'yasnippet)
 (setq yas-snippet-dirs '("/etc/nixos/programs/emacs/snippets"))
 (add-hook 'after-init-hook 'yas-global-mode)
-(add-hook 'yas-minor-mode-hook 'yas-reload-all)
+(add-hook 'yas-global-mode-hook 'yas-reload-all)
 (delight 'yas-minor-mode nil 'yasnippet)
 
 (require 'direnv)
@@ -188,6 +209,11 @@
 (setq bbdb-mua-auto-update-p 'query)
 (bbdb-initialize 'message)
 (bbdb-mua-auto-update-init 'gnus 'message)
+
+(require 'paren)
+(setq show-paren-delay 0)
+(add-hook 'after-init-hook 'show-paren-mode)
+(set-face-attribute 'show-paren-match nil :weight 'extra-bold :slant 'normal)
 
 (require 'org)
 (global-set-key (kbd "C-c c") 'org-capture)
