@@ -7,6 +7,17 @@ let
       collection-langfrench # french language
       wrapfig lastpage; # org-mode invoice pdf export
   });
+  slack = pkgs.slack.overrideAttrs (old: {
+    installPhase = old.installPhase + ''
+      rm $out/bin/slack
+
+      makeWrapper $out/lib/slack/slack $out/bin/slack \
+        --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+        --prefix PATH : ${lib.makeBinPath [pkgs.xdg-utils]} \
+        --add-flags "--enable-features=WebRTCPipeWireCapturer"
+    '';
+  });
+  
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -49,6 +60,7 @@ in
       xournal
       filezilla
       slack
+      postman
     ];
     sessionPath = [
       "${config.home.homeDirectory}/.local/bin"
@@ -72,8 +84,6 @@ in
         --file ${config.home.homeDirectory}/documents/ledger/auto-entrepreneur.ldg
         --strict
         --empty
-        --effective
-        --cleared
       '';
     };
   };
@@ -342,9 +352,9 @@ in
       };
       input = {
         "type:keyboard" = {
-          xkb_layout = "us,us,ru";
-          xkb_variant = ",dvorak-alt-intl,";
-          xkb_options = ",grp:shifts_toggle,numpad:mac,compose:ralt,ctrl:swapcaps,";
+          xkb_layout = "us,ru";
+          xkb_variant = "dvorak-alt-intl,";
+          xkb_options = "grp:shifts_toggle,numpad:mac,compose:ralt,ctrl:swapcaps";
           repeat_delay = "256";
           repeat_rate = "32";
         };
@@ -470,6 +480,11 @@ in
     path = "${config.home.homeDirectory}/documents";
   };
 
+  systemd.user.services.dropbox = {
+    Unit.After = "graphical-session.target network-online.target";
+    Service.Environment = ["DISPLAY=:0"];
+  };
+
   services.gammastep = {
     enable = true;
     tray = true;
@@ -480,10 +495,6 @@ in
       };
     };
   };
-
-  systemd.user.services.dropbox.Service.Environment = [
-    "DISPLAY=:0"
-  ];
 
   home.stateVersion = "21.05";
 }
