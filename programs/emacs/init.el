@@ -12,6 +12,7 @@
 (setq inhibit-startup-screen t) ; deactivate startup screen
 (setq visible-bell t) ; activate visual bell
 (setq completion-styles '(flex)) ; enable flex partial completion
+(setq completion-ignore-case t)
 (setq vc-make-backup-files nil) ; disable backup files on version control
 (setq make-backup-files nil) ; disable backup files
 (setq auto-save-default nil) ; disable auto save
@@ -33,12 +34,12 @@
       (concat (capitalize first-char) rest-str))))
 
 (defun soywod/default-web-indent-mode ()
-  (setq indent-tabs-mode nil)
-  (setq tab-width 2)
-  (setq web-mode-smart-quotes nil)
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2))
+  (setq-local indent-tabs-mode nil)
+  (setq-local tab-width 2)
+  (setq-local web-mode-smart-quotes nil)
+  (setq-local web-mode-markup-indent-offset 2)
+  (setq-local web-mode-css-indent-offset 2)
+  (setq-local web-mode-code-indent-offset 2))
 
 (defun soywod/eglot-ensure ()
   (eglot-ensure)
@@ -51,20 +52,15 @@
 	  :documentRangeFormattingProvider
 	  :documentOnTypeFormattingProvider)))
 
+(defun soywod/org-clock-toggle ()
+  (interactive)
+  (if org-clock-current-task (org-clock-out) (org-clock-in-last)))
+
 ;; Theme
 
 (require 'doom-themes)
 (load-theme 'doom-one t)
 (doom-themes-org-config)
-
-;; Local packages
-
-(add-to-list 'load-path "~/code/himalaya-emacs")
-(require 'himalaya)
-(setq himalaya-executable "/home/soywod/code/himalaya/target/debug/himalaya")
-
-(add-to-list 'load-path "~/code/org-latex-invoice")
-(require 'org-latex-invoice)
 
 ;; Packages
 
@@ -77,7 +73,11 @@
 (delight 'abbrev-mode nil 'abbrev)
 
 ;; eldoc
+(setq eldoc-echo-area-use-multiline-p nil)
 (delight 'eldoc-mode nil 'eldoc)
+
+;; fido
+(add-hook 'after-init-hook 'fido-vertical-mode)
 
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -94,40 +94,6 @@
 (add-hook 'after-init-hook 'projectile-global-mode)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 (delight 'projectile-mode (format " Proj[%s]" (projectile-project-name)) 'projectile)
-
-(require 'flx)
-(require 'ivy)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
-(add-hook 'after-init-hook 'ivy-mode)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-(set-face-attribute 'ivy-current-match nil :weight 'bold :background "#2257a0" :foreground nil)
-(set-face-attribute 'ivy-minibuffer-match-face-1 nil :weight 'bold :background nil :foreground "#51afef")
-(set-face-attribute 'ivy-minibuffer-match-face-2 nil :weight 'bold :background nil :foreground "#51afef")
-(set-face-attribute 'ivy-minibuffer-match-face-3 nil :weight 'bold :background nil :foreground "#51afef")
-(set-face-attribute 'ivy-minibuffer-match-face-4 nil :weight 'bold :background nil :foreground "#51afef")
-(set-face-attribute 'ivy-virtual nil :slant 'normal :background nil :foreground "#bbc2cf")
-(delight 'ivy-mode nil 'ivy)
-
-(require 'counsel)
-(add-hook 'after-init-hook 'counsel-mode)
-(delight 'counsel-mode nil 'counsel)
-
-(require 'counsel-projectile)
-(add-hook 'after-init-hook 'counsel-projectile-mode)
-
-(require 'swiper)
-(global-set-key (kbd "C-s") 'swiper)
-(global-set-key (kbd "C-r") 'swiper-backward)
-(set-face-attribute 'swiper-line-face nil :weight 'bold :background "#2257a0" :foreground nil)
-(set-face-attribute 'swiper-match-face-1 nil :background nil :foreground nil)
-(set-face-attribute 'swiper-match-face-2 nil :weight 'bold :background "#51afef" :foreground "#282c34")
-(set-face-attribute 'swiper-match-face-3 nil :weight 'bold :background "#51afef" :foreground "#282c34")
-(set-face-attribute 'swiper-match-face-4 nil :weight 'bold :background "#51afef" :foreground "#282c34")
-(set-face-attribute 'swiper-background-match-face-1 nil :background nil :foreground nil)
-(set-face-attribute 'swiper-background-match-face-2 nil :background "#51afef" :foreground "#282c34")
-(set-face-attribute 'swiper-background-match-face-3 nil :background "#51afef" :foreground "#282c34")
-(set-face-attribute 'swiper-background-match-face-4 nil :background "#51afef" :foreground "#282c34")
 
 (require 'smartparens)
 (global-set-key (kbd "C-c s s") 'sp-splice-sexp)
@@ -148,31 +114,38 @@
 ;; elec-pair
 (add-hook 'after-init-hook 'electric-pair-mode)
 
-(require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
-(define-key company-active-map (kbd "<tab>") nil) ; make yasnippets expand properly
-(delight 'company-mode nil 'company)
-
 (require 'eglot)
 (setq eglot-extend-to-xref t)
-(setq eglot-stay-out-of '(eldoc))
 (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
 (define-key eglot-mode-map (kbd "C-c t") 'eglot-code-actions)
 (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
 (define-key eglot-mode-map (kbd "C-c h") 'eldoc)
 (define-key eglot-mode-map (kbd "M-.") 'xref-find-definitions)
 
-(require 'web-mode)
 (require 'prettier-js)
 (delight 'prettier-js-mode nil 'prettier-js)
 
-;; js-ts-mode
-(define-derived-mode js-ts-mode web-mode "Js")
-(add-to-list 'auto-mode-alist '("\\.[jt]sx?\\'" . js-ts-mode))
-(add-to-list 'eglot-server-programs '(js-ts-mode . ("typescript-language-server" "--stdio")))
-(add-hook 'js-ts-mode-hook 'soywod/default-web-indent-mode)
-(add-hook 'js-ts-mode-hook 'soywod/eglot-ensure-without-formatting)
-(add-hook 'js-ts-mode-hook 'prettier-js-mode)
+(require 'web-mode)
+(define-derived-mode tsx-mode web-mode "TypeScript/React")
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
+(cl-defmethod project-root ((project (head eglot-project))) (cdr project))
+(defun my-project-try-tsconfig-json (dir)
+  (when-let* ((found (locate-dominating-file dir "tsconfig.json")))
+    (cons 'eglot-project found)))
+(add-to-list 'eglot-server-programs '(tsx-mode . ("typescript-language-server" "--stdio")))
+(add-hook 'project-find-functions
+          'my-project-try-tsconfig-json nil nil)
+(add-hook 'tsx-mode-hook 'soywod/eglot-ensure-without-formatting)
+(add-hook 'tsx-mode-hook 'soywod/default-web-indent-mode)
+(add-hook 'tsx-mode-hook 'prettier-js-mode)
+
+(require 'typescript-mode)
+(setq typescript-indent-level 2)
+(setq typescript-auto-indent-flag nil)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-to-list 'eglot-server-programs '(typescript-mode . ("typescript-language-server" "--stdio")))
+(add-hook 'typescript-mode-hook 'soywod/eglot-ensure-without-formatting)
+(add-hook 'typescript-mode-hook 'prettier-js-mode)
 
 ;; scss-mode
 (add-hook 'scss-mode-hook 'soywod/default-web-indent-mode)
@@ -216,13 +189,19 @@
 (set-face-attribute 'show-paren-match nil :weight 'extra-bold :slant 'normal)
 
 (require 'org)
+(require 'org-clock)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c TAB") 'soywod/org-clock-toggle)
+(setq org-effort-durations
+      `(("min" . 1)
+	("h" . 60)
+	("j" . ,(* 60 7))
+	("s" . ,(* 60 7 5))
+	("m" . ,(* 60 7 5 4))
+	("a" . ,(* 60 7 5 4 12))))
 (setq org-startup-folded t)
-(setq org-agenda-files
-      '("~/documents/org/inbox.org"
-	"~/documents/org/tasks.org"
-	"~/documents/org/agenda.org"))
+(setq org-agenda-files '("~/documents/org/agenda.org"))
 (setq org-refile-use-outline-path 'file)
 (setq org-refile-targets '(("~/documents/org/tasks.org" :maxlevel . 3)
 			   ("~/documents/org/someday.org" :level . 1)
@@ -242,3 +221,90 @@
 	("A" "Today's agenda" agenda "" ((org-agenda-span 'day)))
 	("W" "Week's agenda" agenda "" ((org-agenda-span 'week)))
 	("M" "Month's agenda" agenda "" ((org-agenda-span 'month)))))
+
+(defun soywod/org-clock-get-table-data (file start end)
+  (let* ((start (format-time-string (org-time-stamp-format t t) start))
+	 (end (format-time-string (org-time-stamp-format t t) end))
+	 (params (list :maxlevel 0 :tstart start :tend end)))
+    (org-clock-get-table-data file params)))
+
+;; (defun soywod/to-duration-str (mins)
+;;   "Transforms integer minutes into a minimalistic human-readable
+;; string duration."
+;;   (let ((durations '()))
+;;     (dolist (unit (reverse org-duration-units))
+;;       (let* ((unit-symbol (car unit))
+;; 	     (unit (cdr unit)))
+;; 	(when (>= mins unit)
+;; 	  (push (format "%d%s%s" (/ mins unit) "" unit-symbol) durations)
+;; 	  (setq mins (mod mins unit)))))
+;;     (string-join (reverse durations) " ")))
+
+(defun round-price (price)
+  (/ (fround (* 100 price)) 100))
+
+(setq calc-float-format '(fix 2))
+(setq calc-point-char ",")
+(setq calc-group-char " ")
+(setq calc-group-digits t)
+
+(defun org-dblock-write:invoice (params)
+  (let* ((file (or (plist-get params :file) (buffer-file-name)))
+         (rate (plist-get params :rate))
+         (start (time-convert (org-matcher-time (plist-get params :tstart))))
+         (end (time-convert (org-matcher-time (plist-get params :tend))))
+	 (total-time 0)
+	 (total-vat-excl 0)
+	 (total-vat 0))
+    (insert "|Jour"
+	    "|Durée"
+	    "|Montant\n"
+	    "|-\n"
+	    "|<l>"
+	    "|<r>"
+	    "|<r>\n")
+    (while (time-less-p start end)
+      (let* ((next-day (time-add start (* 60 60 24)))
+	     (time (org-clock-sum start next-day))
+	     (amount (round-price (/ (float (* time rate)) 60))))
+	(unless (zerop time)
+	  (setq total-time (+ total-time time))
+	  (setq total-vat-excl (+ total-vat-excl amount))
+	  (insert "|" (format-time-string "%a %d" start)
+		  "|" (org-duration-from-minutes time '((special . h:mm)))
+		  "|" (calc-eval (number-to-string amount))
+		  "|\n"))
+	(setq start next-day)))
+    (org-table-align)
+    (setq total-vat (round-price (* 0.2 total-vat-excl)))
+    (insert "\n"
+	    "|Total\n"
+	    "|-\n"
+	    "|<l>"
+	    "|<r>\n"
+	    "|Durée"
+	    "|" (org-duration-from-minutes total-time '(("j" . true) (special . h:mm))) "\n"
+	    "|HT"
+	    "|" (calc-eval (number-to-string total-vat-excl)) "\n"
+	    "|TVA 20%"
+	    "|" (calc-eval (number-to-string total-vat)) "\n"
+	    "|TTC"
+	    "|" (calc-eval (number-to-string (+ total-vat-excl total-vat))) "\n")
+    (org-table-align)))
+
+;; Local packages
+
+(add-to-list 'load-path "~/code/himalaya-emacs")
+(require 'himalaya)
+(setq himalaya-executable "/home/soywod/code/himalaya/target/debug/himalaya")
+
+(add-to-list 'load-path "~/code/org-latex-invoice")
+(require 'org-latex-invoice)
+
+(add-to-list 'load-path "~/code/emacs-prisma-mode")
+(require 'prisma-mode)
+(add-to-list 'auto-mode-alist '("\\.prisma\\'" . prisma-mode))
+(add-to-list 'eglot-server-programs '(prisma-mode . ("prisma-language-server" "--stdio")))
+(add-hook 'prisma-mode-hook 'soywod/eglot-ensure)
+
+(require 'rg)
