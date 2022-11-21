@@ -59,7 +59,7 @@
 ;; Theme
 
 (require 'doom-themes)
-(load-theme 'doom-one t)
+(load-theme 'doom-one-light t)
 (doom-themes-org-config)
 
 ;; Packages
@@ -165,6 +165,12 @@
 (require 'ledger-mode)
 (add-to-list 'auto-mode-alist '("\\.ldg\\'" . ledger-mode))
 
+(require 'vimrc-mode)
+(add-hook 'vimrc-mode-hook 'soywod/eglot-ensure)
+
+(require 'lua-mode)
+(add-hook 'lua-mode-hook 'soywod/eglot-ensure)
+
 (require 'yasnippet)
 (setq yas-snippet-dirs '("/etc/nixos/programs/emacs/snippets"))
 (add-hook 'after-init-hook 'yas-global-mode)
@@ -176,6 +182,8 @@
 
 (require 'ox-latex)
 (add-to-list 'org-latex-classes '("letter" "\\documentclass{frletter}"))
+
+(require 'ox-md)
 
 (require 'bbdb)
 (setq bbdb-file "~/documents/contacts/bbdb")
@@ -192,13 +200,16 @@
 (require 'org-clock)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c TAB") 'soywod/org-clock-toggle)
+(global-set-key (kbd "C-c SPC") 'soywod/org-clock-toggle)
 (setq org-effort-durations
       `(("min" . 1)
 	("h" . 60)
+	("d" . ,(* 60 7))
 	("j" . ,(* 60 7))
+	("w" . ,(* 60 7 5))
 	("s" . ,(* 60 7 5))
 	("m" . ,(* 60 7 5 4))
+	("y" . ,(* 60 7 5 4 12))
 	("a" . ,(* 60 7 5 4 12))))
 (setq org-startup-folded t)
 (setq org-agenda-files '("~/documents/org/agenda.org"))
@@ -209,9 +220,9 @@
   			   ("~/documents/org/habits.org" :level . 1)))
 (setq org-todo-keywords
       '((sequence "TODO(t)" "PENDING(p)" "|" "CANCELLED(c)" "DONE(d)")))
-(setq org-todo-keyword-faces
-      '(("TODO" . (:foreground "#c678dd" :weight bold))
-	("PENDING" . (:background "#3f444a" :foreground "#ff6c6b" :weight bold))))
+;; (setq org-todo-keyword-faces
+;;       '(("TODO" . (:foreground "#c678dd" :weight bold))
+;; 	("PENDING" . (:background "#3f444a" :foreground "#ff6c6b" :weight bold))))
 (setq org-capture-templates
       '(("i" "Inbox" entry (file "~/documents/org/inbox.org") "* TODO %i%?")
 	("a" "Agenda" entry (file "~/documents/org/agenda.org") "* TODO %i%?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \".\"))")))

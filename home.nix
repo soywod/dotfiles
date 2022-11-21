@@ -5,62 +5,46 @@ let
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-small
       collection-langfrench # french language
-      wrapfig lastpage; # org-mode invoice pdf export
-  });
-  slack = pkgs.slack.overrideAttrs (old: {
-    installPhase = old.installPhase + ''
-      rm $out/bin/slack
-
-      makeWrapper $out/lib/slack/slack $out/bin/slack \
-        --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${lib.makeBinPath [pkgs.xdg-utils]} \
-        --add-flags "--enable-features=WebRTCPipeWireCapturer"
-    '';
+      wrapfig lastpage capt-of # org-mode invoice pdf export
+      siunitx; # number formatting
   });
   
 in
 {
   nixpkgs.config.allowUnfree = true;
 
-  nixpkgs.overlays = [
-    # For neovim nightly:
-    # (import (builtins.fetchTarball {
-    #   url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
-    # }))
-  ];
-
   imports = [
     (import ./programs/bash { inherit pkgs; })
-    (import ./programs/dunst { inherit config pkgs; })
+    (import ./programs/dunst { inherit pkgs config theme; })
     (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit nixpkgs pkgs; })
-    (import ./programs/himalaya { inherit config pkgs; })
+    # (import ./programs/himalaya { inherit pkgs config; })
   ];
 
   home = {
     packages = with pkgs; [
-      chromium
-      libreoffice
       brightnessctl
-      pulseaudio
+      chromium
+      element-desktop
+      filezilla
       ghostscript
-      p7zip
-      ripgrep
-      mpv
-      xdg-utils
       gimp
       inkscape
-      tdesktop
-      wally-cli
       ledger
       libnotify
-      w3m
-      tex
-      xournal
-      filezilla
-      slack
+      libreoffice
+      mpv
+      p7zip
       postman
+      pulseaudio
+      ripgrep
+      tdesktop
+      tex
+      w3m
+      wally-cli
+      xdg-utils
+      xournal
     ];
     sessionPath = [
       "${config.home.homeDirectory}/.local/bin"
@@ -88,21 +72,15 @@ in
     };
   };
 
-  programs.firefox = {
-    enable = true;
-    package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-      forceWayland = true;
-      extraNativeMessagingHosts = [ pkgs.passff-host ];
-      extraPolicies = {
-        ExtensionSettings = { };
-      };
-    };
-  };
-
   programs.home-manager = {
     enable = true;
   };
 
+  programs.browserpass = {
+    enable = true;
+    browsers = [ "chromium" ];
+  };
+  
   programs.waybar = {
     enable = true;
     systemd.enable = true;
@@ -202,7 +180,7 @@ in
           clock = {
             timezone = "Europe/Paris";
             tooltip = false;
-            format = "{:%H:%M, %a %b %e}";
+            format = "{:%Hh%M, %a %e %b}";
           };
 
           "sway/mode" = {
@@ -218,14 +196,13 @@ in
     style = ''
       * {
         font-family: JetBrains Mono, Font Awesome;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: bold;
       }
       
       #waybar {
-        background-color: #21242b;
-        color: #bbc2cf;
-        border-bottom: 2px solid #3f444a;
+        background-color: ${theme.fg};
+        color: ${theme.bg};
       }
       
       #battery,
@@ -242,20 +219,20 @@ in
       }
       
       #battery.good {
-        color: #98be65;
+        color: ${theme.green};
       }
       
       #battery.warning {
-        color: #da8548;
+        color: ${theme.orange};
       }
       
       .critical {
-        background-color: #ff6c6b;
-        color: #bbc2cf;
+        background-color: ${theme.red};
+        color: ${theme.fg};
       }
       
       #battery.charging {
-        color: #ecbe7b;
+        color: ${theme.blue};
       }
       
       #tray {
@@ -305,28 +282,28 @@ in
       linux_display_server = "wayland";
       background_opacity = 90;
       touch_scroll_multiplier = 10;
-      background = "#282c34";
-      foreground = "#bbc2cf";
-      selection_background = "#3f444a";
-      selection_foreground = "#bbc2cf";
-      cursor = "#51afef";
-      url_color = "#2257a0";
-      color0 = "#3f444a";
-      color1 = "#ff6c6b";
-      color2 = "#98be65";
-      color3 = "#ecbe7b";
-      color4 = "#51afef";
-      color5 = "#c678dd";
-      color6 = "#46d9ff";
-      color7 = "#bbc2cf";
-      color8 = "#3f444a";
-      color9 = "#ff6c6b";
-      color10 = "#98be65";
-      color11 = "#ecbe7b";
-      color12 = "#51afef";
-      color13 = "#c678dd";
-      color14 = "#46d9ff";
-      color15 = "#bbc2cf";
+      background = theme.bg;
+      foreground = theme.fg;
+      selection_background = theme.mono4;
+      selection_foreground = theme.fg;
+      cursor = theme.blue;
+      url_color = theme.dark-blue;
+      color0 = theme.mono4;
+      color1 = theme.red;
+      color2 = theme.green;
+      color3 = theme.yellow;
+      color4 = theme.blue;
+      color5 = theme.magenta;
+      color6 = theme.cyan;
+      color7 = theme.fg;
+      color8 = theme.mono4;
+      color9 = theme.red;
+      color10 = theme.green;
+      color11 = theme.yellow;
+      color12 = theme.blue;
+      color13 = theme.magenta;
+      color14 = theme.cyan;
+      color15 = theme.fg;
     };
     keybindings = {
       "ctrl+shift+n" = "new_os_window_with_cwd";
@@ -337,7 +314,7 @@ in
     enable = true;
     wrapperFeatures.gtk = true;
     config = {
-      menu = "${pkgs.dmenu}/bin/dmenu_path | ${pkgs.dmenu}/bin/dmenu -b -fn JetBrainsMono-15 -nb '${theme.bg}' -nf '${theme.fg}' -sb '${theme.magenta}' -sf '${theme.bg}' | ${pkgs.findutils}/bin/xargs swaymsg exec --";
+      menu = "${pkgs.dmenu}/bin/dmenu_path | ${pkgs.dmenu}/bin/dmenu -b -fn JetBrainsMono-15 -nb '${theme.bg}' -nf '${theme.fg}' -sb '${theme.blue}' -sf '${theme.bg}' | ${pkgs.findutils}/bin/xargs swaymsg exec --";
       modifier = "Mod4";
       terminal = "kitty";
       focus.followMouse = false;
@@ -367,6 +344,11 @@ in
         eDP-1 = {
           resolution = "1920x1200@60Hz";
           position = "0 0";
+          bg = "${config.home.homeDirectory}/documents/wallpapers/nixos.svg fill";
+        };
+        DP-2 = {
+          resolution = "1920x1080@60Hz";
+          position = "1920 0";
           bg = "${config.home.homeDirectory}/documents/wallpapers/nixos.svg fill";
         };
       };
@@ -407,25 +389,25 @@ in
       colors = {
         background = theme.bg;
         focused = {
-          background = theme.magenta;
-          border = theme.magenta;
-          childBorder = theme.magenta;
-          indicator = theme.magenta;
+          background = theme.blue;
+          border = theme.blue;
+          childBorder = theme.mono2;
+          indicator = theme.blue;
           text = theme.bg;
         };
         focusedInactive = {
-          background = theme.fg-alt;
-          border = theme.fg-alt;
-          childBorder = theme.mono4;
-          indicator = theme.bg;
+          background = theme.dark-blue;
+          border = theme.blue;
+          childBorder = theme.mono2;
+          indicator = theme.dark-blue;
           text = theme.bg;
         };
         unfocused = {
-          background = theme.bg;
-          border = theme.magenta;
-          childBorder = theme.mono4;
-          indicator = theme.bg;
-          text = theme.fg-alt;
+          background = theme.mono2;
+          border = theme.mono2;
+          childBorder = theme.mono2;
+          indicator = theme.fg;
+          text = theme.fg;
         };
         urgent = {
           background = theme.red;
@@ -450,20 +432,6 @@ in
     settings = {
       PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/password-store";
     };
-  };
-
-  programs.neovim = {
-    enable = true;
-    # For neovim nightly:
-    # package = pkgs.neovim-nightly;
-    viAlias = true;
-    vimAlias = true;
-    plugins = [ pkgs.vimPlugins.telescope-nvim ];
-    extraConfig = ''
-      set runtimepath+=,~/code/himalaya/vim
-      let g:himalaya_telescope_preview_enabled = 0
-      let g:himalaya_mailbox_picker = "native"
-    '';
   };
 
   services.gpg-agent = {

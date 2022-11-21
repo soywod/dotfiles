@@ -1,4 +1,4 @@
-{config, pkgs}:
+{pkgs, theme, config}:
 
 let
   mpv = "${pkgs.mpv}/bin/mpv";
@@ -75,21 +75,21 @@ in {
         per_monitor_dpi = false;
       };
       urgency_low = {
-        background = "#282c34";
-        foreground = "#bbc2cf";
-        frame_color = "#c678dd";
+        background = theme.dark-blue;
+        foreground = theme.fg;
+        frame_color = theme.blue;
         timeout = 10;
       };
       urgency_normal = {
-        background = "#282c34";
-        foreground = "#bbc2cf";
-        frame_color = "#c678dd";
+        background = theme.dark-blue;
+        foreground = theme.fg;
+        frame_color = theme.blue;
         timeout = 10;
       };
       urgency_critical = {
-        background = "#bf616a";
-        foreground = "#d08770";
-        frame_color = "#d08770";
+        background = theme.orange;
+        foreground = theme.fg;
+        frame_color = theme.red;
         timeout = 0;
       };
       all = {

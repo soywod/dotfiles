@@ -1,4 +1,4 @@
 # key: us
 # name: us
 # --
-const [$1, ${2:$$(concat "set" (custom/capitalize-first-char (yas-field-value 1)))}] = useState${3:<$4>}($5);
+const [$1, ${2:$$(concat "set" (soywod/capitalize-first-char (yas-field-value 1)))}] = useState${3:<$4>}($5);

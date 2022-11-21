@@ -17,10 +17,17 @@
         eglot
         web-mode
         nix-mode
-        flx
+        yaml-mode
+        markdown-mode
         rust-mode
         ledger-mode
-        company
+        graphql-mode
+        typescript-mode
+        vimrc-mode
+        lua-mode
+        helm
+        helm-lsp
+        helm-projectile
         direnv
         yasnippet
         prettier-js
@@ -28,17 +35,14 @@
         magit
         bbdb
         projectile
-        ivy
-        counsel
-        counsel-projectile
-        swiper
         which-key
         pass
         delight
-        yaml-mode
-        markdown-mode
         expand-region
         org
+        tree-sitter
+        tree-sitter-langs
+        rg
       ]));
   };
   

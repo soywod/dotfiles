@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ierr
+# key: ierr
+# --
+TaskEither<InternalError, $1>$0
