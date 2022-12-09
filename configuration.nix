@@ -95,7 +95,23 @@ in
     };
   };
 
+  sound = {
+    enable = false;
+  };
+
   hardware = {
+    pulseaudio = {
+      enable = false;
+    };
+    bluetooth = {
+      enable = true;
+      hsphfpd.enable = true;
+      settings = {
+        General = {
+          Enable = "Source,Sink,Media,Socket";
+        };
+      };
+    };
     opengl = {
       enable = true;
     };
@@ -119,8 +135,10 @@ in
 
   services.pipewire = {
     enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
     pulse.enable = true;
   };
 

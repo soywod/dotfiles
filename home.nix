@@ -37,6 +37,7 @@ in
       mpv
       p7zip
       postman
+      pavucontrol
       pulseaudio
       ripgrep
       tdesktop
