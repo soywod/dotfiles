@@ -4,11 +4,14 @@ let
   theme = import ./theme.nix;
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-small
-      collection-langfrench # french language
-      wrapfig lastpage capt-of # org-mode invoice pdf export
-      siunitx; # number formatting
+      # french language
+      collection-langfrench
+      # org-mode invoice pdf export
+      wrapfig lastpage capt-of
+      # number formatting
+      siunitx;
   });
-  
+
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -19,7 +22,7 @@ in
     (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit nixpkgs pkgs; })
-    # (import ./programs/himalaya { inherit pkgs config; })
+    (import ./programs/himalaya { inherit pkgs config; })
   ];
 
   home = {
@@ -81,7 +84,7 @@ in
     enable = true;
     browsers = [ "chromium" ];
   };
-  
+
   programs.waybar = {
     enable = true;
     systemd.enable = true;
@@ -172,9 +175,9 @@ in
               default = [ "" "" ];
             };
           };
-          
+
           "custom/himalaya" = {
-            exec = "${pkgs.coreutils}/bin/tail -fn 1 /tmp/himalaya-counter | ${pkgs.findutils}/bin/xargs -I {} ${pkgs.bash}/bin/bash -c 'if [ {} -gt 0 ]; then echo ; else echo; fi'";
+            exec = "${pkgs.coreutils}/bin/tail -fn 1 /tmp/himalaya-counter";
             format = "{} ";
             tooltip = false;
           };
@@ -272,10 +275,11 @@ in
       gtk-application-prefer-dark-theme = true;
     };
   };
-  
+
   programs.kitty = {
     enable = true;
     settings = {
+      confirm_os_window_close = 0;
       font_family = "JetBrains Mono";
       font_size = 15;
       cursor_blink_interval = 1;
@@ -322,7 +326,7 @@ in
       gaps.inner = 16;
       window.border = 2;
       floating.border = 2;
-      bars = [];
+      bars = [ ];
       fonts = {
         names = [ "JetBrains Mono" ];
         style = "Medium";
@@ -357,36 +361,36 @@ in
         let
           mod = config.wayland.windowManager.sway.config.modifier;
         in
-          lib.mkOptionDefault {
-            "${mod}+Tab" = "workspace back_and_forth";
-            
-            "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
-            "Shift+XF86MonBrightnessDown" = "exec brightnessctl set 1%";
-            "Shift+${mod}+XF86MonBrightnessDown" = "exec brightnessctl set 1%-";
+        lib.mkOptionDefault {
+          "${mod}+Tab" = "workspace back_and_forth";
 
-            "XF86MonBrightnessUp" = "exec brightnessctl set  5%+";
-            "Shift+XF86MonBrightnessUp" = "exec brightnessctl set 100%";
-            "Shift+${mod}+XF86MonBrightnessUp" = "exec brightnessctl set  1%+";
+          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
+          "Shift+XF86MonBrightnessDown" = "exec brightnessctl set 1%";
+          "Shift+${mod}+XF86MonBrightnessDown" = "exec brightnessctl set 1%-";
 
-            "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
-            "Shift+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@  1%";
-            "Shift+${mod}+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -1%";
+          "XF86MonBrightnessUp" = "exec brightnessctl set  5%+";
+          "Shift+XF86MonBrightnessUp" = "exec brightnessctl set 100%";
+          "Shift+${mod}+XF86MonBrightnessUp" = "exec brightnessctl set  1%+";
 
-            "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
-            "Shift+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ 100%";
-            "Shift+${mod}+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +1%";
+          "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
+          "Shift+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@  1%";
+          "Shift+${mod}+XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -1%";
 
-            "XF86AudioMute" = "exec pactl set-sink-mute   @DEFAULT_SINK@ toggle";
-            "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SINK@ toggle";
+          "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
+          "Shift+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ 100%";
+          "Shift+${mod}+XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +1%";
 
-            "XF86AudioPrev" = "exec playerctl previous";
-            "XF86AudioPlay" = "exec playerctl play-pause";
-            "XF86AudioNext" = "exec playerctl next";
+          "XF86AudioMute" = "exec pactl set-sink-mute   @DEFAULT_SINK@ toggle";
+          "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SINK@ toggle";
 
-            "Print" = "exec selection-capture";
-            "Shift+Print" = "exec selection-record";
-            "Shift+${mod}+Print" = "exec screen-capture";
-          };
+          "XF86AudioPrev" = "exec playerctl previous";
+          "XF86AudioPlay" = "exec playerctl play-pause";
+          "XF86AudioNext" = "exec playerctl next";
+
+          "Print" = "exec selection-capture";
+          "Shift+Print" = "exec selection-record";
+          "Shift+${mod}+Print" = "exec screen-capture";
+        };
       colors = {
         background = theme.bg;
         focused = {
@@ -451,7 +455,7 @@ in
 
   systemd.user.services.dropbox = {
     Unit.After = "graphical-session.target network-online.target";
-    Service.Environment = ["DISPLAY=:0"];
+    Service.Environment = [ "DISPLAY=:0" ];
   };
 
   services.gammastep = {

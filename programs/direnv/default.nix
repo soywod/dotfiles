@@ -7,7 +7,6 @@
     enableFishIntegration = false;
     nix-direnv = {
       enable = true;
-      enableFlakes = true;
     };
   };
 }

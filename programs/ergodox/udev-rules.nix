@@ -1,4 +1,4 @@
-{    
+{
   # Extra udev rules for the ErgoDox EZ keyboard
   # https://github.com/positron-solutions/wally-cli/blob/496fd78c7e03e21e66517d85271df450350af94a/ergodox-udev.nix
   services.udev.extraRules = ''

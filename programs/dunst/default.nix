@@ -1,19 +1,18 @@
-{pkgs, theme, config}:
+{ pkgs, theme, config }:
 
 let
-  mpv = "${pkgs.mpv}/bin/mpv";
-  sound-file = "${config.xdg.configHome}/dunst/sound.ogg";
-  notifier = pkgs.writeShellScriptBin "dunst-play-sound" "${mpv} --really-quiet ${sound-file}";
-    
-in {
-  home.file = {
-    ${sound-file} = {
-      source = ./sound.ogg;
-    };
+  notification = "${config.xdg.dataHome}/dunst/notification.ogg";
+  notifier = pkgs.writeShellScriptBin "notify" ''
+    ${pkgs.mpv}/bin/mpv --really-quiet ${notification}
+  '';
+
+in
+{
+  home = {
+    packages = [ notifier ];
+    file."${notification}".source = ./notification.ogg;
   };
 
-  home.packages = [notifier];
-  
   services.dunst = {
     enable = true;
     settings = {
@@ -67,9 +66,9 @@ in {
         ignore_dbusclose = false;
         force_xwayland = false;
         force_xinerama = false;
-        mouse_left_click = ["close_current"];
-        mouse_middle_click = ["do_action" "close_current"];
-        mouse_right_click = ["close_all"];
+        mouse_left_click = [ "close_current" ];
+        mouse_middle_click = [ "do_action" "close_current" ];
+        mouse_right_click = [ "close_all" ];
       };
       experimental = {
         per_monitor_dpi = false;
@@ -94,7 +93,7 @@ in {
       };
       all = {
         summary = "*";
-        script = "dunst-play-sound";
+        script = "${notifier}/bin/notify";
       };
     };
   };

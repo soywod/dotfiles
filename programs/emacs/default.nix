@@ -1,16 +1,16 @@
 { nixpkgs, pkgs, ... }:
 
 {
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      # 30/03/2022
-      url = https://github.com/nix-community/emacs-overlay/archive/26da73dd9129d267f0c8c26b591ab91050c4cdc9.tar.gz;
-    }))
-  ];
-    
+  # nixpkgs.overlays = [
+  #   (import (builtins.fetchTarball {
+  #     # 30/03/2022
+  #     url = https://github.com/nix-community/emacs-overlay/archive/26da73dd9129d267f0c8c26b591ab91050c4cdc9.tar.gz;
+  #   }))
+  # ];
+
   programs.emacs = {
     enable = true;
-    package = pkgs.emacsGcc;
+    # package = pkgs.emacsGcc;
     extraPackages = (epkgs:
       (with epkgs; [
         doom-themes
@@ -45,7 +45,7 @@
         rg
       ]));
   };
-  
+
   services.emacs.enable = true;
 
   home.file = {

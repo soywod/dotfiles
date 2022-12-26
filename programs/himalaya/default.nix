@@ -9,7 +9,7 @@ in
     realName = "Clément DOUIN";
     userName = "clement.douin@posteo.net";
     address = "clement.douin@posteo.net";
-    passwordCommand = "pass show posteo";
+    passwordCommand = "${pkgs.pass}/bin/pass show posteo";
     imap = {
       host = "posteo.de";
       port = 993;
@@ -22,15 +22,16 @@ in
       enable = true;
       settings = {
         signature = "~/.signature";
-        pgp-encrypt-cmd = "gpg -o - -eqar";
-        pgp-decrypt-cmd = "gpg -dq";
-        watch-cmds = [
-          "${himalaya} -o json search not seen | ${pkgs.jq}/bin/jq -r '.response|length' >> /tmp/himalaya-counter"
+        email-writing-encrypt-cmd = "gpg -o - -eqar <recipient>";
+        email-reading-decrypt-cmd = "gpg -dq";
+        imap-notify-cmd = "${pkgs.libnotify}/bin/notify-send";
+        imap-watch-cmds = [
+          "${himalaya} -o json search not seen | ${pkgs.jq}/bin/jq -r 'if (.|length)>0 then \"\" else \"\" end' >> /tmp/himalaya-counter"
         ];
       };
     };
   };
-  
+
   programs.himalaya = {
     enable = true;
     settings = {
@@ -38,17 +39,19 @@ in
     };
   };
 
-  systemd.user.services.himalaya = {
-    Unit = {
-      Description = "Himalaya watcher.";
+  services.himalaya-notify = {
+    enable = true;
+    environment = {
+      PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
+      RUST_LOG = "debug";
     };
-    Install = {
-      WantedBy = [ "multi-user.target" ];
-    };
-    Service = {
-      ExecStart = "${himalaya} watch";
-      Restart = "always";
-      RestartSec = 10;
+  };
+
+  services.himalaya-watch = {
+    enable = true;
+    environment = {
+      PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
+      RUST_LOG = "debug";
     };
   };
 }
