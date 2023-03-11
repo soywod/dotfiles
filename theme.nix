@@ -23,4 +23,5 @@
   violet = "#b751b6";
   cyan = "#0184bc";
   dark-cyan = "#005478";
+  font = "JetBrains";
 }

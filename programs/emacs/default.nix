@@ -1,16 +1,17 @@
 { nixpkgs, pkgs, ... }:
 
 {
-  # nixpkgs.overlays = [
-  #   (import (builtins.fetchTarball {
-  #     # 30/03/2022
-  #     url = https://github.com/nix-community/emacs-overlay/archive/26da73dd9129d267f0c8c26b591ab91050c4cdc9.tar.gz;
-  #   }))
-  # ];
+  nixpkgs.overlays =
+    let
+      emacs-rev = "02b3e92fb3f23fba90c25820f9b1b8b6bfb555d0"; # 15/02/2023
+      emacs-tarball = "https://github.com/nix-community/emacs-overlay/archive/${emacs-rev}.tar.gz";
+      emacs-overlay = import "${builtins.fetchTarball emacs-tarball}";
+    in
+    [ emacs-overlay ];
 
   programs.emacs = {
     enable = true;
-    # package = pkgs.emacsGcc;
+    package = pkgs.emacsUnstable;
     extraPackages = (epkgs:
       (with epkgs; [
         doom-themes
@@ -46,7 +47,12 @@
       ]));
   };
 
-  services.emacs.enable = true;
+  services.emacs = {
+    enable = true;
+    package = pkgs.emacsUnstable;
+    startWithUserSession = true;
+    defaultEditor = true;
+  };
 
   home.file = {
     ".emacs.d/init.el" = {

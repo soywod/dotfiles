@@ -19,6 +19,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./programs/ergodox/udev-rules.nix
+    ./cachix.nix
     home-manager
   ];
 
@@ -83,7 +84,6 @@ in
       noto-fonts-cjk
       noto-fonts-emoji
       jetbrains-mono
-    ] ++ [
       font-awesome
     ];
 

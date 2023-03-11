@@ -45,17 +45,17 @@ in
       ripgrep
       tdesktop
       tex
+      thunderbird
       w3m
       wally-cli
       xdg-utils
       xournal
+      zoom-us
     ];
     sessionPath = [
       "${config.home.homeDirectory}/.local/bin"
     ];
     sessionVariables = {
-      EDITOR = "editor";
-      VISUAL = "editor";
       PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/password-store";
       MOZ_ENABLE_WAYLAND = "1";
       XDG_CURRENT_DESKTOP = "sway";
@@ -199,7 +199,7 @@ in
     ];
     style = ''
       * {
-        font-family: JetBrains Mono, Font Awesome;
+        font-family: ${theme.font} Mono, Font Awesome;
         font-size: 1.1rem;
         font-weight: bold;
       }
@@ -266,6 +266,10 @@ in
       init = {
         defaultBranch = "master";
       };
+      core = {
+        autocrlf = "input";
+        safecrlf = false;
+      };
     };
   };
 
@@ -280,7 +284,7 @@ in
     enable = true;
     settings = {
       confirm_os_window_close = 0;
-      font_family = "JetBrains Mono";
+      font_family = "${theme.font} Mono";
       font_size = 15;
       cursor_blink_interval = 1;
       sync_to_monitor = false;
@@ -319,7 +323,7 @@ in
     enable = true;
     wrapperFeatures.gtk = true;
     config = {
-      menu = "${pkgs.dmenu}/bin/dmenu_path | ${pkgs.dmenu}/bin/dmenu -b -fn JetBrainsMono-15 -nb '${theme.bg}' -nf '${theme.fg}' -sb '${theme.blue}' -sf '${theme.bg}' | ${pkgs.findutils}/bin/xargs swaymsg exec --";
+      menu = "${pkgs.dmenu}/bin/dmenu_path | ${pkgs.dmenu}/bin/dmenu -b -fn ${theme.font}Mono-15 -nb '${theme.bg}' -nf '${theme.fg}' -sb '${theme.blue}' -sf '${theme.bg}' | ${pkgs.findutils}/bin/xargs swaymsg exec --";
       modifier = "Mod4";
       terminal = "kitty";
       focus.followMouse = false;
@@ -328,7 +332,7 @@ in
       floating.border = 2;
       bars = [ ];
       fonts = {
-        names = [ "JetBrains Mono" ];
+        names = [ "${theme.font} Mono" ];
         style = "Medium";
         size = 12.0;
       };

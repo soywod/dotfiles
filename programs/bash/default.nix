@@ -17,9 +17,6 @@ in
       wl-clipboard
     ];
     file = {
-      ".local/bin/editor" = {
-        source = ./editor.sh;
-      };
       ".local/bin/screen-capture" = {
         source = ./screen-capture.sh;
       };
