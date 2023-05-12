@@ -2,6 +2,7 @@
 
 let
   theme = import ./theme.nix;
+  passStorePath = "${config.home.homeDirectory}/documents/password-store";
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-small
       # french language
@@ -11,6 +12,7 @@ let
       # number formatting
       siunitx;
   });
+  # comodoro = (import "${config.home.homeDirectory}/code/comodoro").defaultPackage.${builtins.currentSystem};
 
 in
 {
@@ -23,6 +25,7 @@ in
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit nixpkgs pkgs; })
     (import ./programs/himalaya { inherit pkgs config; })
+    # (import ./programs/comodoro { inherit pkgs config; })
   ];
 
   home = {
@@ -43,6 +46,8 @@ in
       pavucontrol
       pulseaudio
       ripgrep
+      signal-desktop
+      slack
       tdesktop
       tex
       thunderbird
@@ -56,8 +61,8 @@ in
       "${config.home.homeDirectory}/.local/bin"
     ];
     sessionVariables = {
+      NIXOS_OZONE_WL = "1";
       PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/password-store";
-      MOZ_ENABLE_WAYLAND = "1";
       XDG_CURRENT_DESKTOP = "sway";
       XDG_SESSION_TYPE = "wayland";
     };
@@ -104,10 +109,11 @@ in
           "pulseaudio"
         ];
         modules-center = [
-          "custom/himalaya"
+          # "custom/himalaya"
           "clock"
         ];
         modules-right = [
+          # "custom/comodoro"
           "sway/mode"
           "tray"
         ];
@@ -187,6 +193,14 @@ in
             format = "{:%Hh%M, %a %e %b}";
           };
 
+          # "custom/comodoro" = {
+          #   exec = "${comodoro}/bin/comodoro get tcp";
+          #   interval = 1;
+          #   format = "{}";
+          #   on-click = "${comodoro}/bin/comodoro start tcp";
+          #   on-click-right = "${comodoro}/bin/comodoro stop tcp";
+          #   tooltip = false;
+          # };
           "sway/mode" = {
             format = "{}";
           };
@@ -263,12 +277,15 @@ in
       key = "75F0 AB7C FE01 D077 AEE6  CAFD 353E 4A18 EE0F AB72";
     };
     extraConfig = {
-      init = {
-        defaultBranch = "master";
-      };
       core = {
         autocrlf = "input";
         safecrlf = false;
+      };
+      init = {
+        defaultBranch = "master";
+      };
+      push = {
+        followTags = true;
       };
     };
   };
@@ -439,38 +456,45 @@ in
   programs.password-store = {
     enable = true;
     settings = {
-      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/password-store";
+      PASSWORD_STORE_DIR = passStorePath;
     };
   };
 
-  services.gpg-agent = {
-    enable = true;
-    enableSshSupport = true;
-    defaultCacheTtl = 86400;
-    defaultCacheTtlSsh = 86400;
-    maxCacheTtl = 604800;
-    maxCacheTtlSsh = 604800;
-  };
+  services = {
+    gpg-agent = {
+      enable = true;
+      enableSshSupport = true;
+      defaultCacheTtl = 86400;
+      defaultCacheTtlSsh = 86400;
+      maxCacheTtl = 604800;
+      maxCacheTtlSsh = 604800;
+    };
 
-  services.dropbox = {
-    enable = true;
-    path = "${config.home.homeDirectory}/documents";
+    dropbox = {
+      enable = true;
+      path = "${config.home.homeDirectory}/documents";
+    };
+
+    gammastep = {
+      enable = true;
+      tray = true;
+      provider = "geoclue2";
+      settings = {
+        general = {
+          fade = false;
+        };
+      };
+    };
+
+    pass-secret-service = {
+      enable = true;
+      storePath = passStorePath;
+    };
   };
 
   systemd.user.services.dropbox = {
     Unit.After = "graphical-session.target network-online.target";
     Service.Environment = [ "DISPLAY=:0" ];
-  };
-
-  services.gammastep = {
-    enable = true;
-    tray = true;
-    provider = "geoclue2";
-    settings = {
-      general = {
-        fade = false;
-      };
-    };
   };
 
   home.stateVersion = "21.05";

@@ -43,7 +43,7 @@
 
 (defun soywod/eglot-ensure ()
   (eglot-ensure)
-  (setq eglot-ignored-server-capabilities '()))
+  (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
 (defun soywod/eglot-ensure-without-formatting ()
   (eglot-ensure)

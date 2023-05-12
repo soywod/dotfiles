@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  himalaya = (import "${config.home.homeDirectory}/code/himalaya").defaultPackage.${builtins.currentSystem};
+  himalaya = (import "${config.home.homeDirectory}/code/himalaya").packages.${builtins.currentSystem}.default;
 in
 {
   accounts.email.accounts = {
@@ -34,6 +34,9 @@ in
           imap-notify-cmd = ''
             ${pkgs.libnotify}/bin/notify-send "📫 <sender>" "<subject>"
           '';
+          imap-watch-cmds = [
+            "${himalaya}/bin/himalaya --account posteo --folder INBOX account sync"
+          ];
         };
       };
     };
@@ -72,6 +75,14 @@ in
     settings = {
       signature = "~/.signature";
       downloads-dir = "${config.home.homeDirectory}/downloads";
+    };
+  };
+
+  services.himalaya-watch = {
+    enable = true;
+    environment = {
+      PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
+      RUST_LOG = "debug";
     };
   };
 

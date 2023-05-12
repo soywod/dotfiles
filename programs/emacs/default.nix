@@ -3,7 +3,7 @@
 {
   nixpkgs.overlays =
     let
-      emacs-rev = "02b3e92fb3f23fba90c25820f9b1b8b6bfb555d0"; # 15/02/2023
+      emacs-rev = "5f9bc90bd2fd0bf53cc4e2643b083fa75b358461"; # 04/05/2023
       emacs-tarball = "https://github.com/nix-community/emacs-overlay/archive/${emacs-rev}.tar.gz";
       emacs-overlay = import "${builtins.fetchTarball emacs-tarball}";
     in
@@ -15,7 +15,6 @@
     extraPackages = (epkgs:
       (with epkgs; [
         doom-themes
-        eglot
         web-mode
         nix-mode
         yaml-mode
