@@ -12,7 +12,7 @@ let
       # number formatting
       siunitx;
   });
-  # comodoro = (import "${config.home.homeDirectory}/code/comodoro").defaultPackage.${builtins.currentSystem};
+  comodoro = config.programs.comodoro.package;
 
 in
 {
@@ -25,7 +25,7 @@ in
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit nixpkgs pkgs; })
     (import ./programs/himalaya { inherit pkgs config; })
-    # (import ./programs/comodoro { inherit pkgs config; })
+    (import ./programs/comodoro { inherit pkgs config; })
   ];
 
   home = {
@@ -47,10 +47,10 @@ in
       pulseaudio
       ripgrep
       signal-desktop
+      skim
       slack
       tdesktop
       tex
-      thunderbird
       w3m
       wally-cli
       xdg-utils
@@ -113,9 +113,9 @@ in
           "clock"
         ];
         modules-right = [
-          # "custom/comodoro"
           "sway/mode"
           "tray"
+          "custom/comodoro"
         ];
         modules = {
           battery = {
@@ -193,20 +193,20 @@ in
             format = "{:%Hh%M, %a %e %b}";
           };
 
-          # "custom/comodoro" = {
-          #   exec = "${comodoro}/bin/comodoro get tcp";
-          #   interval = 1;
-          #   format = "{}";
-          #   on-click = "${comodoro}/bin/comodoro start tcp";
-          #   on-click-right = "${comodoro}/bin/comodoro stop tcp";
-          #   tooltip = false;
-          # };
           "sway/mode" = {
             format = "{}";
           };
           tray = {
             icon-size = 16;
             spacing = 8;
+          };
+          "custom/comodoro" = {
+            exec = "${comodoro}/bin/comodoro get work tcp";
+            interval = 1;
+            format = "{} ";
+            on-click = "${comodoro}/bin/comodoro start work tcp";
+            on-click-right = "${comodoro}/bin/comodoro stop work tcp";
+            tooltip = false;
           };
         };
       }

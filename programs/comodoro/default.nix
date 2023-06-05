@@ -1,25 +1,32 @@
 { config, pkgs, ... }:
 
 let
-  comodoro = (import "${config.home.homeDirectory}/code/comodoro").defaultPackage.${builtins.currentSystem};
+  comodoro = (import "${config.home.homeDirectory}/code/comodoro").packages.${builtins.currentSystem}.default;
+  notify = desc: "${pkgs.libnotify}/bin/notify-send '🍅 Comodoro' '${desc}'";
 in
 {
   programs.comodoro = {
     enable = true;
     package = comodoro;
     settings = {
-      work-began-hook = "${pkgs.libnotify}/bin/notify-send '🍅 Comodoro' 'Working time!'";
-      short-break-began-hook = "${pkgs.libnotify}/bin/notify-send '🍅 Comodoro' 'Breaking time!'";
-      long-break-began-hook = "${pkgs.libnotify}/bin/notify-send '🍅 Comodoro' 'Long breaking time!'";
-      tcp = {
-        host = "localhost";
-        port = 9999;
+      work = {
+        preset = "52/17";
+
+        tcp-host = "localhost";
+        tcp-port = 9999;
+
+        on-work-begin = notify "Work time!";
+        on-resting-begin = notify "Rest time!";
       };
     };
   };
 
   services.comodoro = {
     enable = true;
+    settings = {
+      preset = "work";
+      protocols = [ "tcp" ];
+    };
     environment = {
       RUST_LOG = "debug";
     };
