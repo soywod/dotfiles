@@ -20,6 +20,7 @@
 (setq calendar-week-start-day 1) ; adjust week start day
 (setq user-full-name "Clément DOUIN")
 (setq user-mail-address	"clement.douin@posteo.net")
+(setq split-width-threshold 0)
 
 ;; Custom functions
 
@@ -186,7 +187,7 @@
 (require 'ox-md)
 
 (require 'bbdb)
-(setq bbdb-file "~/documents/contacts/bbdb")
+(setq bbdb-file "~/documents/contacts")
 (setq bbdb-mua-auto-update-p 'query)
 (bbdb-initialize 'message)
 (bbdb-mua-auto-update-init 'gnus 'message)
@@ -212,23 +213,23 @@
 	("y" . ,(* 60 7 5 4 12))
 	("a" . ,(* 60 7 5 4 12))))
 (setq org-startup-folded t)
-(setq org-agenda-files '("~/documents/org/agenda.org"))
+(setq org-agenda-files '("~/documents/gtd/agenda.org"))
 (setq org-refile-use-outline-path 'file)
-(setq org-refile-targets '(("~/documents/org/tasks.org" :maxlevel . 3)
-			   ("~/documents/org/someday.org" :level . 1)
-			   ("~/documents/org/agenda.org" :level . 1)
-  			   ("~/documents/org/habits.org" :level . 1)))
+(setq org-refile-targets '(("~/documents/gtd/tasks.org" :maxlevel . 3)
+			   ("~/documents/gtd/someday.org" :level . 1)
+			   ("~/documents/gtd/agenda.org" :level . 1)
+  			   ("~/documents/gtd/habits.org" :level . 1)))
 (setq org-todo-keywords
       '((sequence "TODO(t)" "PENDING(p)" "|" "CANCELLED(c)" "DONE(d)")))
 ;; (setq org-todo-keyword-faces
 ;;       '(("TODO" . (:foreground "#c678dd" :weight bold))
 ;; 	("PENDING" . (:background "#3f444a" :foreground "#ff6c6b" :weight bold))))
 (setq org-capture-templates
-      '(("i" "Inbox" entry (file "~/documents/org/inbox.org") "* TODO %i%?")
-	("a" "Agenda" entry (file "~/documents/org/agenda.org") "* TODO %i%?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \".\"))")))
+      '(("i" "Inbox" entry (file "~/documents/gtd/inbox.org") "* TODO %i%?")
+	("a" "Agenda" entry (file "~/documents/gtd/agenda.org") "* TODO %i%?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \".\"))")))
 (setq org-agenda-custom-commands
       '(("T" "Active tasks" tags-todo "+LEVEL=1+CATEGORY=\"tasks\"")
-	("h" "Today's habits" tags-todo "+DEADLINE<=\"<today>\"" ((org-agenda-files '("~/documents/org/habits.org"))))
+	("h" "Today's habits" tags-todo "+DEADLINE<=\"<today>\"" ((org-agenda-files '("~/documents/gtd/habits.org"))))
 	("A" "Today's agenda" agenda "" ((org-agenda-span 'day)))
 	("W" "Week's agenda" agenda "" ((org-agenda-span 'week)))
 	("M" "Month's agenda" agenda "" ((org-agenda-span 'month)))))
@@ -308,7 +309,8 @@
 (add-to-list 'load-path "~/code/himalaya-emacs")
 (require 'himalaya)
 (setq himalaya-executable "/home/soywod/code/himalaya/target/debug/himalaya")
-(setq himalaya-default-folder "INBOX")
+;; (setq himalaya-config-path "/home/soywod/.himalaya.config.toml")
+;; (setq himalaya-default-folder "INBOX")
 
 (add-to-list 'load-path "~/code/org-latex-invoice")
 (require 'org-latex-invoice)
@@ -318,5 +320,3 @@
 (add-to-list 'auto-mode-alist '("\\.prisma\\'" . prisma-mode))
 (add-to-list 'eglot-server-programs '(prisma-mode . ("prisma-language-server" "--stdio")))
 (add-hook 'prisma-mode-hook 'soywod/eglot-ensure)
-
-(require 'rg)

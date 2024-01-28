@@ -1,17 +1,16 @@
 { nixpkgs, pkgs, ... }:
 
 {
-  nixpkgs.overlays =
-    let
-      emacs-rev = "5f9bc90bd2fd0bf53cc4e2643b083fa75b358461"; # 04/05/2023
-      emacs-tarball = "https://github.com/nix-community/emacs-overlay/archive/${emacs-rev}.tar.gz";
-      emacs-overlay = import "${builtins.fetchTarball emacs-tarball}";
-    in
-    [ emacs-overlay ];
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      # 28/01/2024
+      url = https://github.com/nix-community/emacs-overlay/archive/d6d5dd09b6533a30e3b312f0f225bd3475733f23.tar.gz;
+    }))
+  ];
 
   programs.emacs = {
     enable = true;
-    package = pkgs.emacsUnstable;
+    package = pkgs.emacs-pgtk;
     extraPackages = (epkgs:
       (with epkgs; [
         doom-themes
@@ -25,13 +24,10 @@
         typescript-mode
         vimrc-mode
         lua-mode
-        helm
-        helm-lsp
-        helm-projectile
         direnv
         yasnippet
         prettier-js
-        smartparens
+        # smartparens
         magit
         bbdb
         projectile
@@ -48,17 +44,23 @@
 
   services.emacs = {
     enable = true;
-    package = pkgs.emacsUnstable;
+    package = pkgs.emacs-pgtk;
     startWithUserSession = true;
-    defaultEditor = true;
   };
 
-  home.file = {
-    ".emacs.d/init.el" = {
-      source = ./init.el;
+  home = {
+    file = {
+      ".emacs.d/init.el" = {
+        source = ./init.el;
+      };
+      ".authinfo.gpg" = {
+        source = ./authinfo.gpg;
+      };
     };
-    ".authinfo.gpg" = {
-      source = ./authinfo.gpg;
+    sessionVariables = {
+      ALTERNATE_EDITOR = "";
+      EDITOR = "emacsclient -c";
+      VISUAL = "emacsclient -c -a emacs";
     };
   };
 }

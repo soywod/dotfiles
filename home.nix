@@ -2,7 +2,7 @@
 
 let
   theme = import ./theme.nix;
-  passStorePath = "${config.home.homeDirectory}/documents/password-store";
+  passStorePath = "${config.home.homeDirectory}/documents/mots-de-passe";
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-small
       # french language
@@ -12,7 +12,6 @@ let
       # number formatting
       siunitx;
   });
-  comodoro = config.programs.comodoro.package;
 
 in
 {
@@ -32,6 +31,7 @@ in
     packages = with pkgs; [
       brightnessctl
       chromium
+      # dconf # for paprefs virtual output
       element-desktop
       filezilla
       ghostscript
@@ -40,17 +40,19 @@ in
       ledger
       libnotify
       libreoffice
+      maestral-gui
       mpv
       p7zip
-      postman
+      # postman
       pavucontrol
       pulseaudio
       ripgrep
       signal-desktop
       skim
-      slack
+      # slack
       tdesktop
       tex
+      tor-browser-bundle-bin
       w3m
       wally-cli
       xdg-utils
@@ -62,19 +64,18 @@ in
     ];
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
-      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/password-store";
+      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/mots-de-passe";
       XDG_CURRENT_DESKTOP = "sway";
       XDG_SESSION_TYPE = "wayland";
     };
     file = {
       ".signature".text = ''
-        Cordialement
+        Regards
         Clément DOUIN
-        Développeur Web Full-Stack
         https://soywod.me
       '';
       ".ledgerrc".text = ''
-        --file ${config.home.homeDirectory}/documents/ledger/auto-entrepreneur.ldg
+        --file ${config.home.homeDirectory}/documents/micro-entreprise/compta.ldg
         --strict
         --empty
       '';
@@ -84,6 +85,12 @@ in
   programs.home-manager = {
     enable = true;
   };
+
+  nixpkgs.overlays = [
+    (final: prev: {
+      element-desktop = (import <nixos-22.11> { }).element-desktop;
+    })
+  ];
 
   programs.browserpass = {
     enable = true;
@@ -182,11 +189,11 @@ in
             };
           };
 
-          "custom/himalaya" = {
-            exec = "${pkgs.coreutils}/bin/tail -fn 1 /tmp/himalaya-counter";
-            format = "{} ";
-            tooltip = false;
-          };
+          # "custom/himalaya" = {
+          #   exec = "${pkgs.coreutils}/bin/tail -fn 1 /tmp/himalaya-counter";
+          #   format = "{} ";
+          #   tooltip = false;
+          # };
           clock = {
             timezone = "Europe/Paris";
             tooltip = false;
@@ -201,11 +208,11 @@ in
             spacing = 8;
           };
           "custom/comodoro" = {
-            exec = "${comodoro}/bin/comodoro get work tcp";
+            exec = "${pkgs.comodoro}/bin/comodoro get work tcp";
             interval = 1;
             format = "{} ";
-            on-click = "${comodoro}/bin/comodoro start work tcp";
-            on-click-right = "${comodoro}/bin/comodoro stop work tcp";
+            on-click = "${pkgs.comodoro}/bin/comodoro start work tcp";
+            on-click-right = "${pkgs.comodoro}/bin/comodoro stop work tcp";
             tooltip = false;
           };
         };
@@ -292,9 +299,6 @@ in
 
   gtk = {
     enable = true;
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
-    };
   };
 
   programs.kitty = {
@@ -370,12 +374,12 @@ in
         eDP-1 = {
           resolution = "1920x1200@60Hz";
           position = "0 0";
-          bg = "${config.home.homeDirectory}/documents/wallpapers/nixos.svg fill";
+          bg = "${config.home.homeDirectory}/documents/fond.jpeg fill";
         };
         DP-2 = {
           resolution = "1920x1080@60Hz";
           position = "1920 0";
-          bg = "${config.home.homeDirectory}/documents/wallpapers/nixos.svg fill";
+          bg = "${config.home.homeDirectory}/documents/fond.jpeg fill";
         };
       };
       keybindings =
@@ -468,11 +472,7 @@ in
       defaultCacheTtlSsh = 86400;
       maxCacheTtl = 604800;
       maxCacheTtlSsh = 604800;
-    };
-
-    dropbox = {
-      enable = true;
-      path = "${config.home.homeDirectory}/documents";
+      pinentryFlavor = "gtk2";
     };
 
     gammastep = {
@@ -492,9 +492,16 @@ in
     };
   };
 
-  systemd.user.services.dropbox = {
-    Unit.After = "graphical-session.target network-online.target";
-    Service.Environment = [ "DISPLAY=:0" ];
+  systemd.user.services.maestral = {
+    Unit = {
+      Description = "Maestral daemon";
+      After = "graphical-session.target network-online.target";
+    };
+    Install.WantedBy = [ "default.target" ];
+    Service = {
+      ExecStart = "${pkgs.maestral-gui.out}/bin/maestral_qt";
+      ExecStop = "${pkgs.coreutils}/bin/pkill maestral_qt";
+    };
   };
 
   home.stateVersion = "21.05";

@@ -1,9 +1,6 @@
 { nixpkgs, pkgs, lib, ... }:
 
 let
-  # home-manager-tarball = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-21.11.tar.gz";
-  # home-manager = import "${home-manager-tarball}/nixos";
-  home-manager = import /home/soywod/code/home-manager/nixos;
   font-awesome = pkgs.fetchFromGitHub {
     owner = "FortAwesome";
     repo = "Font-Awesome";
@@ -20,7 +17,8 @@ in
     ./hardware-configuration.nix
     ./programs/ergodox/udev-rules.nix
     ./cachix.nix
-    home-manager
+    # <home-manager/nixos>
+    (import /home/soywod/code/home-manager/nixos)
   ];
 
   nix = {
@@ -29,6 +27,14 @@ in
       experimental-features = nix-command flakes
       keep-outputs = true
       keep-derivations = true
+    '';
+  };
+
+  environment.etc = {
+    "pipewire/pipewire.conf.d/combine-sink.conf".text = ''
+      context.exec = [
+        { path = "pactl" args = "load-module module-combine-sink" }
+      ]
     '';
   };
 
@@ -45,10 +51,14 @@ in
   };
 
   networking = {
-    hostName = "soywod";
     networkmanager.enable = true;
-    useDHCP = false;
-    # interfaces.wlp0s20f3.useDHCP = true;
+    hostName = "soywod";
+    defaultGateway = "192.168.1.254";
+    nameservers = [ "8.8.8.8" ];
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 3000 ];
+    };
   };
 
   time.timeZone = "Europe/Paris";
@@ -79,7 +89,7 @@ in
   };
 
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
@@ -117,7 +127,9 @@ in
     };
   };
 
-  virtualisation.docker.enable = true;
+  virtualisation = {
+    docker.enable = true;
+  };
 
   services.getty.autologinUser = "soywod";
   home-manager.users.soywod = import ./home.nix;

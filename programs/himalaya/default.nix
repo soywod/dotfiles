@@ -1,15 +1,12 @@
 { config, pkgs, ... }:
 
-let
-  himalaya = (import "${config.home.homeDirectory}/code/himalaya").packages.${builtins.currentSystem}.default;
-in
 {
   accounts.email.accounts = {
-    posteo = {
+    posteo = rec {
       primary = true;
-      realName = "Clément DOUIN";
-      userName = "clement.douin@posteo.net";
       address = "clement.douin@posteo.net";
+      realName = "Clément DOUIN";
+      userName = address;
       passwordCommand = "${pkgs.pass}/bin/pass show posteo";
       folders = {
         inbox = "INBOX";
@@ -18,52 +15,31 @@ in
         trash = "Trash";
       };
       imap = {
+        tls.enable = true;
         host = "posteo.de";
         port = 993;
       };
       smtp = {
+        tls.enable = true;
         host = "posteo.de";
         port = 465;
       };
       himalaya = {
         enable = true;
         settings = {
-          sync = true;
-          email-writing-encrypt-cmd = "gpg -o - -eqar <recipient>";
-          email-reading-decrypt-cmd = "gpg -dq";
-          imap-notify-cmd = ''
-            ${pkgs.libnotify}/bin/notify-send "📫 <sender>" "<subject>"
-          '';
-          imap-watch-cmds = [
-            "${himalaya}/bin/himalaya --account posteo --folder INBOX account sync"
-          ];
-        };
-      };
-    };
-
-    gmail = {
-      realName = "Clément DOUIN";
-      userName = "clement@getpiana.com";
-      address = "clement@getpiana.com";
-      passwordCommand = "${pkgs.pass}/bin/pass show piana/gmail";
-      folders = {
-        inbox = "INBOX";
-        drafts = "[Gmail]/Drafts";
-        sent = "[Gmail]/Sent Mail";
-        trash = "[Gmail]/Trash";
-      };
-      imap = {
-        host = "imap.gmail.com";
-        port = 993;
-      };
-      smtp = {
-        host = "smtp.gmail.com";
-        port = 465;
-      };
-      himalaya = {
-        enable = true;
-        settings = {
-          sync = true;
+          envelope.watch = {
+            backend = "imap";
+            received.notify = {
+              summary = "📬 New message from {sender}";
+              body = "{subject}";
+            };
+          };
+          message.send.save-copy = true;
+          sync = {
+            enable = true;
+            strategy.include = [ folders.inbox ];
+          };
+          pgp.backend = "gpg";
         };
       };
     };
@@ -71,22 +47,14 @@ in
 
   programs.himalaya = {
     enable = true;
-    package = himalaya;
+    package = pkgs.himalaya.override { buildFeatures = [ "pgp-gpg" "pgp-commands" ]; };
     settings = {
-      signature = "~/.signature";
+      signature = "${config.home.homeDirectory}/.signature";
       downloads-dir = "${config.home.homeDirectory}/downloads";
     };
   };
 
   services.himalaya-watch = {
-    enable = true;
-    environment = {
-      PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
-      RUST_LOG = "debug";
-    };
-  };
-
-  services.himalaya-notify = {
     enable = true;
     environment = {
       PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";

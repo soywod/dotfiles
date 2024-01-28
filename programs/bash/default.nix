@@ -63,7 +63,6 @@ in
       u = "unfog";
       h = "~/code/himalaya/target/debug/himalaya";
       o = "xdg-open";
-      l = ''ledger --strict --empty --input-date-format="%d/%m/%y" --effective --cleared --file ~/documents/ledger/auto-entrepreneur.ldg'';
     };
     profileExtra = ''      
       if [ "$(tty)" == "/dev/tty1" ] && [ -z "$WAYLAND_DISPLAY" ] && command -v sway >/dev/null
