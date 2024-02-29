@@ -1,16 +1,9 @@
 { nixpkgs, pkgs, ... }:
 
 {
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      # 28/01/2024
-      url = https://github.com/nix-community/emacs-overlay/archive/d6d5dd09b6533a30e3b312f0f225bd3475733f23.tar.gz;
-    }))
-  ];
-
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs-pgtk;
+    package = pkgs.emacs29-pgtk;
     extraPackages = (epkgs:
       (with epkgs; [
         doom-themes
@@ -44,7 +37,7 @@
 
   services.emacs = {
     enable = true;
-    package = pkgs.emacs-pgtk;
+    package = pkgs.emacs29-pgtk;
     startWithUserSession = true;
   };
 
