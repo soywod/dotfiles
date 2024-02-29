@@ -1,5 +1,11 @@
 { config, pkgs, ... }:
 
+let
+  himalaya-pkg = pkgs.himalaya.override {
+    buildNoDefaultFeatures = true;
+    buildFeatures = [ "imap" "maildir" "smtp" "account-sync" "pgp-gpg" ];
+  };
+in
 {
   accounts.email.accounts = {
     posteo = rec {
@@ -27,17 +33,26 @@
       himalaya = {
         enable = true;
         settings = {
-          envelope.watch = {
-            backend = "imap";
-            received.notify = {
-              summary = "📬 New message from {sender}";
-              body = "{subject}";
+          folder.sync.filter.include = [ folders.inbox ];
+          envelope = {
+            list = {
+              datetime-fmt = "%d/%m/%Y, %Hh%M";
+              datetime-local-tz = true;
+            };
+            watch = {
+              backend = "imap";
+              received = {
+                cmd = "${himalaya-pkg}/bin/himalaya account sync posteo";
+                notify = {
+                  summary = "📬 New message from {sender}";
+                  body = "{subject}";
+                };
+              };
             };
           };
           message.send.save-copy = true;
           sync = {
             enable = true;
-            strategy.include = [ folders.inbox ];
           };
           pgp.backend = "gpg";
         };
@@ -47,7 +62,7 @@
 
   programs.himalaya = {
     enable = true;
-    package = pkgs.himalaya.override { buildFeatures = [ "pgp-gpg" "pgp-commands" ]; };
+    package = himalaya-pkg;
     settings = {
       signature = "${config.home.homeDirectory}/.signature";
       downloads-dir = "${config.home.homeDirectory}/downloads";
@@ -59,6 +74,9 @@
     environment = {
       PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
       RUST_LOG = "debug";
+    };
+    settings = {
+      account = "posteo";
     };
   };
 }
