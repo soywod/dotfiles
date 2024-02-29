@@ -30,13 +30,13 @@ in
     '';
   };
 
-  environment.etc = {
-    "pipewire/pipewire.conf.d/combine-sink.conf".text = ''
-      context.exec = [
-        { path = "pactl" args = "load-module module-combine-sink" }
-      ]
-    '';
-  };
+  # environment.etc = {
+  #   "pipewire/pipewire.conf.d/combine-sink.conf".text = ''
+  #     context.exec = [
+  #       { path = "pactl" args = "load-module module-combine-sink" }
+  #     ]
+  #   '';
+  # };
 
   boot = {
     loader = {
@@ -53,12 +53,6 @@ in
   networking = {
     networkmanager.enable = true;
     hostName = "soywod";
-    defaultGateway = "192.168.1.254";
-    nameservers = [ "8.8.8.8" ];
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 3000 ];
-    };
   };
 
   time.timeZone = "Europe/Paris";
@@ -107,7 +101,7 @@ in
   };
 
   sound = {
-    enable = false;
+    enable = true;
   };
 
   hardware = {
@@ -157,11 +151,9 @@ in
   xdg = {
     portal = {
       enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-      ];
-      gtkUsePortal = true;
+      wlr.enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      config.common.default = "*";
     };
   };
 
