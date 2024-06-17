@@ -312,7 +312,7 @@
 
 (add-to-list 'load-path "~/code/himalaya-emacs")
 (require 'himalaya)
-;; (setq himalaya-executable "/home/soywod/code/himalaya/target/debug/himalaya")
+;; (setq himalaya-executable "/home/soywod/code/himalaya/target/release/himalaya")
 ;; (setq himalaya-config-path "/home/soywod/.himalaya.config.toml")
 ;; (setq himalaya-default-folder "INBOX")
 

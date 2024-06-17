@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 
 let
   himalaya-pkg = pkgs.himalaya.override {
@@ -13,7 +13,7 @@ in
       address = "clement.douin@posteo.net";
       realName = "Clément DOUIN";
       userName = address;
-      passwordCommand = "${pkgs.pass}/bin/pass show posteo";
+      passwordCommand = "${lib.getExe pkgs.pass} show posteo";
       folders = {
         inbox = "INBOX";
         drafts = "Drafts";
@@ -42,7 +42,7 @@ in
             watch = {
               backend = "imap";
               received = {
-                cmd = "${himalaya-pkg}/bin/himalaya account sync posteo";
+                # cmd = "${himalaya-pkg}/bin/himalaya account sync posteo";
                 notify = {
                   summary = "📬 New message from {sender}";
                   body = "{subject}";
@@ -74,9 +74,6 @@ in
     environment = {
       PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
       RUST_LOG = "debug";
-    };
-    settings = {
-      account = "posteo";
     };
   };
 }
