@@ -23,15 +23,17 @@ in
     (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit nixpkgs pkgs; })
-    (import ./programs/himalaya { inherit pkgs config; })
+    (import ./programs/himalaya { inherit lib pkgs config; })
     (import ./programs/comodoro { inherit pkgs config; })
   ];
 
   home = {
     packages = with pkgs; [
+      brave
       brightnessctl
-      chromium
+      # chromium
       # dconf # for paprefs virtual output
+      discord
       element-desktop
       filezilla
       ghostscript
@@ -48,16 +50,16 @@ in
       pulseaudio
       ripgrep
       signal-desktop
-      skim
+      # skim
       # slack
       tdesktop
       tex
-      tor-browser-bundle-bin
-      w3m
+      # tor-browser-bundle-bin
+      # w3m
       wally-cli
       xdg-utils
       xournal
-      zoom-us
+      # zoom-us
     ];
     sessionPath = [
       "${config.home.homeDirectory}/.local/bin"
@@ -94,7 +96,7 @@ in
 
   programs.browserpass = {
     enable = true;
-    browsers = [ "chromium" ];
+    browsers = [ "brave" ];
   };
 
   programs.waybar = {
@@ -472,7 +474,7 @@ in
       defaultCacheTtlSsh = 86400;
       maxCacheTtl = 604800;
       maxCacheTtlSsh = 604800;
-      pinentryFlavor = "gtk2";
+      pinentryPackage = pkgs.pinentry-gtk2;
     };
 
     gammastep = {
