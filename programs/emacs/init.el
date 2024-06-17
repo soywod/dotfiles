@@ -22,6 +22,10 @@
 (setq user-mail-address	"clement.douin@posteo.net")
 (setq split-width-threshold 0)
 
+; scratch buffer
+(setq initial-major-mode 'org-mode)
+(setq initial-scratch-message nil)
+
 ;; Custom functions
 
 (defun soywod/format-on-save-hook ()
