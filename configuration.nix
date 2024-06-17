@@ -50,9 +50,15 @@ in
     };
   };
 
+
+  services.avahi.enable = true;
+  services.resolved.enable = true;
   networking = {
-    networkmanager.enable = true;
     hostName = "soywod";
+    networkmanager = {
+      enable = true;
+      connectionConfig."connection.mdns" = 2;
+    };
   };
 
   time.timeZone = "Europe/Paris";
