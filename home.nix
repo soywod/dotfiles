@@ -82,6 +82,11 @@ in
         --empty
       '';
     };
+
+    pointerCursor = {
+      package = pkgs.vanilla-dmz;
+      name = "Vanilla-DMZ";
+    };
   };
 
   programs.home-manager = {
