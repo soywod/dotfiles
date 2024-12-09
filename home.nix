@@ -23,8 +23,8 @@ in
     (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit nixpkgs pkgs; })
-    (import ./programs/himalaya { inherit lib pkgs config; })
-    (import ./programs/comodoro { inherit pkgs config; })
+    # (import ./programs/himalaya { inherit lib pkgs config; })
+    # (import ./programs/comodoro { inherit pkgs config; })
   ];
 
   home = {
@@ -54,7 +54,7 @@ in
       # slack
       tdesktop
       tex
-      # tor-browser-bundle-bin
+      tor-browser-bundle-bin
       # w3m
       wally-cli
       xdg-utils
@@ -93,12 +93,6 @@ in
     enable = true;
   };
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      element-desktop = (import <nixos-22.11> { }).element-desktop;
-    })
-  ];
-
   programs.browserpass = {
     enable = true;
     browsers = [ "brave" ];
@@ -129,7 +123,7 @@ in
         modules-right = [
           "sway/mode"
           "tray"
-          "custom/comodoro"
+          # "custom/comodoro"
         ];
         modules = {
           battery = {
@@ -195,7 +189,6 @@ in
               default = [ "" "" ];
             };
           };
-
           # "custom/himalaya" = {
           #   exec = "${pkgs.coreutils}/bin/tail -fn 1 /tmp/himalaya-counter";
           #   format = "{} ";
@@ -214,14 +207,14 @@ in
             icon-size = 16;
             spacing = 8;
           };
-          "custom/comodoro" = {
-            exec = "${pkgs.comodoro}/bin/comodoro get work tcp";
-            interval = 1;
-            format = "{} ";
-            on-click = "${pkgs.comodoro}/bin/comodoro start work tcp";
-            on-click-right = "${pkgs.comodoro}/bin/comodoro stop work tcp";
-            tooltip = false;
-          };
+          # "custom/comodoro" = {
+          #   exec = "${pkgs.comodoro}/bin/comodoro get work tcp";
+          #   interval = 1;
+          #   format = "{} ";
+          #   on-click = "${pkgs.comodoro}/bin/comodoro start work tcp";
+          #   on-click-right = "${pkgs.comodoro}/bin/comodoro stop work tcp";
+          #   tooltip = false;
+          # };
         };
       }
     ];
@@ -350,6 +343,7 @@ in
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
+    checkConfig = false; # HACK: cannot load background
     config = {
       menu = "${pkgs.dmenu}/bin/dmenu_path | ${pkgs.dmenu}/bin/dmenu -b -fn ${theme.font}Mono-15 -nb '${theme.bg}' -nf '${theme.fg}' -sb '${theme.blue}' -sf '${theme.bg}' | ${pkgs.findutils}/bin/xargs swaymsg exec --";
       modifier = "Mod4";
@@ -381,12 +375,12 @@ in
         eDP-1 = {
           resolution = "1920x1200@60Hz";
           position = "0 0";
-          bg = "${config.home.homeDirectory}/documents/fond.jpeg fill";
+          background = "${config.home.homeDirectory}/documents/fond.jpeg fill";
         };
         DP-2 = {
           resolution = "1920x1080@60Hz";
           position = "1920 0";
-          bg = "${config.home.homeDirectory}/documents/fond.jpeg fill";
+          background = "${config.home.homeDirectory}/documents/fond.jpeg fill";
         };
       };
       keybindings =
@@ -481,16 +475,14 @@ in
       maxCacheTtlSsh = 604800;
       pinentryPackage = pkgs.pinentry-gtk2;
     };
-
+    
     gammastep = {
       enable = true;
       tray = true;
-      provider = "geoclue2";
-      settings = {
-        general = {
-          fade = false;
-        };
-      };
+      latitude = 46.21073634459176;
+      longitude = 6.405966563306475;
+      temperature.day = 6500;
+      temperature.night = 4500;
     };
 
     pass-secret-service = {

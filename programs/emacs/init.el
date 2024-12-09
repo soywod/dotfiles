@@ -312,15 +312,9 @@
 
 (add-to-list 'load-path "~/code/himalaya-emacs")
 (require 'himalaya)
-;; (setq himalaya-executable "/home/soywod/code/himalaya/target/release/himalaya")
-;; (setq himalaya-config-path "/home/soywod/.himalaya.config.toml")
+(setq himalaya-executable "/home/soywod/code/himalaya/target/release/himalaya")
+(setq himalaya-config-path "/home/soywod/.h.toml")
 ;; (setq himalaya-default-folder "INBOX")
 
 (add-to-list 'load-path "~/code/org-latex-invoice")
 (require 'org-latex-invoice)
-
-(add-to-list 'load-path "~/code/emacs-prisma-mode")
-(require 'prisma-mode)
-(add-to-list 'auto-mode-alist '("\\.prisma\\'" . prisma-mode))
-(add-to-list 'eglot-server-programs '(prisma-mode . ("prisma-language-server" "--stdio")))
-(add-hook 'prisma-mode-hook 'soywod/eglot-ensure)

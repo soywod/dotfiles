@@ -17,12 +17,11 @@ in
     ./hardware-configuration.nix
     ./programs/ergodox/udev-rules.nix
     ./cachix.nix
-    # <home-manager/nixos>
-    (import /home/soywod/code/home-manager/nixos)
+    <home-manager/nixos>
   ];
 
   nix = {
-    package = pkgs.nixFlakes;
+    settings.trusted-users = [ "root" "soywod" ];
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -91,7 +90,7 @@ in
   fonts = {
     packages = with pkgs; [
       noto-fonts
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       noto-fonts-emoji
       jetbrains-mono
       font-awesome
@@ -106,10 +105,6 @@ in
     };
   };
 
-  sound = {
-    enable = true;
-  };
-
   hardware = {
     pulseaudio = {
       enable = false;
@@ -122,7 +117,7 @@ in
         };
       };
     };
-    opengl = {
+    graphics = {
       enable = true;
     };
   };
@@ -161,10 +156,6 @@ in
       extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
       config.common.default = "*";
     };
-  };
-
-  services.geoclue2 = {
-    enable = true;
   };
 
   system.stateVersion = "21.05";
