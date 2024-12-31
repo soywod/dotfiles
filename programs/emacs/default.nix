@@ -3,7 +3,22 @@
 {
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs29-pgtk;
+    package = pkgs.emacs30.override {
+      withNativeCompilation = false;
+      noGui = true;
+      withCsrc = false;
+      withDbus = false;
+      withGpm = false;
+      withImageMagick = false;
+      withMailutils = false;
+      withSelinux = false;
+      withSQLite3 = false;
+      withSystemd = false;
+      withToolkitScrollBars = false;
+      withWebP = false;
+      withX = false;
+      withSmallJaDic = true;
+    };
     extraPackages = (epkgs:
       (with epkgs; [
         doom-themes
@@ -13,25 +28,17 @@
         markdown-mode
         rust-mode
         ledger-mode
-        graphql-mode
         typescript-mode
         vimrc-mode
         lua-mode
         direnv
         yasnippet
         prettier-js
-        # smartparens
         magit
         bbdb
         projectile
-        which-key
-        pass
         delight
-        expand-region
         org
-        tree-sitter
-        tree-sitter-langs
-        rg
       ]));
   };
 
