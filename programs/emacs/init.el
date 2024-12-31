@@ -149,6 +149,17 @@
 	  ("M" "Month's agenda" agenda "" ((org-agenda-span 'month)))))
   :config (use-package org-clock))
 
+;; Wayland clipboard
+
+(defun soywod/clipboard-cut (text)
+  (call-process "wl-copy" nil 0 nil "-n" text))
+
+(defun soywod/clipboard-paste ()
+  (shell-command-to-string "wl-paste"))
+
+(setq interprogram-cut-function 'soywod/clipboard-cut)
+(setq interprogram-paste-function 'soywod/clipboard-paste)
+
 ;; Custom functions
 
 (defun soywod/format-on-save-hook ()
