@@ -1,0 +1,4 @@
+# key: log
+# name: log
+# --
+console.log("$1", ${2:$1});$0

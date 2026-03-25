@@ -1,7 +1,12 @@
 {
   # Extra udev rules for the ErgoDox EZ keyboard
-  # https://github.com/positron-solutions/wally-cli/blob/496fd78c7e03e21e66517d85271df450350af94a/ergodox-udev.nix
+  # https://github.com/zsa/wally/wiki/Linux-install#2-create-a-udev-rule-file
   services.udev.extraRules = ''
+    # Rules for Oryx web flashing and live training
+    KERNEL=="hidraw*", ATTRS{idVendor}=="16c0", MODE="0664", GROUP="plugdev"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="3297", MODE="0664", GROUP="plugdev"
+
+    # Wally Flashing rules for the Ergodox EZ
     ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_DEVICE_IGNORE}="1"
     ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789A]?", ENV{MTP_NO_PROBE}="1"
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789ABCD]?", MODE:="0666"

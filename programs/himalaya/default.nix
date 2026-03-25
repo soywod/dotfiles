@@ -39,21 +39,20 @@ in
               datetime-fmt = "%d/%m/%Y, %Hh%M";
               datetime-local-tz = true;
             };
-            watch = {
-              backend = "imap";
-              received = {
-                # cmd = "${himalaya-pkg}/bin/himalaya account sync posteo";
-                notify = {
-                  summary = "📬 New message from {sender}";
-                  body = "{subject}";
-                };
-              };
-            };
+            # watch = {
+            #   backend = "imap";
+            #   received = {
+            #     notify = {
+            #       summary = "📬 New message from {sender}";
+            #       body = "{subject}";
+            #     };
+            #   };
+            # };
           };
           message.send.save-copy = true;
-          sync = {
-            enable = true;
-          };
+          # sync = {
+          #   enable = false;
+          # };
           pgp.backend = "gpg";
         };
       };
@@ -69,11 +68,11 @@ in
     };
   };
 
-  services.himalaya-watch = {
-    enable = true;
-    environment = {
-      PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
-      RUST_LOG = "debug";
-    };
-  };
+  # services.himalaya-watch = {
+  #   enable = true;
+  #   environment = {
+  #     PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
+  #     RUST_LOG = "debug";
+  #   };
+  # };
 }

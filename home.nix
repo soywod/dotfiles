@@ -2,7 +2,9 @@
 
 let
   theme = import ./theme.nix;
+
   passStorePath = "${config.home.homeDirectory}/documents/mots-de-passe";
+
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-small
       # french language
@@ -31,14 +33,15 @@ in
     packages = with pkgs; [
       brave
       brightnessctl
-      # chromium
       # dconf # for paprefs virtual output
-      discord
+      # discord
       element-desktop
+      feh
       filezilla
       ghostscript
       gimp
       inkscape
+      jq
       ledger
       libnotify
       libreoffice
@@ -52,13 +55,14 @@ in
       signal-desktop
       # skim
       # slack
-      tdesktop
+      # tdesktop
       tex
       tor-browser-bundle-bin
       # w3m
+      # vscode
       wally-cli
       xdg-utils
-      xournal
+      xournalpp
       # zoom-us
     ];
     sessionPath = [
@@ -360,8 +364,8 @@ in
       };
       input = {
         "type:keyboard" = {
-          xkb_layout = "us,ru";
-          xkb_variant = "dvorak-alt-intl,";
+          xkb_layout = "us,us,ru";
+          xkb_variant = "dvorak-alt-intl,,";
           xkb_options = "grp:shifts_toggle,numpad:mac,compose:ralt,ctrl:swapcaps";
           repeat_delay = "256";
           repeat_rate = "32";
@@ -464,6 +468,51 @@ in
       PASSWORD_STORE_DIR = passStorePath;
     };
   };
+
+  # programs.vim = {
+  #   enable = true;
+
+  #   packageConfigurable = (pkgs.vim-full.overrideAttrs (prev: {
+  #     configureFlags = (lib.subtractLists [
+  #       # unrecognized options
+  #       "--disable-workshop"
+  #       "--disable-sniff"
+  #       "--disable-hangulinput"
+  #       "--disable-gtk_check"
+  #       "--disable-athena_check"
+  #       "--disable-nextaf_check"
+  #       "--disable-carbon_check"
+  #       "--disable-wildmenu"
+  #     ] prev.configureFlags) ++ [
+  #       "--disable-sysmouse"
+  #       "--enable-gpm=false"
+  #     ];
+  #   })).override {
+  #     features = "normal";
+  #     wrapPythonDrv = false;
+  #     guiSupport = false;
+  #     luaSupport = false;
+  #     perlSupport = false;
+  #     pythonSupport = false;
+  #     rubySupport = false;
+  #     nlsSupport = false;
+  #     tclSupport = false;
+  #     multibyteSupport = false;
+  #     cscopeSupport = false;
+  #     netbeansSupport = false;
+  #     ximSupport = false;
+  #     darwinSupport = false;
+  #     ftNixSupport = false;
+  #     sodiumSupport = false;
+  #   };
+
+  #   plugins = [];
+
+  #   extraConfig = ''
+  #     set nobackup
+  #     set mouse-=a
+  #   '';
+  # };
 
   services = {
     gpg-agent = {

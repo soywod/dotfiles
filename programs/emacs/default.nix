@@ -4,47 +4,50 @@
   programs.emacs = {
     enable = true;
     package = pkgs.emacs30.override {
-      withNativeCompilation = false;
       noGui = true;
       withCsrc = false;
       withDbus = false;
       withGpm = false;
       withImageMagick = false;
       withMailutils = false;
-      withSelinux = false;
+      withNativeCompilation = false;
       withSQLite3 = false;
+      withSelinux = false;
+      withSmallJaDic = true;
       withSystemd = false;
       withToolkitScrollBars = false;
       withWebP = false;
       withX = false;
-      withSmallJaDic = true;
     };
     extraPackages = (epkgs:
       (with epkgs; [
+        bbdb
+        delight
+        direnv
         doom-themes
-        web-mode
-        nix-mode
-        yaml-mode
-        markdown-mode
-        rust-mode
         ledger-mode
+        lua-mode
+        magit
+        markdown-ts-mode
+        nix-mode
+        org
+        prettier-js
+        projectile
+        rg
+        rust-mode
+        tree-sitter
+        tree-sitter-langs
         typescript-mode
         vimrc-mode
-        lua-mode
-        direnv
+        web-mode
+        yaml-mode
         yasnippet
-        prettier-js
-        magit
-        bbdb
-        projectile
-        delight
-        org
       ]));
   };
 
   services.emacs = {
     enable = true;
-    package = pkgs.emacs29-pgtk;
+    package = pkgs.emacs30-pgtk;
     startWithUserSession = true;
   };
 

@@ -1,4 +1,9 @@
-{ nixpkgs, pkgs, lib, ... }:
+{
+  nixpkgs,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   font-awesome = pkgs.fetchFromGitHub {
@@ -21,7 +26,10 @@ in
   ];
 
   nix = {
-    settings.trusted-users = [ "root" "soywod" ];
+    settings.trusted-users = [
+      "root"
+      "soywod"
+    ];
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -49,11 +57,14 @@ in
     };
   };
 
-
   services.avahi.enable = true;
   services.resolved.enable = true;
   networking = {
     hostName = "soywod";
+    nameservers = [
+      "1.1.1.1"
+      "9.9.9.9"
+    ];
     networkmanager = {
       enable = true;
       connectionConfig."connection.mdns" = 2;
@@ -100,7 +111,10 @@ in
       defaultFonts = {
         serif = [ "Noto Serif" ];
         sansSerif = [ "Noto Sans" ];
-        monospace = [ "JetBrains Mono" "Font Awesome" ];
+        monospace = [
+          "JetBrains Mono"
+          "Font Awesome"
+        ];
       };
     };
   };
@@ -131,7 +145,14 @@ in
   users.users.soywod = {
     isNormalUser = true;
     hashedPassword = "$6$LMKJHJSxnGOwEwuF$KJQLQcOkXlHWkGWp7Z4/eXetRoVnuiSOv2Rl6BNtEhpgpX2b/Ky5ELHYL3Q0kQbERSKiMWfEmDXLAOX6fAivg0";
-    extraGroups = [ "wheel" "networkmanager" "video" "docker" ];
+    extraGroups = [
+      "dialout"
+      "docker"
+      "networkmanager"
+      "plugdev"
+      "video"
+      "wheel"
+    ];
     shell = pkgs.bash;
   };
 

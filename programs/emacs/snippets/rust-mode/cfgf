@@ -1,0 +1,4 @@
+# key: cfgf
+# name: cfgf
+# --
+#[cfg(feature = "$0")]

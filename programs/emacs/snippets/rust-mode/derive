@@ -1,0 +1,4 @@
+# key: derive
+# name: #[derive(…)]
+# --
+#[derive(${1:Clone, Debug, Default, Eq, PartialEq})]$0

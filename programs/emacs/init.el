@@ -11,34 +11,44 @@
 (setq inhibit-startup-screen t)
 (setq user-full-name "Clément DOUIN")
 (setq user-mail-address	"clement.douin@posteo.net")
-(setq split-width-threshold 0) ; always split vertical
+(setq split-width-threshold 0) ; always split vertically
 
-;; Completion
+;; completion
 (setq completion-ignore-case t)
 (setq completion-styles '(flex))
 
-;; Backup
+;; backup
 (setq auto-save-default nil)
 (setq create-lockfiles nil)
 (setq make-backup-files nil)
 (setq vc-make-backup-files nil)
 
-;; Calc
+;; calc
 (setq calc-float-format '(fix 2))
 (setq calc-group-char " ")
 (setq calc-group-digits t)
 (setq calc-point-char ",")
 
-;; Scratch buffer
-;; (setq initial-major-mode 'org-mode)
+;; scratch buffer
 (setq initial-scratch-message nil)
 
-;; Menus and tooltips
+;; menus and tooltips
 (menu-bar-mode -1)
 (tooltip-mode -1)
 
 ;; use fido vertical mode
 (add-hook 'after-init-hook 'fido-vertical-mode)
+
+;; ;; major mode remap for tree sitter
+;; (setq major-mode-remap-alist
+;;       '((bash-mode . bash-ts-mode)
+;; 	(css-mode . css-ts-mode)
+;; 	(elisp-mode . elisp-ts-mode)
+;; 	(json-mode . json-ts-mode)
+;; 	(markdown-mode . markdown-ts-mode)
+;; 	(rust-mode . rust-ts-mode)
+;; 	(toml-mode . toml-ts-mode)
+;; 	(yaml-mode . yaml-ts-mode)))
 
 ;; Packages
 
@@ -71,28 +81,80 @@
 	("M-p" . flymake-goto-prev-error)
 	("M-n" . flymake-goto-next-error)))
 
+(use-package eldoc
+  :delight
+  :init
+  (setq eldoc-echo-area-use-multiline-p nil))
+
 (use-package projectile
   :init
   (setq projectile-project-search-path (cddr (directory-files "~/code" t)))
   :bind-keymap
   ("C-c p" . projectile-command-map))
 
-(use-package eldoc
-  :delight
+(use-package tree-sitter
   :init
-  (setq eldoc-echo-area-use-multiline-p nil))
+  (setq treesit-language-source-alist
+	'((bash "https://github.com/tree-sitter/tree-sitter-bash")
+	  (css "https://github.com/tree-sitter/tree-sitter-css")
+	  (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+	  (json "https://github.com/tree-sitter/tree-sitter-json")
+	  (rust "https://github.com/tree-sitter/tree-sitter-rust")
+	  (toml "https://github.com/tree-sitter/tree-sitter-toml")
+	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+	  (yaml "https://github.com/ikatyang/tree-sitter-yaml"))))
+
+(use-package markdown-ts-mode
+  :mode
+  ("\\.md\\'" . markdown-ts-mode)
+  :init
+  (add-to-list 'treesit-language-source-alist
+	       '(markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src"))
+  (add-to-list 'treesit-language-source-alist
+	       '(markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src"))
+  :hook
+  (markdown-mode . soywod/eglot-ensure)
+  (markdown-mode . soywod/eglot-format-before-save))
 
 (use-package rust-mode
   :mode ("\\.rust\\'" . rust-mode)
   :hook
   (rust-mode . soywod/eglot-ensure)
-  (rust-mode . soywod/format-on-save-hook))
+  (rust-mode . soywod/eglot-format-before-save))
 
 (use-package nix-mode
   :mode ("\\.nix\\'" . nix-mode)
   :hook
   (nix-mode . soywod/eglot-ensure)
-  (nix-mode . soywod/format-on-save-hook))
+  (nix-mode . soywod/eglot-format-before-save))
+
+(use-package tsx
+  :mode
+  ("\\.tsx\\'" . tsx-ts-mode)
+  ("\\.ctsx\\'" . tsx-ts-mode)
+  ("\\.mtsx\\'" . tsx-ts-mode)
+  :hook
+  (tsx-ts-mode . prettier-js-mode)
+  (tsx-ts-mode . soywod/eglot-ensure-without-formatting))
+
+(use-package typescript
+  :mode
+  ("\\.ts\\'" . typescript-ts-mode)
+  ("\\.cts\\'" . typescript-ts-mode)
+  ("\\.mts\\'" . typescript-ts-mode)
+  :hook
+  (typescript-ts-mode . prettier-js-mode)
+  (typescript-ts-mode . soywod/eglot-ensure-without-formatting))
+
+(use-package javascript
+  :mode
+  ("\\.js\\'" . typescript-ts-mode)
+  ("\\.cjs\\'" . typescript-ts-mode)
+  ("\\.mjs\\'" . typescript-ts-mode)
+  :hook
+  (typescript-ts-mode . prettier-js-mode)
+  (typescript-ts-mode . soywod/eglot-ensure-without-formatting))
 
 (use-package ledger-mode
   :mode ("\\.ldg\\'" . ledger-mode))
@@ -155,14 +217,14 @@
   (call-process "wl-copy" nil 0 nil "-n" text))
 
 (defun soywod/clipboard-paste ()
-  (shell-command-to-string "wl-paste"))
+  (shell-command-to-string "wl-paste -n"))
 
 (setq interprogram-cut-function 'soywod/clipboard-cut)
 (setq interprogram-paste-function 'soywod/clipboard-paste)
 
 ;; Custom functions
 
-(defun soywod/format-on-save-hook ()
+(defun soywod/eglot-format-before-save ()
   (add-hook 'before-save-hook 'eglot-format nil 'local))
 
 (defun soywod/capitalize-first-char (&optional string)
@@ -188,8 +250,9 @@
   (eglot-ensure)
   (setq eglot-ignored-server-capabilities
 	'(:documentFormattingProvider
+	  :documentOnTypeFormattingProvider
 	  :documentRangeFormattingProvider
-	  :documentOnTypeFormattingProvider)))
+	  :inlayHintProvider)))
 
 (defun soywod/org-clock-toggle ()
   (interactive)

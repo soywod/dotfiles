@@ -2,7 +2,7 @@
 
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
-    rnix-lsp
-    nixpkgs-fmt
+    nixd
+    nixfmt-rfc-style
   ];
 }
