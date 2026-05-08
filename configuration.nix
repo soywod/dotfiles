@@ -1,7 +1,5 @@
 {
-  nixpkgs,
   pkgs,
-  lib,
   ...
 }:
 
@@ -12,8 +10,9 @@ let
     rev = "6.1.1";
     sha256 = "BjK1PJQFWtKDvfQ2Vh7BoOPqYucyvOG+2Pu/Kh+JpAA=";
     postFetch = ''
-      tar xf $downloadedFile --strip=1
-      install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
+      src=$(mktemp -d)
+      mv "$out"/* "$src"/
+      install -m444 -Dt "$out/share/fonts/opentype" "$src"/{fonts,otfs}/*.otf
     '';
   };
 in
