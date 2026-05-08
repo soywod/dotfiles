@@ -280,14 +280,9 @@ in
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "Clément DOUIN";
-    userEmail = "clement.douin@posteo.net";
-    signing = {
-      signByDefault = true;
-      gpgPath = "${pkgs.gnupg}/bin/gpg";
-      key = "75F0 AB7C FE01 D077 AEE6  CAFD 353E 4A18 EE0F AB72";
-    };
-    extraConfig = {
+    settings = {
+      user.name = "Clément DOUIN";
+      user.email = "clement.douin@posteo.net";
       core = {
         autocrlf = "input";
         safecrlf = false;
@@ -298,6 +293,11 @@ in
       push = {
         followTags = true;
       };
+    };
+    signing = {
+      signByDefault = true;
+      signer = "${pkgs.gnupg}/bin/gpg";
+      key = "75F0 AB7C FE01 D077 AEE6  CAFD 353E 4A18 EE0F AB72";
     };
   };
 
