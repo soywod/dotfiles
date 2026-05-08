@@ -6,6 +6,8 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+(setq-default fill-column 80)
+
 (setq calendar-week-start-day 1)
 (setq disabled-command-function nil)
 (setq inhibit-startup-screen t)
