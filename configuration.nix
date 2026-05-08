@@ -169,6 +169,10 @@ in
     pulse.enable = true;
   };
 
+  services.fwupd = {
+    enable = true;
+  };
+
   xdg = {
     portal = {
       enable = true;
