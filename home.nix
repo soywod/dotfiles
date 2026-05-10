@@ -57,7 +57,7 @@ in
       # slack
       # tdesktop
       tex
-      tor-browser-bundle-bin
+      tor-browser
       # w3m
       # vscode
       wally-cli
