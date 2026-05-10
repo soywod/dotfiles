@@ -535,17 +535,5 @@ in
     };
   };
 
-  systemd.user.services.maestral = {
-    Unit = {
-      Description = "Maestral daemon";
-      After = "graphical-session.target network-online.target";
-    };
-    Install.WantedBy = [ "default.target" ];
-    Service = {
-      ExecStart = "${pkgs.maestral-gui.out}/bin/maestral_qt";
-      ExecStop = "${pkgs.coreutils}/bin/pkill maestral_qt";
-    };
-  };
-
   home.stateVersion = "21.05";
 }
