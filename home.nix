@@ -376,15 +376,10 @@ in
         };
       };
       output = {
-        eDP-1 = {
-          resolution = "1920x1200@60Hz";
-          position = "0 0";
-          background = "${config.home.homeDirectory}/documents/fond.jpeg fill";
-        };
-        DP-2 = {
+        HDMI-A-1 = {
           resolution = "1920x1080@60Hz";
-          position = "1920 0";
-          background = "${config.home.homeDirectory}/documents/fond.jpeg fill";
+          position = "0 0";
+          background = "/etc/nixos/background.jpeg fill";
         };
       };
       keybindings =
