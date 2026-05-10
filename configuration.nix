@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 
@@ -23,6 +24,18 @@ in
     ./cachix.nix
     <home-manager/nixos>
   ];
+
+  environment.etc."nextcloud-adminpass".text = "password";
+  services.nextcloud = {
+    enable = true;
+    hostName = "locahost";
+    config.adminpassFile = "/etc/nextcloud-adminpass";
+    config.dbtype = "sqlite";
+    extraAppsEnable = true;
+    extraApps = with config.services.nextcloud.package.packages.apps; {
+      inherit calendar contacts notes tasks mail news;
+    };
+  };
 
   nix = {
     settings.trusted-users = [
