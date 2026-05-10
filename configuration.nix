@@ -94,7 +94,7 @@ in
     packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk-sans
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       jetbrains-mono
       font-awesome
     ];
@@ -111,10 +111,9 @@ in
     };
   };
 
+  services.pulseaudio.enable = false;
+
   hardware = {
-    pulseaudio = {
-      enable = false;
-    };
     bluetooth = {
       enable = true;
       settings = {
@@ -136,7 +135,6 @@ in
   home-manager.users.soywod = import ./home.nix;
   users.users.soywod = {
     isNormalUser = true;
-    hashedPassword = "$6$LMKJHJSxnGOwEwuF$KJQLQcOkXlHWkGWp7Z4/eXetRoVnuiSOv2Rl6BNtEhpgpX2b/Ky5ELHYL3Q0kQbERSKiMWfEmDXLAOX6fAivg0";
     extraGroups = [
       "dialout"
       "docker"
@@ -175,5 +173,5 @@ in
     };
   };
 
-  system.stateVersion = "21.05";
+  system.stateVersion = "25.11";
 }
