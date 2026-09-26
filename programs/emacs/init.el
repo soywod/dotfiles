@@ -52,6 +52,9 @@
 ;; 	(toml-mode . toml-ts-mode)
 ;; 	(yaml-mode . yaml-ts-mode)))
 
+(add-to-list 'auto-mode-alist '("\\.eml\\'" . message-mode))
+(add-to-list 'auto-mode-alist '("\\.mml\\'" . message-mode))
+
 ;; Packages
 
 (use-package doom-themes
