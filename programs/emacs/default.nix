@@ -63,7 +63,7 @@
     sessionVariables = {
       ALTERNATE_EDITOR = "";
       EDITOR = "emacsclient -c";
-      VISUAL = "emacsclient -c -a emacs";
+      VISUAL = "emacsclient -c -a server";
     };
   };
 }
