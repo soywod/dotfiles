@@ -25,16 +25,16 @@ in
     <home-manager/nixos>
   ];
 
-  environment.etc."nextcloud-adminpass".text = "password";
-  services.nextcloud = {
+  services.bitcoind.main = {
     enable = true;
-    hostName = "locahost";
-    config.adminpassFile = "/etc/nextcloud-adminpass";
-    config.dbtype = "sqlite";
-    extraAppsEnable = true;
-    extraApps = with config.services.nextcloud.package.packages.apps; {
-      inherit calendar contacts notes tasks mail news;
-    };
+    prune = 2048;
+    dbCache = 3000;
+    group = "bitcoin";
+    user = "bitcoin";
+    extraConfig = ''
+      server=1
+      rpcallowip=127.0.0.1
+    '';
   };
 
   nix = {
@@ -58,14 +58,21 @@ in
   # };
 
   boot = {
+    enableContainers = true;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
+
     kernel.sysctl = {
       "fs.inotify.max_user_watches" = 1048576;
       "fs.inotify.max_user_instances" = 1024;
       "fs.inotify.max_queued_events" = 32768;
+    };
+
+    tmp = {
+      useTmpfs = true;
+      cleanOnBoot = true;
     };
   };
 
@@ -128,7 +135,10 @@ in
   };
 
   virtualisation = {
-    docker.enable = true;
+    docker = {
+      enable = true;
+      package = pkgs.docker_29;
+    };
   };
 
   services.getty.autologinUser = "soywod";
@@ -136,6 +146,7 @@ in
   users.users.soywod = {
     isNormalUser = true;
     extraGroups = [
+      "bitcoin"
       "dialout"
       "docker"
       "networkmanager"
