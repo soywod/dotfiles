@@ -1,19 +1,31 @@
-{ config, lib, nixpkgs, pkgs, ... }:
+{
+  config,
+  lib,
+  nixpkgs,
+  pkgs,
+  ...
+}:
 
 let
   theme = import ./theme.nix;
 
-  passStorePath = "${config.home.homeDirectory}/documents/mots-de-passe";
+  passStorePath = "/data/pass";
 
-  tex = (pkgs.texlive.combine {
-    inherit (pkgs.texlive) scheme-small
-      # french language
-      collection-langfrench
-      # org-mode invoice pdf export
-      wrapfig lastpage capt-of
-      # number formatting
-      siunitx;
-  });
+  tex = (
+    pkgs.texlive.combine {
+      inherit (pkgs.texlive)
+        scheme-small
+        # french language
+        collection-langfrench
+        # org-mode invoice pdf export
+        wrapfig
+        lastpage
+        capt-of
+        # number formatting
+        siunitx
+        ;
+    }
+  );
 
 in
 {
@@ -31,13 +43,13 @@ in
 
   home = {
     packages = with pkgs; [
-      brave
       brightnessctl
       # dconf # for paprefs virtual output
       # discord
       element-desktop
       feh
       filezilla
+      firefox
       ghostscript
       gimp
       inkscape
@@ -59,8 +71,8 @@ in
       tex
       tor-browser
       # w3m
-      # vscode
-      wally-cli
+      vscode
+      # wally-cli
       xdg-utils
       xournalpp
       # zoom-us
@@ -70,7 +82,7 @@ in
     ];
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
-      PASSWORD_STORE_DIR = "${config.home.homeDirectory}/documents/mots-de-passe";
+      PASSWORD_STORE_DIR = passStorePath;
       XDG_CURRENT_DESKTOP = "sway";
       XDG_SESSION_TYPE = "wayland";
     };
@@ -95,11 +107,6 @@ in
 
   programs.home-manager = {
     enable = true;
-  };
-
-  programs.browserpass = {
-    enable = true;
-    browsers = [ "brave" ];
   };
 
   programs.waybar = {
@@ -141,7 +148,13 @@ in
             format-full = "";
             format-charging = " {capacity}%";
             format-plugged = " {capacity}%";
-            format-icons = [ "" "" "" "" "" ];
+            format-icons = [
+              ""
+              ""
+              ""
+              ""
+              ""
+            ];
           };
           temperature = {
             interval = 1;
@@ -150,7 +163,13 @@ in
             critical-threshold = 80;
             format = "{icon} {temperatureC}°C";
             format-critical = "{icon} {temperatureC}°C";
-            format-icons = [ "" "" "" "" "" ];
+            format-icons = [
+              ""
+              ""
+              ""
+              ""
+              ""
+            ];
           };
           cpu = {
             interval = 1;
@@ -190,7 +209,10 @@ in
             format-icons = {
               headphone = "";
               headset = "";
-              default = [ "" "" ];
+              default = [
+                ""
+                ""
+              ];
             };
           };
           # "custom/himalaya" = {
@@ -228,12 +250,12 @@ in
         font-size: 1.1rem;
         font-weight: bold;
       }
-      
+
       #waybar {
         background-color: ${theme.fg};
         color: ${theme.bg};
       }
-      
+
       #battery,
       #temperature,
       #cpu,
@@ -246,24 +268,24 @@ in
       #network {
         padding: 0.5rem 0.75rem;
       }
-      
+
       #battery.good {
         color: ${theme.green};
       }
-      
+
       #battery.warning {
         color: ${theme.orange};
       }
-      
+
       .critical {
         background-color: ${theme.red};
         color: ${theme.fg};
       }
-      
+
       #battery.charging {
         color: ${theme.blue};
       }
-      
+
       #tray {
         padding: 0.5rem 0.75rem;
       }
@@ -339,9 +361,6 @@ in
       color14 = theme.cyan;
       color15 = theme.fg;
     };
-    keybindings = {
-      "ctrl+shift+n" = "new_os_window_with_cwd";
-    };
   };
 
   wayland.windowManager.sway = {
@@ -415,6 +434,9 @@ in
           "Print" = "exec selection-capture";
           "Shift+Print" = "exec selection-record";
           "Shift+${mod}+Print" = "exec screen-capture";
+
+          "Shift+${mod}+R" = "exec ~/code/whisper/whisper-clip-toggle";
+          "Ctrl+Shift+${mod}+R" = "exec ~/code/whisper/whisper-clip-toggle -m medium -l fr";
         };
       colors = {
         background = theme.bg;
@@ -517,9 +539,9 @@ in
       defaultCacheTtlSsh = 86400;
       maxCacheTtl = 604800;
       maxCacheTtlSsh = 604800;
-      pinentryPackage = pkgs.pinentry-gtk2;
+      pinentry.package = pkgs.pinentry-gtk2;
     };
-    
+
     gammastep = {
       enable = true;
       tray = true;
