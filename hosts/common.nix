@@ -19,10 +19,8 @@ let
 in
 {
   imports = [
-    ./hardware-configuration.nix
-    ./programs/ergodox/udev-rules.nix
-    ./cachix.nix
-    <home-manager/nixos>
+    ../programs/ergodox/udev-rules.nix
+    ../cachix.nix
   ];
 
   services.bitcoind.main = {
@@ -79,7 +77,6 @@ in
   services.avahi.enable = true;
   services.resolved.enable = true;
   networking = {
-    hostName = "soywod";
     nameservers = [
       "1.1.1.1"
       "9.9.9.9"
@@ -147,7 +144,7 @@ in
   };
 
   services.getty.autologinUser = "soywod";
-  home-manager.users.soywod = import ./home.nix;
+  home-manager.users.soywod = import ../home.nix;
   users.users.soywod = {
     isNormalUser = true;
     extraGroups = [

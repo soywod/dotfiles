@@ -2,6 +2,7 @@
   config,
   lib,
   nixpkgs,
+  pimalaya-assistant,
   pkgs,
   ...
 }:
@@ -39,7 +40,10 @@ in
     (import ./programs/emacs { inherit nixpkgs pkgs; })
     # (import ./programs/himalaya { inherit lib pkgs config; })
     # (import ./programs/comodoro { inherit pkgs config; })
+    pimalaya-assistant.homeModules.default
   ];
+
+  services.pimalaya-assistant.enable = true;
 
   home = {
     packages = with pkgs; [
