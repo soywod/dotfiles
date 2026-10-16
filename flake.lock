@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789770686,
+        "narHash": "sha256-uZkBR7yHdIKUFB5SZdfgh1qkGfI3XmYmI/lTiquxbck=",
+        "owner": "nix-community",
+        "repo": "disko",
+        "rev": "725ea35e410ad83be4931d1bff7e090eacaf3563",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "disko",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -58,11 +78,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1792059141,
-        "narHash": "sha256-s+CqmQJeVcSYVGBuZL/WVaAp7lSuB9EcTCZENJVFORk=",
+        "lastModified": 1792064195,
+        "narHash": "sha256-RgbMIf244EgyhqZrD0+J9VrfI+r4dFkT52ZzSj+W4So=",
         "owner": "pimalaya",
         "repo": "assistant",
-        "rev": "7b29c7b5704cae5b649f75c661a4380b0921e3c2",
+        "rev": "79dfc463190a47f608b4861cc3769148d9900012",
         "type": "github"
       },
       "original": {
@@ -73,6 +93,7 @@
     },
     "root": {
       "inputs": {
+        "disko": "disko",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "pimalaya-assistant": "pimalaya-assistant"

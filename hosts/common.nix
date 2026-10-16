@@ -24,7 +24,7 @@ in
   ];
 
   services.bitcoind.main = {
-    enable = true;
+    enable = false;
     prune = 2048;
     dbCache = 3000;
     group = "bitcoin";
@@ -97,6 +97,8 @@ in
   console = {
     font = "latarcyrheb-sun32";
     keyMap = "dvorak";
+    # Load the keymap in initrd so the LUKS passphrase is typed in dvorak.
+    earlySetup = true;
   };
 
   fonts = {
