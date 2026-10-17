@@ -1,78 +1,23 @@
-{ lib, pkgs, config, ... }:
-
-let
-  himalaya-pkg = pkgs.himalaya.override {
-    buildNoDefaultFeatures = true;
-    buildFeatures = [ "imap" "maildir" "smtp" "account-sync" "pgp-gpg" ];
-  };
-in
 {
-  accounts.email.accounts = {
-    posteo = rec {
-      primary = true;
-      address = "clement.douin@posteo.net";
-      realName = "Clément DOUIN";
-      userName = address;
-      passwordCommand = "${lib.getExe pkgs.pass} show posteo";
-      folders = {
-        inbox = "INBOX";
-        drafts = "Drafts";
-        sent = "Sent";
-        trash = "Trash";
-      };
-      imap = {
-        tls.enable = true;
-        host = "posteo.de";
-        port = 993;
-      };
-      smtp = {
-        tls.enable = true;
-        host = "posteo.de";
-        port = 465;
-      };
-      himalaya = {
-        enable = true;
-        settings = {
-          folder.sync.filter.include = [ folders.inbox ];
-          envelope = {
-            list = {
-              datetime-fmt = "%d/%m/%Y, %Hh%M";
-              datetime-local-tz = true;
-            };
-            # watch = {
-            #   backend = "imap";
-            #   received = {
-            #     notify = {
-            #       summary = "📬 New message from {sender}";
-            #       body = "{subject}";
-            #     };
-            #   };
-            # };
-          };
-          message.send.save-copy = true;
-          # sync = {
-          #   enable = false;
-          # };
-          pgp.backend = "gpg";
-        };
-      };
-    };
+  config,
+  himalaya,
+  pkgs,
+}:
+
+{
+  accounts.email.accounts.posteo = {
+    primary = true;
+    flavor = "posteo.de";
+    address = "clement.douin@posteo.net";
+    realName = "Clément DOUIN";
+    passwordCommand = "${config.programs.password-store.package}/bin/pass show posteo";
+    imap.authentication = "plain";
+    smtp.authentication = "plain";
+    himalaya.enable = true;
   };
 
   programs.himalaya = {
     enable = true;
-    package = himalaya-pkg;
-    settings = {
-      signature = "${config.home.homeDirectory}/.signature";
-      downloads-dir = "${config.home.homeDirectory}/downloads";
-    };
+    package = himalaya.packages.${pkgs.stdenv.hostPlatform.system}.default;
   };
-
-  # services.himalaya-watch = {
-  #   enable = true;
-  #   environment = {
-  #     PASSWORD_STORE_DIR = "${config.home.sessionVariables.PASSWORD_STORE_DIR}";
-  #     RUST_LOG = "debug";
-  #   };
-  # };
 }

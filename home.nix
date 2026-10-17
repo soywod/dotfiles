@@ -42,7 +42,7 @@ in
     (import ./programs/ergodox { inherit pkgs; })
     (import ./programs/direnv { inherit pkgs; })
     (import ./programs/emacs { inherit nixpkgs pkgs; })
-    # (import ./programs/himalaya { inherit lib pkgs config; })
+    (import ./programs/himalaya { inherit config himalaya pkgs; })
     # (import ./programs/comodoro { inherit pkgs config; })
     "${home-manager-master}/modules/programs/himalaya"
     "${home-manager-master}/modules/programs/mblaze"
@@ -50,11 +50,6 @@ in
   ];
 
   services.pimalaya-assistant.enable = false;
-
-  programs.himalaya = {
-    enable = true;
-    package = himalaya.packages.${pkgs.stdenv.hostPlatform.system}.default;
-  };
 
   home = {
     packages = with pkgs; [
