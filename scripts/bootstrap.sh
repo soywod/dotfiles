@@ -24,10 +24,12 @@ read -r _ mrconfig known_hosts < <(grep "^$host " "$HOSTS_FILE") || {
 }
 
 home="${root%/}/home/$USER_NAME"
-[ -d "$home" ] || {
+if [ "$root" != / ]; then
+  mkdir -p "$home"
+elif [ ! -d "$home" ]; then
   echo "Home directory not found: $home" >&2
   exit 1
-}
+fi
 
 tmp=$(mktemp -d)
 export GNUPGHOME="$tmp/gnupg"
