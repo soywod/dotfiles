@@ -7,6 +7,11 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-manager-master = {
+      url = "github:nix-community/home-manager";
+      flake = false;
+    };
+    himalaya.url = "github:pimalaya/himalaya";
     pimalaya-assistant.url = "github:pimalaya/assistant";
     disko = {
       url = "github:nix-community/disko";
@@ -19,6 +24,8 @@
       self,
       nixpkgs,
       home-manager,
+      home-manager-master,
+      himalaya,
       pimalaya-assistant,
       disko,
       ...
@@ -36,7 +43,14 @@
             ./hosts/${name}
             home-manager.nixosModules.home-manager
             {
-              home-manager.extraSpecialArgs = { inherit nixpkgs pimalaya-assistant; };
+              home-manager.extraSpecialArgs = {
+                inherit
+                  nixpkgs
+                  home-manager-master
+                  himalaya
+                  pimalaya-assistant
+                  ;
+              };
             }
           ];
         };

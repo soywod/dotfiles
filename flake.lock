@@ -20,6 +20,49 @@
         "type": "github"
       }
     },
+    "fenix": {
+      "inputs": {
+        "nixpkgs": [
+          "himalaya",
+          "nixpkgs"
+        ],
+        "rust-analyzer-src": "rust-analyzer-src"
+      },
+      "locked": {
+        "lastModified": 1782900513,
+        "narHash": "sha256-GHrsl1+ysDFgmDQtQSqWS7TiYD2Q58VlwLvnf1+crJM=",
+        "owner": "nix-community",
+        "repo": "fenix",
+        "rev": "16810aa8f4ad89ca480b1513774e8b6f485fe368",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "monthly",
+        "repo": "fenix",
+        "type": "github"
+      }
+    },
+    "himalaya": {
+      "inputs": {
+        "fenix": "fenix",
+        "nixpkgs": "nixpkgs",
+        "pimalaya": "pimalaya"
+      },
+      "locked": {
+        "lastModified": 1792151668,
+        "narHash": "sha256-Q4//bE8F5U3/4zosSI6WGvd9bCHARpX54otIvfvHIjk=",
+        "owner": "pimalaya",
+        "repo": "himalaya",
+        "rev": "e7743878fe213bcb4174f58141a9adcdc7a43390",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pimalaya",
+        "repo": "himalaya",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -41,7 +84,39 @@
         "type": "github"
       }
     },
+    "home-manager-master": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792098797,
+        "narHash": "sha256-u4DIIZgznEGzByxXrxWCXK19VcMtTBmi/M9gZ7Jk9bM=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "640725978b99076e18e069f6e7d2959124584f8f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1782847189,
+        "narHash": "sha256-twXPFqFsrrY5r28Zh7Homgcp2gUMBgQ6WDS98Q/3xFI=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "b6018f87da91d19d0ab4cf979885689b469cdd41",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1792030654,
         "narHash": "sha256-OaQwAtPMTjQiY2sT/2/62UbSPhzP/0aDnWzMm/NCiUw=",
@@ -57,7 +132,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1791734076,
         "narHash": "sha256-i5qk1kLiit98rRbh1AXmWBNT9QXC/y4l5Wk/u5EdpDQ=",
@@ -73,9 +148,25 @@
         "type": "github"
       }
     },
+    "pimalaya": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790888248,
+        "narHash": "sha256-KjU8CrD6bo77bHrsaXtaGxLhv34PYHULvldbbXRVgVE=",
+        "owner": "pimalaya",
+        "repo": "nix",
+        "rev": "82fb3477f7b5a21aa08d68eb9de4febb0632e099",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pimalaya",
+        "repo": "nix",
+        "type": "github"
+      }
+    },
     "pimalaya-assistant": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 1792064195,
@@ -94,9 +185,28 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "himalaya": "himalaya",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs",
+        "home-manager-master": "home-manager-master",
+        "nixpkgs": "nixpkgs_2",
         "pimalaya-assistant": "pimalaya-assistant"
+      }
+    },
+    "rust-analyzer-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782864348,
+        "narHash": "sha256-NVYhLbaefeIUftPlo3kS6qr0xd8eFJRodEiaHrvFKR4=",
+        "owner": "rust-lang",
+        "repo": "rust-analyzer",
+        "rev": "0d381ca097a8e0375a19387874d952c0a230ac4f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rust-lang",
+        "ref": "nightly",
+        "repo": "rust-analyzer",
+        "type": "github"
       }
     }
   },

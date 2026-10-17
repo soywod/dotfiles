@@ -1,5 +1,7 @@
 {
   config,
+  himalaya,
+  home-manager-master,
   lib,
   nixpkgs,
   pimalaya-assistant,
@@ -32,6 +34,8 @@ in
 {
   nixpkgs.config.allowUnfree = true;
 
+  disabledModules = [ "programs/himalaya.nix" ];
+
   imports = [
     (import ./programs/bash { inherit pkgs; })
     (import ./programs/dunst { inherit pkgs config theme; })
@@ -40,10 +44,17 @@ in
     (import ./programs/emacs { inherit nixpkgs pkgs; })
     # (import ./programs/himalaya { inherit lib pkgs config; })
     # (import ./programs/comodoro { inherit pkgs config; })
+    "${home-manager-master}/modules/programs/himalaya"
+    "${home-manager-master}/modules/programs/mblaze"
     pimalaya-assistant.homeModules.default
   ];
 
   services.pimalaya-assistant.enable = false;
+
+  programs.himalaya = {
+    enable = true;
+    package = himalaya.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  };
 
   home = {
     packages = with pkgs; [
