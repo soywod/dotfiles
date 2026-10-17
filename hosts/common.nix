@@ -72,11 +72,6 @@ in
       enable = true;
       connectionConfig."connection.mdns" = 2;
     };
-    # Vite dev (5173) + preview (4173), reachable from the phone on wifi only.
-    firewall.interfaces.wlp4s0.allowedTCPPorts = [
-      5173
-      4173
-    ];
   };
 
   time.timeZone = "Europe/Paris";
