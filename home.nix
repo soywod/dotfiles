@@ -146,112 +146,110 @@ in
           "tray"
           # "custom/comodoro"
         ];
-        modules = {
-          battery = {
-            states = {
-              good = 95;
-              warning = 30;
-              critical = 15;
-            };
-            format = "{icon} {capacity}%";
-            format-alt = "{time}";
-            format-full = "";
-            format-charging = " {capacity}%";
-            format-plugged = " {capacity}%";
-            format-icons = [
-              ""
-              ""
-              ""
-              ""
-              ""
-            ];
+        battery = {
+          states = {
+            good = 95;
+            warning = 30;
+            critical = 15;
           };
-          temperature = {
-            interval = 1;
-            tooltip = false;
-            thermal-zone = 1;
-            critical-threshold = 80;
-            format = "{icon} {temperatureC}°C";
-            format-critical = "{icon} {temperatureC}°C";
-            format-icons = [
-              ""
-              ""
-              ""
-              ""
-              ""
-            ];
-          };
-          cpu = {
-            interval = 1;
-            tooltip = false;
-            format = " {usage}%";
-          };
-          memory = {
-            interval = 1;
-            format = " {percentage}%";
-            tooltip-format = "{used:0.1f}GiB/{avail:0.1f}GiB";
-          };
-          disk = {
-            interval = 60;
-            path = "/";
-            format = " {percentage_free}%";
-            tooltip-format = "{used}/{total}";
-          };
-
-          network = {
-            interval = 1;
-            interface = "wlp*";
-            format-wifi = " {signalStrength}%";
-            tooltip-format-wifi = "IP = {ipaddr}\nSSID = {essid}";
-            format-ethernet = "";
-            tooltip-format-ethernet = "IP = {ipaddr}";
-            format-disconnected = "";
-          };
-          backlight = {
-            tooltip = false;
-            format = " {percent}%";
-          };
-          pulseaudio = {
-            scroll-step = 2;
-            format = "{icon} {volume}%";
-            format-bluetooth = " {icon} {volume}%";
-            format-muted = "";
-            format-icons = {
-              headphone = "";
-              headset = "";
-              default = [
-                ""
-                ""
-              ];
-            };
-          };
-          # "custom/himalaya" = {
-          #   exec = "${pkgs.coreutils}/bin/tail -fn 1 /tmp/himalaya-counter";
-          #   format = "{} ";
-          #   tooltip = false;
-          # };
-          clock = {
-            timezone = "Europe/Paris";
-            tooltip = false;
-            format = "{:%Hh%M, %a %e %b}";
-          };
-
-          "sway/mode" = {
-            format = "{}";
-          };
-          tray = {
-            icon-size = 16;
-            spacing = 8;
-          };
-          # "custom/comodoro" = {
-          #   exec = "${pkgs.comodoro}/bin/comodoro get work tcp";
-          #   interval = 1;
-          #   format = "{} ";
-          #   on-click = "${pkgs.comodoro}/bin/comodoro start work tcp";
-          #   on-click-right = "${pkgs.comodoro}/bin/comodoro stop work tcp";
-          #   tooltip = false;
-          # };
+          format = "{icon} {capacity}%";
+          format-alt = "{time}";
+          format-full = "";
+          format-charging = " {capacity}%";
+          format-plugged = " {capacity}%";
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
         };
+        temperature = {
+          interval = 1;
+          tooltip = false;
+          thermal-zone = 1;
+          critical-threshold = 80;
+          format = "{icon} {temperatureC}°C";
+          format-critical = "{icon} {temperatureC}°C";
+          format-icons = [
+            ""
+            ""
+            ""
+            ""
+            ""
+          ];
+        };
+        cpu = {
+          interval = 1;
+          tooltip = false;
+          format = " {usage}%";
+        };
+        memory = {
+          interval = 1;
+          format = " {percentage}%";
+          tooltip-format = "{used:0.1f}GiB/{avail:0.1f}GiB";
+        };
+        disk = {
+          interval = 60;
+          path = "/";
+          format = " {percentage_free}%";
+          tooltip-format = "{used}/{total}";
+        };
+
+        network = {
+          interval = 1;
+          interface = "wlp*";
+          format-wifi = " {signalStrength}%";
+          tooltip-format-wifi = "IP = {ipaddr}\nSSID = {essid}";
+          format-ethernet = "";
+          tooltip-format-ethernet = "IP = {ipaddr}";
+          format-disconnected = "";
+        };
+        backlight = {
+          tooltip = false;
+          format = " {percent}%";
+        };
+        pulseaudio = {
+          scroll-step = 2;
+          format = "{icon} {volume}%";
+          format-bluetooth = " {icon} {volume}%";
+          format-muted = "";
+          format-icons = {
+            headphone = "";
+            headset = "";
+            default = [
+              ""
+              ""
+            ];
+          };
+        };
+        # "custom/himalaya" = {
+        #   exec = "${pkgs.coreutils}/bin/tail -fn 1 /tmp/himalaya-counter";
+        #   format = "{} ";
+        #   tooltip = false;
+        # };
+        clock = {
+          timezone = "Europe/Paris";
+          tooltip = false;
+          format = "{:%Hh%M, %a %e %b}";
+        };
+
+        "sway/mode" = {
+          format = "{}";
+        };
+        tray = {
+          icon-size = 16;
+          spacing = 8;
+        };
+        # "custom/comodoro" = {
+        #   exec = "${pkgs.comodoro}/bin/comodoro get work tcp";
+        #   interval = 1;
+        #   format = "{} ";
+        #   on-click = "${pkgs.comodoro}/bin/comodoro start work tcp";
+        #   on-click-right = "${pkgs.comodoro}/bin/comodoro stop work tcp";
+        #   tooltip = false;
+        # };
       }
     ];
     style = ''
@@ -591,5 +589,5 @@ in
     };
   };
 
-  home.stateVersion = "21.05";
+  home.stateVersion = "26.05";
 }
