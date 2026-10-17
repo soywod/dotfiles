@@ -24,10 +24,6 @@ in
   ];
 
   nix = {
-    settings.trusted-users = [
-      "root"
-      "soywod"
-    ];
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -121,9 +117,10 @@ in
   };
 
   virtualisation = {
-    docker = {
+    docker.rootless = {
       enable = true;
       package = pkgs.docker_29;
+      setSocketVariable = true;
     };
   };
 
@@ -133,7 +130,6 @@ in
     isNormalUser = true;
     extraGroups = [
       "dialout"
-      "docker"
       "networkmanager"
       "plugdev"
       "video"
@@ -143,7 +139,7 @@ in
   };
 
   security = {
-    sudo.wheelNeedsPassword = false;
+    sudo.execWheelOnly = true;
     rtkit.enable = true;
   };
 

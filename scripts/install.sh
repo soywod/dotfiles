@@ -37,6 +37,9 @@ disko "${disko_args[@]}" "$FLAKE/hosts/$host/disko.nix"
 
 nixos-install --root "$mnt" --flake "path:$FLAKE#$host" --no-root-passwd
 
+echo "Setting password for $USER_NAME…"
+nixos-enter --root "$mnt" -c "passwd $USER_NAME"
+
 bootstrap --root "$mnt" --host "$host" "$key"
 
 echo "Installation complete, you can reboot."

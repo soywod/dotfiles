@@ -26,7 +26,7 @@ sudo nix --extra-experimental-features 'nix-command flakes' \
 - `--disk`: the disk to wipe, defaults to the one declared in `hosts/HOST/disko.nix`
 - `--mount`: where to mount the new system, defaults to `/mnt`
 
-It partitions the disk (wiping it, after confirmation), asks for the LUKS passphrase, installs the system, then runs `bootstrap`. Reboot when it is done.
+It partitions the disk (wiping it, after confirmation), asks for the LUKS passphrase, installs the system, asks for the user password, then runs `bootstrap`. Root has no password: use `sudo`. Reboot when it is done.
 
 For new hardware, first create `hosts/HOST/` with a `hardware-configuration.nix` generated from the installer by:
 

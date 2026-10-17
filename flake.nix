@@ -80,7 +80,10 @@
           pkgs.coreutils
           pkgs.nixos-install-tools
         ];
-        runtimeEnv.FLAKE = "${self}";
+        runtimeEnv = {
+          FLAKE = "${self}";
+          USER_NAME = user;
+        };
         text = builtins.readFile ./scripts/install.sh;
       };
     in
