@@ -1,7 +1,11 @@
 usage() {
-  echo "Usage: install [--disk DEVICE] [--mount DIR] HOST KEY_FILE" >&2
+  echo "Usage: install KEY_FILE [--disk DEVICE] [--mount DIR] HOST" >&2
   exit 1
 }
+
+[ $# -ge 1 ] || usage
+key=$(realpath "$1")
+shift
 
 disk=
 mnt=/mnt
@@ -15,9 +19,8 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-[ $# -eq 2 ] || usage
+[ $# -eq 1 ] || usage
 host=$1
-key=$(realpath "$2")
 
 [ "$(id -u)" -eq 0 ] || {
   echo "install must run as root" >&2

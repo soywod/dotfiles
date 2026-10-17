@@ -19,7 +19,7 @@ Boot the NixOS installer, connect to the network, mount the USB stick, then:
 
 ```sh
 sudo nix --extra-experimental-features 'nix-command flakes' \
-  run github:soywod/dotfiles#install -- [--disk DEVICE] [--mount DIR] HOST /path/to/secret-key
+  run github:soywod/dotfiles#install -- /path/to/secret-key [--disk DEVICE] [--mount DIR] HOST
 ```
 
 - `--disk`: the disk to wipe, defaults to the one declared in `hosts/HOST/disko.nix`
