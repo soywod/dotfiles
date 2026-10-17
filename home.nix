@@ -370,7 +370,6 @@ in
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
-    checkConfig = false; # HACK: cannot load background
     config = {
       menu = "${pkgs.dmenu}/bin/dmenu_path | ${pkgs.dmenu}/bin/dmenu -b -fn ${theme.font}Mono-15 -nb '${theme.bg}' -nf '${theme.fg}' -sb '${theme.blue}' -sf '${theme.bg}' | ${pkgs.findutils}/bin/xargs swaymsg exec --";
       modifier = "Mod4";
@@ -399,10 +398,8 @@ in
         };
       };
       output = {
-        HDMI-A-1 = {
-          resolution = "1920x1080@60Hz";
-          position = "0 0";
-          background = "/etc/nixos/background.jpeg fill";
+        "*" = {
+          bg = "${./background.jpeg} fill";
         };
       };
       keybindings =
@@ -558,6 +555,24 @@ in
     pass-secret-service = {
       enable = true;
       storePath = passStorePath;
+    };
+
+    kanshi = {
+      enable = true;
+      systemdTarget = "sway-session.target";
+      settings = [
+        {
+          profile.name = "laptop";
+          profile.outputs = [
+            {
+              criteria = "eDP-1";
+              mode = "2560x1600@180Hz";
+              scale = 1.5;
+              position = "0,0";
+            }
+          ];
+        }
+      ];
     };
   };
 
