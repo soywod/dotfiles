@@ -2,7 +2,7 @@
   imports = [
     ../common.nix
     ./hardware-configuration.nix
-    ./disko.nix
+    (import ./disko.nix { })
   ];
 
   networking.hostName = "soywod";

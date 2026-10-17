@@ -15,8 +15,19 @@
   };
 
   outputs =
-    { nixpkgs, home-manager, pimalaya-assistant, disko, ... }:
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      pimalaya-assistant,
+      disko,
+      ...
+    }:
     let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+      user = "soywod";
+
       host =
         name:
         nixpkgs.lib.nixosSystem {
@@ -29,8 +40,64 @@
             }
           ];
         };
+
+      hostsFile = pkgs.writeText "hosts" (
+        nixpkgs.lib.concatStrings (
+          nixpkgs.lib.mapAttrsToList (name: host: ''
+            ${name} ${host.config.home-manager.users.${user}.home.file.".mrconfig".source} ${
+              host.config.environment.etc."ssh/ssh_known_hosts".source
+            }
+          '') self.nixosConfigurations
+        )
+      );
+
+      bootstrap = pkgs.writeShellApplication {
+        name = "bootstrap";
+        runtimeInputs = with pkgs; [
+          coreutils
+          gawk
+          git
+          gnugrep
+          gnupg
+          hostname
+          mr
+          nixos-install-tools
+          openssh
+          pinentry-curses
+        ];
+        runtimeEnv = {
+          HOSTS_FILE = "${hostsFile}";
+          USER_NAME = user;
+        };
+        text = builtins.readFile ./scripts/bootstrap.sh;
+      };
+
+      install = pkgs.writeShellApplication {
+        name = "install";
+        runtimeInputs = [
+          bootstrap
+          disko.packages.${system}.disko
+          pkgs.coreutils
+          pkgs.nixos-install-tools
+        ];
+        runtimeEnv.FLAKE = "${self}";
+        text = builtins.readFile ./scripts/install.sh;
+      };
     in
     {
       nixosConfigurations.soywod = host "soywod";
+
+      packages.${system} = { inherit bootstrap install; };
+
+      apps.${system} = {
+        bootstrap = {
+          type = "app";
+          program = "${bootstrap}/bin/bootstrap";
+        };
+        install = {
+          type = "app";
+          program = "${install}/bin/install";
+        };
+      };
     };
 }

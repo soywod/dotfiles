@@ -10,7 +10,7 @@
 let
   theme = import ./theme.nix;
 
-  passStorePath = "/data/pass";
+  passStorePath = "${config.home.homeDirectory}/.password-store";
 
   tex = (
     pkgs.texlive.combine {
@@ -480,6 +480,15 @@ in
     enable = true;
   };
 
+  programs.mr = {
+    enable = true;
+    settings = {
+      ".dotfiles".checkout = "git clone git@github.com:soywod/dotfiles .dotfiles";
+      ".password-store".checkout = "git clone git@github.com:soywod/pass .password-store";
+      "code/himalaya".checkout = "git clone git@github.com:pimalaya/himalaya himalaya";
+    };
+  };
+
   programs.password-store = {
     enable = true;
     settings = {
@@ -536,10 +545,10 @@ in
     gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      defaultCacheTtl = 86400;
-      defaultCacheTtlSsh = 86400;
-      maxCacheTtl = 604800;
-      maxCacheTtlSsh = 604800;
+      defaultCacheTtl = 60;
+      defaultCacheTtlSsh = 60;
+      maxCacheTtl = 600;
+      maxCacheTtlSsh = 600;
       pinentry.package = pkgs.pinentry-gtk2;
     };
 
