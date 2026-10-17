@@ -5,5 +5,5 @@
     (import ./disko.nix { })
   ];
 
-  networking.hostName = "soywod";
+  networking.hostName = "z13";
 }

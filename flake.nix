@@ -85,7 +85,9 @@
       };
     in
     {
-      nixosConfigurations.soywod = host "soywod";
+      nixosConfigurations = nixpkgs.lib.mapAttrs (name: _: host name) (
+        nixpkgs.lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./hosts)
+      );
 
       packages.${system} = { inherit bootstrap install; };
 
