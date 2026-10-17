@@ -11,7 +11,10 @@
       url = "github:nix-community/home-manager";
       flake = false;
     };
-    himalaya.url = "github:pimalaya/himalaya";
+    himalaya = {
+      url = "github:pimalaya/himalaya";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     pimalaya-assistant.url = "github:pimalaya/assistant";
     disko = {
       url = "github:nix-community/disko";
