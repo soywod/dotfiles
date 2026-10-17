@@ -31,14 +31,26 @@ key=$(realpath "$2")
   exit 1
 }
 
-disko_args=(--mode "destroy,format,mount" --root-mountpoint "$mnt")
+read -rsp "Password (LUKS and $USER_NAME): " password; echo
+read -rsp "Confirm password: " confirm; echo
+[ -n "$password" ] && [ "$password" = "$confirm" ] || {
+  echo "Passwords are empty or do not match" >&2
+  exit 1
+}
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+(umask 077; printf '%s' "$password" > "$tmp/password")
+
+disko_args=(--mode "destroy,format,mount" --root-mountpoint "$mnt" --argstr passwordFile "$tmp/password")
 if [ -n "$disk" ]; then disko_args+=(--argstr device "$disk"); fi
 disko "${disko_args[@]}" "$FLAKE/hosts/$host/disko.nix"
 
 nixos-install --root "$mnt" --flake "path:$FLAKE#$host" --no-root-passwd
 
-echo "Setting password for $USER_NAME…"
-nixos-enter --root "$mnt" -c "passwd $USER_NAME"
+printf '%s:%s\n' "$USER_NAME" "$password" | nixos-enter --root "$mnt" -c chpasswd
+unset password confirm
+rm -f "$tmp/password"
 
 bootstrap --root "$mnt" --host "$host" "$key"
 
