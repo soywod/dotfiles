@@ -8,11 +8,10 @@ The GPG key is the only secret: it signs commits, decrypts the password store an
 
 ```sh
 gpg --quick-add-key <fingerprint> ed25519 auth
-gpg --export-secret-keys --armor <fingerprint> > secret-key.asc
 gpg --export-ssh-key <fingerprint>
 ```
 
-Copy `secret-key.asc` to a USB stick, and add the SSH public key to GitHub.
+Add the SSH public key to GitHub.
 
 ## Install
 
@@ -20,7 +19,7 @@ Boot the NixOS installer, connect to the network, mount the USB stick, then:
 
 ```sh
 sudo nix --extra-experimental-features 'nix-command flakes' \
-  run github:soywod/dotfiles#install -- [--disk DEVICE] [--mount DIR] HOST /path/to/secret-key.asc
+  run github:soywod/dotfiles#install -- [--disk DEVICE] [--mount DIR] HOST /path/to/secret-key
 ```
 
 - `--disk`: the disk to wipe, defaults to the one declared in `hosts/HOST/disko.nix`
@@ -39,7 +38,7 @@ nixos-generate-config --no-filesystems --show-hardware-config
 `bootstrap` imports the GPG key in a temporary agent (asking for its passphrase once), uses the authentication subkey to clone every repository declared in `programs.mr` over SSH, installs the key into `~/.gnupg`, then prints the keygrip of the authentication subkey.
 
 ```sh
-nix run github:soywod/dotfiles#bootstrap -- [--root DIR] [--host HOST] /path/to/secret-key.asc
+nix run github:soywod/dotfiles#bootstrap -- [--root DIR] [--host HOST] /path/to/secret-key
 ```
 
 - `--root`: root of the target system, defaults to `/` (`install` passes the mount point)
