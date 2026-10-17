@@ -23,18 +23,6 @@ in
     ../cachix.nix
   ];
 
-  services.bitcoind.main = {
-    enable = false;
-    prune = 2048;
-    dbCache = 3000;
-    group = "bitcoin";
-    user = "bitcoin";
-    extraConfig = ''
-      server=1
-      rpcallowip=127.0.0.1
-    '';
-  };
-
   nix = {
     settings.trusted-users = [
       "root"
@@ -56,7 +44,6 @@ in
   # };
 
   boot = {
-    enableContainers = true;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -150,7 +137,6 @@ in
   users.users.soywod = {
     isNormalUser = true;
     extraGroups = [
-      "bitcoin"
       "dialout"
       "docker"
       "networkmanager"
