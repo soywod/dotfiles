@@ -302,6 +302,10 @@ in
 
   programs.gh = {
     enable = true;
+    package = pkgs.writeShellScriptBin "gh" ''
+      export GH_TOKEN="''${GH_TOKEN:-$(${pkgs.pass}/bin/pass show github/token)}"
+      exec ${pkgs.gh}/bin/gh "$@"
+    '';
     settings = {
       git_protocol = "ssh";
     };
@@ -549,11 +553,11 @@ in
     gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      sshKeys = [ "8480965E6B298EB49B40C4B537FC16E5B6BD5436 0 confirm" ];
-      defaultCacheTtl = 60;
-      defaultCacheTtlSsh = 60;
-      maxCacheTtl = 600;
-      maxCacheTtlSsh = 600;
+      sshKeys = [ "8480965E6B298EB49B40C4B537FC16E5B6BD5436 0" ];
+      defaultCacheTtl = 300;
+      defaultCacheTtlSsh = 300;
+      maxCacheTtl = 300;
+      maxCacheTtlSsh = 300;
       pinentry.package = pkgs.pinentry-gtk2;
     };
 

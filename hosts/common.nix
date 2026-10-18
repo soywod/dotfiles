@@ -140,6 +140,10 @@ in
 
   security = {
     sudo.execWheelOnly = true;
+    sudo.extraConfig = ''
+      Defaults timestamp_timeout=5
+      Defaults timestamp_type=global
+    '';
     rtkit.enable = true;
   };
 
