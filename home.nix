@@ -49,7 +49,7 @@ in
     pimalaya-assistant.homeModules.default
   ];
 
-  services.pimalaya-assistant.enable = false;
+  services.pimalaya-assistant.enable = true;
 
   home = {
     packages = with pkgs; [
