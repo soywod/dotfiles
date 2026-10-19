@@ -60,6 +60,7 @@ in
       feh
       filezilla
       firefox
+      gh
       ghostscript
       gimp
       inkscape
@@ -298,17 +299,6 @@ in
         padding: 0.5rem 0.75rem;
       }
     '';
-  };
-
-  programs.gh = {
-    enable = true;
-    package = pkgs.writeShellScriptBin "gh" ''
-      export GH_TOKEN="''${GH_TOKEN:-$(${pkgs.pass}/bin/pass show github/token)}"
-      exec ${pkgs.gh}/bin/gh "$@"
-    '';
-    settings = {
-      git_protocol = "ssh";
-    };
   };
 
   programs.git = {
