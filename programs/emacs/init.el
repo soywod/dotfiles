@@ -110,17 +110,20 @@
 	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
 	  (yaml "https://github.com/ikatyang/tree-sitter-yaml"))))
 
-(use-package markdown-ts-mode
-  :mode
-  ("\\.md\\'" . markdown-ts-mode)
+(use-package markdown-mode
+  :defer t
   :init
-  (add-to-list 'treesit-language-source-alist
-	       '(markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src"))
-  (add-to-list 'treesit-language-source-alist
-	       '(markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src"))
+  ;; The veille output (fiches, domains, digests) opens read-only with markup
+  ;; hidden; M-x gfm-mode switches back to editing.
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
+  (add-to-list 'auto-mode-alist
+	       '("/veille/\\(items\\|domains\\|index\\|resume\\|weekly\\|monthly\\)/.*\\.md\\'" . gfm-view-mode))
+  :custom
+  (markdown-hide-markup t)
+  (markdown-header-scaling t)
+  (markdown-fontify-code-blocks-natively t)
   :hook
-  (markdown-mode . soywod/eglot-ensure)
-  (markdown-mode . soywod/eglot-format-before-save))
+  (gfm-mode . visual-line-mode))
 
 (use-package rust-mode
   :mode ("\\.rust\\'" . rust-mode)

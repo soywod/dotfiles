@@ -28,7 +28,7 @@
         ledger-mode
         lua-mode
         magit
-        markdown-ts-mode
+        markdown-mode
         nix-mode
         org
         prettier-js
