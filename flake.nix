@@ -109,7 +109,18 @@
         nixpkgs.lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./hosts)
       );
 
-      packages.${system} = { inherit bootstrap install; };
+      packages.${system} = {
+        inherit bootstrap install;
+        # Not a host: kept out of nixosConfigurations, which every host must
+        # be (with home-manager) for hostsFile.
+        signer-iso =
+          (nixpkgs.lib.nixosSystem {
+            modules = [
+              ./iso/signer.nix
+              { nixpkgs.hostPlatform = system; }
+            ];
+          }).config.system.build.isoImage;
+      };
 
       apps.${system} = {
         bootstrap = {

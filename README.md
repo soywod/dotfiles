@@ -64,3 +64,37 @@ mr checkout   # clone repositories newly added to the config
 ```
 
 The password store commits every change automatically. Syncing is manual: `pass git pull`, `pass git push`, or `mr update` / `mr push`. After a fresh clone, run `pass git init` once to restore decrypted diffs.
+
+## Bitcoin signer ISO
+
+[iso/signer.nix](iso/signer.nix) builds a live ISO for offline PSBT signing: Bitcoin Core, no network stack (wireless, bluetooth and common wired drivers blacklisted), dvorak console, root auto-login. Nothing persists: the system runs from the boot medium and writes go to RAM. It boots from BIOS, from USB or DVD, and needs no disk. The image is about 530 MB: any 1 GB stick or a DVD-R fits.
+
+Build it (new files must be tracked by git for the flake to see them), then write down its hash:
+
+```sh
+nix build .#signer-iso
+sha256sum result/iso/signer.iso
+```
+
+Write it to a stick (check the device with `lsblk`: `dd` overwrites without asking), then read it back to check the hash matches:
+
+```sh
+sudo dd if=result/iso/signer.iso of=/dev/sdX bs=4M status=progress conv=fsync
+sudo head -c "$(stat -c%s result/iso/signer.iso)" /dev/sdX | sha256sum
+```
+
+The stick only ever boots the signing machine. Plug it into an online machine only to write a new image, then check the hash again.
+
+On the signing machine, boot the stick from the BIOS boot menu, then check that `ip -br link` lists `lo` only. If a network interface shows up, run `lspci -k` to find its driver and add it to `boot.blacklistedKernelModules`.
+
+The wallet card is mounted read-only, but `bitcoind` opens wallets read-write, so copy it to RAM first:
+
+```sh
+mount -o ro /dev/mmcblk0p1 /mnt
+mkdir -p /tmp/btc/wallets
+cp -r /mnt/signer /tmp/btc/wallets/
+bitcoind -datadir=/tmp/btc -connect=0 -listen=0 -daemon
+bitcoin-cli -datadir=/tmp/btc loadwallet signer
+```
+
+`bitcoind` needs no block: the PSBT carries the spent outputs, so `walletprocesspsbt` signs without the chain. Everything in `/tmp` is gone on shutdown.
