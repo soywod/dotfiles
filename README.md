@@ -128,6 +128,58 @@ umount /mnt
 
 The last `psbt-show` must end with `Next step: extractor`: the transaction is complete, the online machine finalizes and broadcasts it.
 
+### New wallet
+
+A descriptor wallet has no seed phrase: its only backup is `wallet.dat` plus its passphrase. Losing every card, or the passphrase, loses the funds. Keep at least two wallet cards, stored apart. A new wallet means new keys: only create one while the old one is empty, then reformat the old cards (they become the new ones).
+
+Boot the stick and check `ip -br link` as for a session (the ISO still holding the old hash is fine: `wallet-load` is not used). Generate the passphrase on the signer (80 bits, 16 characters), write it on paper, then clear the screen:
+
+```sh
+head -c 10 /dev/urandom | base32 | tr A-Z a-z
+clear
+```
+
+Create the wallet, encrypted from the start so its keys are never written in clear. `read -s` and `printf` (a builtin) keep the passphrase off the screen, the history and the process list. Then check the passphrase unlocks it:
+
+```sh
+read -rs pass
+printf 'wallet_name=signer\npassphrase=%s\n' "$pass" | bitcoin-cli -named -stdin createwallet
+unset pass
+bitcoin-cli -stdinwalletpassphrase walletpassphrase 60
+bitcoin-cli walletlock
+```
+
+Unload it (it flushes the file), check it sits in the datadir itself, and write its hash on paper:
+
+```sh
+bitcoin-cli unloadwallet signer
+ls /root/.bitcoin/signer
+sha256sum /root/.bitcoin/signer/wallet.dat
+```
+
+Then, for each card (`lsblk` for the device, the boot stick is labelled `SIGNER`), format it, copy the wallet, read the hash back from the card (it must match the paper), and label the card physically:
+
+```sh
+mkfs.vfat -F 32 -n WALLET /dev/sdX1
+mount /dev/sdX1 /mnt
+cp -r /root/.bitcoin/signer /mnt/
+umount /mnt
+mount -o ro /dev/sdX1 /mnt
+sha256sum /mnt/signer/wallet.dat
+umount /mnt
+```
+
+Copy every card before loading the wallet again: `loadwallet` changes the file in RAM. Once all cards are written, the public descriptors for the watch-only wallet can go to the transfer card in the same session (without `true`, `listdescriptors` prints no private key):
+
+```sh
+bitcoin-cli loadwallet signer
+mount /dev/sdX1 /mnt
+bitcoin-cli listdescriptors > /mnt/descriptors.json
+umount /mnt
+```
+
+On the online machine, write the hash into iso/wallet.sha256, rebuild and rewrite the stick (see above), cross out the old hash on paper. Then test the restore from a card other than the one used daily: boot the new stick, `wallet-load --check` every card, `wallet-load` one of them and unlock it with `walletpassphrase` as in a session. Only then send funds to the wallet.
+
 ### Media checks
 
 `wallet-load --check [DEVICE]` only checks a wallet card against the reference hash, without copying or loading anything: run it on every clone during the periodic check.
