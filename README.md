@@ -67,12 +67,13 @@ The password store commits every change automatically. Syncing is manual: `pass 
 
 ## Bitcoin signer ISO
 
-[iso/signer.nix](iso/signer.nix) builds a live ISO for offline PSBT signing: Bitcoin Core, no network stack (wireless, bluetooth and common wired drivers blacklisted), dvorak console, root auto-login. Nothing persists: the system runs from the boot medium and writes go to RAM. It boots from BIOS, from USB or DVD, and needs no disk. The image is about 530 MB: any 1 GB stick or a DVD-R fits.
+[iso/signer.nix](iso/signer.nix) builds a live ISO for offline PSBT signing: Bitcoin Core started at boot with no peer, no network stack (wireless, bluetooth and common wired drivers blacklisted), dvorak console with caps lock and ctrl swapped, root auto-login. Nothing persists: the system runs from the boot medium and writes go to RAM. It boots from BIOS, from USB or DVD, and needs no disk. The image is about 530 MB: any 1 GB stick or a DVD-R fits.
 
-Build it (new files must be tracked by git for the flake to see them), then write down its hash:
+Build it (new files must be tracked by git for the flake to see them), then write down its size and hash on paper:
 
 ```sh
 nix build .#signer-iso
+stat -c%s result/iso/signer.iso
 sha256sum result/iso/signer.iso
 ```
 
@@ -83,18 +84,47 @@ sudo dd if=result/iso/signer.iso of=/dev/sdX bs=4M status=progress conv=fsync
 sudo head -c "$(stat -c%s result/iso/signer.iso)" /dev/sdX | sha256sum
 ```
 
-The stick only ever boots the signing machine. Plug it into an online machine only to write a new image, then check the hash again.
+The stick only ever boots the signing machine. Plug it into an online machine only to write a new image, then check the hash again, ideally from a second machine: a compromised machine can write a tampered image and print the expected hash.
 
-On the signing machine, boot the stick from the BIOS boot menu, then check that `ip -br link` lists `lo` only. If a network interface shows up, run `lspci -k` to find its driver and add it to `boot.blacklistedKernelModules`.
+### Session
 
-The wallet card is mounted read-only, but `bitcoind` opens wallets read-write, so copy it to RAM first:
+Boot the stick from the BIOS boot menu (it may be listed as a hard disk), then check that `ip -br link` lists `lo` only. If a network interface shows up, `ls -l /sys/class/net/*/device/driver` names its driver: add it to `boot.blacklistedKernelModules`.
+
+`bitcoind` already runs, with `networkactive=0`, its datadir in `/root/.bitcoin` (in RAM, like everything else), so `bitcoin-cli` needs no flag. It needs no block: the PSBT carries the spent outputs, so `walletprocesspsbt` signs without the chain.
+
+The wallet card is mounted read-only, but `bitcoind` opens wallets read-write, so copy the wallet to RAM first, into the datadir itself (Bitcoin Core keeps wallets there when it has no `wallets` subdirectory). The card is `/dev/sdX` behind a USB card reader, `/dev/mmcblk0` in a built-in slot: check with `lsblk`, the boot stick is the one labelled `SIGNER`. Once loaded, the wallet card can leave the reader for the transfer card:
 
 ```sh
-mount -o ro /dev/mmcblk0p1 /mnt
-mkdir -p /tmp/btc/wallets
-cp -r /mnt/signer /tmp/btc/wallets/
-bitcoind -datadir=/tmp/btc -connect=0 -listen=0 -daemon
-bitcoin-cli -datadir=/tmp/btc loadwallet signer
+mount -o ro /dev/sdX1 /mnt
+cp -r /mnt/signer /root/.bitcoin/
+umount /mnt
+bitcoin-cli loadwallet signer
 ```
 
-`bitcoind` needs no block: the PSBT carries the spent outputs, so `walletprocesspsbt` signs without the chain. Everything in `/tmp` is gone on shutdown.
+Swap the wallet card for the transfer card, holding the PSBT built by the online machine, then mount it:
+
+```sh
+mount /dev/sdX1 /mnt
+```
+
+Check what the PSBT spends and pays before signing. `psbt-show` lists inputs, outputs, fee and fee rate, and flags each output as `mine`, `change (mine)` or `EXTERNAL` against the loaded wallet (pass `--wallet NAME` when several are loaded). A change output shown as `EXTERNAL` means its address was swapped. `-stdinwalletpassphrase` reads the passphrase without echo, so it stays out of the shell history:
+
+```sh
+psbt-show /mnt/tx.psbt
+bitcoin-cli -stdinwalletpassphrase walletpassphrase 60
+bitcoin-cli -stdin walletprocesspsbt < /mnt/tx.psbt | jq -r .psbt > /mnt/signed.psbt
+psbt-show /mnt/signed.psbt
+umount /mnt
+```
+
+The last `psbt-show` must end with `Next step: extractor`: the transaction is complete, the online machine finalizes and broadcasts it.
+
+### Media checks
+
+`device-hash` prints the SHA-256 of a device, or of its first `--size` bytes for an image shorter than the device, and compares it with `--expect` (exit status 1 on mismatch):
+
+```sh
+device-hash --size 550502400 --expect <sha256 from paper> /dev/sdX
+```
+
+It works the same on the online machine with `sudo bash iso/device-hash.sh`.

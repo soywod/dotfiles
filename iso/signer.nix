@@ -31,8 +31,8 @@
   networking.networkmanager.enable = false;
   hardware.bluetooth.enable = false;
   # cfg80211 takes every wifi driver down with it. Wired drivers cover the
-  # usual desktop chips and USB adapters; add the one reported by lspci -k on
-  # the signing machine if it is missing.
+  # usual desktop chips and USB adapters; add the one bound on the signing
+  # machine if it is missing (ls -l /sys/class/net/*/device/driver).
   boot.blacklistedKernelModules = [
     "cfg80211"
     "bluetooth"
@@ -53,10 +53,52 @@
     "ax88179_178a"
   ];
 
-  environment.systemPackages = [ pkgs.bitcoind ];
+  environment.systemPackages = [
+    pkgs.bitcoind
+    pkgs.jq
+    (pkgs.writeShellApplication {
+      name = "device-hash";
+      runtimeInputs = [ pkgs.coreutils ];
+      text = builtins.readFile ./device-hash.sh;
+    })
+    (pkgs.writeShellApplication {
+      name = "psbt-show";
+      runtimeInputs = [
+        pkgs.bitcoind
+        pkgs.coreutils
+        pkgs.jq
+      ];
+      text = builtins.readFile ./psbt-show.sh;
+    })
+  ];
   documentation.enable = false;
 
-  console.keyMap = "dvorak";
+  # Bitcoin Core with no peer: the signer never syncs, the PSBT carries the
+  # spent outputs signing needs. The datadir is the default one of root, so
+  # bitcoin-cli needs no flag; like the rest of the system it lives in RAM.
+  systemd.tmpfiles.rules = [
+    "d /root/.bitcoin 0700 root root -"
+    "L+ /root/.bitcoin/bitcoin.conf - - - - ${pkgs.writeText "bitcoin.conf" ''
+      networkactive=0
+      connect=0
+      listen=0
+      dnsseed=0
+      fixedseeds=0
+    ''}"
+  ];
+  systemd.services.bitcoind = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.ExecStart = "${pkgs.bitcoind}/bin/bitcoind -datadir=/root/.bitcoin";
+  };
+
+  # Console keymap generated from these xkb settings at build time, X itself
+  # stays off.
+  console.useXkbConfig = true;
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "dvorak";
+    options = "ctrl:swapcaps";
+  };
   time.timeZone = "Europe/Paris";
 
   services.getty.autologinUser = "root";
