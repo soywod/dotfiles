@@ -56,6 +56,7 @@ in
 
   home = {
     packages = with pkgs; [
+      bitwarden-cli
       brightnessctl
       # dconf # for paprefs virtual output
       # discord
