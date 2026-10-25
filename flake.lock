@@ -188,7 +188,8 @@
         "home-manager": "home-manager",
         "home-manager-master": "home-manager-master",
         "nixpkgs": "nixpkgs_2",
-        "pimalaya-assistant": "pimalaya-assistant"
+        "pimalaya-assistant": "pimalaya-assistant",
+        "veille": "veille"
       }
     },
     "rust-analyzer-src": {
@@ -206,6 +207,26 @@
         "ref": "nightly",
         "repo": "rust-analyzer",
         "type": "github"
+      }
+    },
+    "veille": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792777504,
+        "narHash": "sha256-gMSiu8T7dKfIElGisq1vNp4V1f+0qIcdXYzNTZiHSmE=",
+        "ref": "refs/heads/main",
+        "rev": "6c4f95ff622a35a4d0aadde95c1c0bdb053d4b6f",
+        "revCount": 8,
+        "type": "git",
+        "url": "file:///home/soywod/veille"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/soywod/veille"
       }
     }
   },

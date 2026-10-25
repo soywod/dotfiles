@@ -16,6 +16,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     pimalaya-assistant.url = "github:pimalaya/assistant";
+    # Private repo: read locally, since root has no SSH key to fetch it.
+    veille = {
+      url = "git+file:///home/soywod/veille";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,6 +35,7 @@
       home-manager-master,
       himalaya,
       pimalaya-assistant,
+      veille,
       disko,
       ...
     }:
@@ -52,6 +58,7 @@
                   home-manager-master
                   himalaya
                   pimalaya-assistant
+                  veille
                   ;
               };
             }

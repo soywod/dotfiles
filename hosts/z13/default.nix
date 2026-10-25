@@ -14,10 +14,17 @@
 
   networking = {
     hostName = "z13";
-    # Vite dev (5173) + preview (4173), reachable from the phone on wifi only.
     firewall.interfaces.wlp194s0.allowedTCPPorts = [
-      5173
-      4173
+      3000 # standard API port
+      5173 # vite dev
+      4173 # vite preview
     ];
+  };
+
+  # Folding the keyboard cover trips the lid switch: keep running instead
+  # of suspending (sway powers the panel off, see home.nix).
+  services.logind.settings.Login = {
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
   };
 }

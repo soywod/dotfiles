@@ -6,6 +6,7 @@
   nixpkgs,
   pimalaya-assistant,
   pkgs,
+  veille,
   ...
 }:
 
@@ -47,9 +48,11 @@ in
     "${home-manager-master}/modules/programs/himalaya"
     "${home-manager-master}/modules/programs/mblaze"
     pimalaya-assistant.homeModules.default
+    veille.homeManagerModules.default
   ];
 
   services.pimalaya-assistant.enable = true;
+  services.veille.enable = true;
 
   home = {
     packages = with pkgs; [
@@ -471,6 +474,8 @@ in
     };
     extraConfig = ''
       titlebar_border_thickness 2
+      bindswitch --reload --locked lid:on output * power off
+      bindswitch --reload --locked lid:off output * power on
     '';
   };
 
@@ -576,10 +581,10 @@ in
       enable = true;
       enableSshSupport = true;
       sshKeys = [ "8480965E6B298EB49B40C4B537FC16E5B6BD5436 0" ];
-      defaultCacheTtl = 300;
-      defaultCacheTtlSsh = 300;
-      maxCacheTtl = 300;
-      maxCacheTtlSsh = 300;
+      defaultCacheTtl = 1800;
+      defaultCacheTtlSsh = 1800;
+      maxCacheTtl = 28800;
+      maxCacheTtlSsh = 28800;
       pinentry.package = pkgs.pinentry-gtk2;
     };
 
