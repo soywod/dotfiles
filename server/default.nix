@@ -143,12 +143,22 @@ in
     ];
   };
 
-  # PhotoPrism shows the photos and videos, each folder an album, to anyone
-  # on the LAN (the firewall keeps it there): no login, no upload, no write
-  # to the originals, no AI, no maps (they call external services). New files
-  # are indexed every hour. nginx exposes it on port 80.
+  # PhotoPrism shows the photos and videos, each folder an album, on the LAN
+  # only (the firewall keeps it there), behind the admin password: upload
+  # and edit, no AI, no maps (they call external services). New files are
+  # indexed every hour. nginx exposes it on port 80. A static user so it owns
+  # the originals, scp'd as root included (Z, at each boot and deploy). Same
+  # UID and GID: photoprism-manage enters the service as GID=UID, and the
+  # idmapped state directory rejects any other GID ("not writable").
+  users.users.photoprism = {
+    isSystemUser = true;
+    uid = 900;
+    group = "photoprism";
+  };
+  users.groups.photoprism.gid = 900;
   systemd.tmpfiles.rules = [
-    "d ${photosDir} 0755 root root -"
+    "d ${photosDir} 0755 photoprism photoprism -"
+    "Z ${photosDir} - photoprism photoprism -"
     "d /var/lib/wireless 0750 root wpa_supplicant -"
     "z ${wifiConfig} 0640 root wpa_supplicant -"
   ];
@@ -157,8 +167,7 @@ in
     address = "127.0.0.1";
     originalsPath = photosDir;
     settings = {
-      PHOTOPRISM_AUTH_MODE = "public";
-      PHOTOPRISM_READONLY = "true";
+      PHOTOPRISM_AUTH_MODE = "password";
       PHOTOPRISM_INDEX_SCHEDULE = "@every 1h";
       PHOTOPRISM_AUTO_INDEX = "-1";
       PHOTOPRISM_DISABLE_TENSORFLOW = "true";

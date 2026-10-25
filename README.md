@@ -145,13 +145,29 @@ systemctl start bitcoind-main
 
 ### Photos
 
-Every folder of /srv/photos is an album, browsable by anyone on the local network at <http://server.local>: no account, read only. Copy new albums from z13, they show up at the next hourly index:
+Every folder of /srv/photos is an album, at <http://server.local> from the local network, behind the `admin` login. Upload from the web page, or copy albums from z13, shown at the next hourly index:
 
 ```sh
 scp -r Album root@server.local:/srv/photos/
 ```
 
 To index at once: `/var/lib/photoprism/photoprism-manage index`. Archives open with `7zz x archive.7z` (zip included).
+
+After an install, set the `admin` password (kept in Bitwarden), once the service has started:
+
+```sh
+ssh -t root@server.local /var/lib/photoprism/photoprism-manage passwd admin
+```
+
+`photoprism` must have UID and GID 900. NixOS never changes the ids of an existing user: if `id photoprism` shows others, fix them by hand:
+
+```sh
+systemctl stop photoprism
+groupmod -g 900 photoprism
+usermod -u 900 -g 900 photoprism
+systemd-tmpfiles --create
+systemctl start photoprism
+```
 
 ### Backup
 
