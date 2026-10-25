@@ -106,6 +106,8 @@ in
   # spent outputs signing needs. The datadir is the default one of root, so
   # bitcoin-cli needs no flag; like the rest of the system it lives in RAM.
   systemd.tmpfiles.rules = [
+    # Mount point for the cards, missing from a bare live system.
+    "d /mnt 0755 root root -"
     "d /root/.bitcoin 0700 root root -"
     "L+ /root/.bitcoin/bitcoin.conf - - - - ${pkgs.writeText "bitcoin.conf" ''
       networkactive=0
