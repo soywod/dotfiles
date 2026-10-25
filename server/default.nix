@@ -181,6 +181,7 @@ in
 
   environment.systemPackages = [
     pkgs._7zz
+    pkgs.kitty.terminfo
     pkgs.restic
     (pkgs.writeShellApplication {
       name = "btc";
