@@ -58,13 +58,18 @@
           ];
         };
 
+      # Workstations, one per directory in hosts/, all with home-manager.
+      hosts = nixpkgs.lib.mapAttrs (name: _: host name) (
+        nixpkgs.lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./hosts)
+      );
+
       hostsFile = pkgs.writeText "hosts" (
         nixpkgs.lib.concatStrings (
           nixpkgs.lib.mapAttrsToList (name: host: ''
             ${name} ${host.config.home-manager.users.${user}.home.file.".mrconfig".source} ${
               host.config.environment.etc."ssh/ssh_known_hosts".source
             }
-          '') self.nixosConfigurations
+          '') hosts
         )
       );
 
@@ -105,18 +110,31 @@
       };
     in
     {
-      nixosConfigurations = nixpkgs.lib.mapAttrs (name: _: host name) (
-        nixpkgs.lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./hosts)
-      );
+      nixosConfigurations = hosts // {
+        # Headless, no home-manager: kept out of hosts and hostsFile.
+        server = nixpkgs.lib.nixosSystem {
+          modules = [
+            disko.nixosModules.disko
+            ./server
+          ];
+        };
+      };
 
       packages.${system} = {
         inherit bootstrap install;
-        # Not a host: kept out of nixosConfigurations, which every host must
-        # be (with home-manager) for hostsFile.
+        # Not a host: an image to boot, never deployed.
         signer-iso =
           (nixpkgs.lib.nixosSystem {
             modules = [
               ./iso/signer.nix
+              { nixpkgs.hostPlatform = system; }
+            ];
+          }).config.system.build.isoImage;
+        # Live installer for the server: wifi and SSH, for nixos-anywhere.
+        installer-iso =
+          (nixpkgs.lib.nixosSystem {
+            modules = [
+              ./iso/installer.nix
               { nixpkgs.hostPlatform = system; }
             ];
           }).config.system.build.isoImage;

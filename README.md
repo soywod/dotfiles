@@ -1,6 +1,6 @@
 # dotfiles
 
-NixOS configurations, one per host in `hosts/`.
+NixOS configurations: one per workstation in `hosts/`, the home server in `server/`.
 
 ## Prerequisites
 
@@ -139,3 +139,136 @@ device-hash --size 550502400 --expect <sha256 from paper> /dev/sdX
 ```
 
 It works the same on the online machine with `sudo bash iso/device-hash.sh`.
+
+## Server
+
+[server/default.nix](server/default.nix) is the home server: a pruned Bitcoin node peering over Tor only, and a PhotoPrism gallery on the local network. No desktop, no home-manager, no user account: root logs in over SSH with the GPG authentication subkey ([ssh.pub](ssh.pub)), or at the console with a password. Two NVMe in mdadm RAID1 (one array for the ESP, one for LUKS then btrfs), declared by serial in [server/disko.nix](server/disko.nix). Wifi only: the network block (SSID and passphrase) lives in /var/lib/wireless/home.conf, outside the store and this repository, since the SSID alone locates the house in wifi maps.
+
+### Install
+
+Build the installer ISO ([iso/installer.nix](iso/installer.nix): the NixOS minimal installer with the console of the signer, nmtui for wifi, SSH open to the authentication subkey), then write it like the signer ISO, by stable device path:
+
+```sh
+nix build .#installer-iso
+sudo dd if=result/iso/installer.iso of=/dev/disk/by-id/usb-... bs=4M conv=fsync status=progress
+```
+
+Boot it on the server from the firmware boot menu (its UEFI entry), run `nmtui` to join the wifi, and note the address with `ip -br addr`. From z13, prepare both secrets in RAM:
+
+```sh
+d=$(mktemp -d -p "$XDG_RUNTIME_DIR")
+mkdir -p "$d/files/var/lib/wireless"
+read -rsp 'Wifi passphrase: ' w; echo
+printf 'network={\n  ssid="SSID"\n  psk="%s"\n  key_mgmt=SAE WPA-PSK\n  ieee80211w=1\n}\n' "$w" > "$d/files/var/lib/wireless/home.conf"
+read -rsp 'LUKS passphrase: ' l; echo
+printf '%s' "$l" > "$d/luks.key"
+unset w l
+```
+
+Then install. It wipes both NVMe without asking, and nothing else:
+
+```sh
+nix run --inputs-from . nixpkgs#nixos-anywhere -- \
+  --flake .#server \
+  --target-host root@IP \
+  --build-on local \
+  --generate-hardware-config nixos-generate-config ./server/hardware-configuration.nix \
+  --disk-encryption-keys /tmp/secret.key "$d/luks.key" \
+  --extra-files "$d/files"
+```
+
+The server reboots when it is done. Remove the stick, unlock, then from z13 forget the installer host key, set the console password and drop the secrets:
+
+```sh
+ssh-keygen -R IP
+ssh root@server.local passwd
+rm -rf "$d"
+```
+
+The console password survives rebuilds (users are mutable) but not a reinstall: run `passwd` again after each one. SSH never accepts it.
+
+### Unlock
+
+After each boot, type the LUKS passphrase at the keyboard plugged into the server, in the layout of the signer (dvorak, caps lock and ctrl swapped). One prompt unlocks the system, even with a disk missing. Without it the server stays offline: there is no remote unlock.
+
+### Deploy
+
+From z13, built locally then copied over SSH (new files must be tracked by git for the flake to see them):
+
+```sh
+nixos-rebuild switch --flake ~/.dotfiles#server --target-host root@server.local
+```
+
+A kernel update needs a reboot, so someone at the keyboard.
+
+### Bitcoin
+
+`btc` runs `bitcoin-cli` against the node, no flag needed:
+
+```sh
+btc getblockchaininfo
+```
+
+To reuse a copy of the chain instead of syncing from scratch, stop the node, replace `blocks/` and `chainstate/` (never `settings.json` nor old wallets), fix ownership, start it again:
+
+```sh
+systemctl stop bitcoind-main
+rm -rf /var/lib/bitcoind-main/{blocks,chainstate}
+cp -r /path/to/datadir/{blocks,chainstate} /var/lib/bitcoind-main/
+chown -R bitcoind-main:bitcoind-main /var/lib/bitcoind-main/{blocks,chainstate}
+chmod -R u=rwX,go= /var/lib/bitcoind-main/{blocks,chainstate}
+systemctl start bitcoind-main
+```
+
+The copy must come from the same Bitcoin Core version or an older one, and the node keeps `prune = 2048`: disabling pruning means a full resync.
+
+### Photos
+
+Every folder of /srv/photos is an album, browsable by anyone on the local network at <http://server.local>: no account, read only. Copy new albums from z13, they show up at the next hourly index:
+
+```sh
+scp -r Album root@server.local:/srv/photos/
+```
+
+To index at once: `/var/lib/photoprism/photoprism-manage index`. Archives open with `7zz x archive.7z` (zip included).
+
+### Backup
+
+The photos are the only data to back up: the PhotoPrism index rebuilds from them, the watch-only wallet re-imports from the signer, the chain downloads again. Backups go to an external disk with restic (encrypted, password kept in pass). Format the disk once with a label, then initialise its repository on the first run:
+
+```sh
+mkfs.ext4 -L BACKUP1 /dev/sdX1
+server-backup --init BACKUP1
+```
+
+Then, each time, plug the disk and run `server-backup BACKUP1`: it mounts the disk, backs up /srv/photos, checks the repository, unmounts. To restore, mount the disk (`mount /dev/disk/by-label/BACKUP1 /mnt`) and run `restic -r /mnt/restic restore latest --target /`.
+
+### Disk failure
+
+A lost disk prints a `wall` message on the console (`mdadm: Fail ...` or `DegradedArray`), and every SSH login warns while an array runs on one disk. `Rebuild20` to `Rebuild80` and `RebuildFinished` only report resync progress. Check the state:
+
+```sh
+cat /proc/mdstat
+mdadm --detail /dev/md/root
+```
+
+`[UU]` is healthy, `[U_]` or `[_U]` runs on one disk. Identify the dead one by serial with `ls -l /dev/disk/by-id/ | grep nvme`: kernel names (`nvme0n1`) do not match disko names (`disk-nvme0-*`).
+
+1. Power off, replace the dead disk, boot. The arrays start degraded after a short wait; unlock as usual. If the firmware does not boot, pick the remaining disk in its boot menu.
+2. Copy the partition table of the healthy disk onto the new one, then give the copy its own GUIDs (`GOOD` and `NEW` are /dev/disk/by-id paths, double check the order: the first one is overwritten):
+
+   ```sh
+   nix shell nixpkgs#gptfdisk -c sgdisk --replicate=NEW GOOD
+   nix shell nixpkgs#gptfdisk -c sgdisk --randomize-guids NEW
+   ```
+
+3. Add both partitions to their arrays:
+
+   ```sh
+   mdadm /dev/md/boot --add NEW-part1
+   mdadm /dev/md/root --add NEW-part2
+   ```
+
+4. Wait for `[UU]` in `cat /proc/mdstat` (about 40 minutes). Nothing else to do: LUKS and btrfs sit above the arrays, GRUB comes back with the ESP, and the disk paths in server/disko.nix only matter when formatting.
+
+Not tested yet on the real hardware: update this section after the first drill.
