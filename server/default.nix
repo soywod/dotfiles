@@ -130,9 +130,17 @@ in
       listen=0
     '';
   };
+  # Started before an IPv4 lease, libevent (AI_ADDRCONFIG) refuses to bind
+  # the RPC on 127.0.0.1 and bitcoind keeps running on ::1 only.
   systemd.services.bitcoind-main = {
-    wants = [ "tor.service" ];
-    after = [ "tor.service" ];
+    wants = [
+      "tor.service"
+      "network-online.target"
+    ];
+    after = [
+      "tor.service"
+      "network-online.target"
+    ];
   };
 
   # PhotoPrism shows the photos and videos, each folder an album, to anyone
@@ -181,6 +189,7 @@ in
 
   environment.systemPackages = [
     pkgs._7zz
+    pkgs.jq
     pkgs.kitty.terminfo
     pkgs.restic
     (pkgs.writeShellApplication {
