@@ -65,132 +65,9 @@ mr checkout   # clone repositories newly added to the config
 
 The password store commits every change automatically. Syncing is manual: `pass git pull`, `pass git push`, or `mr update` / `mr push`. After a fresh clone, run `pass git init` once to restore decrypted diffs.
 
-## Bitcoin signer ISO
+## Bitcoin
 
-[iso/signer.nix](iso/signer.nix) builds a live ISO for offline PSBT signing: Bitcoin Core started at boot with no peer, no network stack (wireless, bluetooth and common wired drivers blacklisted), dvorak console with caps lock and ctrl swapped, root auto-login. Nothing persists: the system runs from the boot medium and writes go to RAM. It boots from BIOS, from USB or DVD, and needs no disk. The image is about 530 MB: any 1 GB stick or a DVD-R fits.
-
-Build it (new files must be tracked by git for the flake to see them), then write down its size and hash on paper:
-
-```sh
-nix build .#signer-iso
-stat -c%s result/iso/signer.iso
-sha256sum result/iso/signer.iso
-```
-
-Write it to a stick (check the device with `lsblk`: `dd` overwrites without asking), then read it back to check the hash matches:
-
-```sh
-sudo dd if=result/iso/signer.iso of=/dev/sdX bs=4M status=progress conv=fsync
-sudo head -c "$(stat -c%s result/iso/signer.iso)" /dev/sdX | sha256sum
-```
-
-The stick only ever boots the signing machine. Plug it into an online machine only to write a new image, then check the hash again, ideally from a second machine: a compromised machine can write a tampered image and print the expected hash.
-
-### Session
-
-Boot the stick from the BIOS boot menu (it may be listed as a hard disk), then check that `ip -br link` lists `lo` only. If a network interface shows up, `ls -l /sys/class/net/*/device/driver` names its driver: add it to `boot.blacklistedKernelModules`.
-
-`bitcoind` already runs, with `networkactive=0`, its datadir in `/root/.bitcoin` (in RAM, like everything else), so `bitcoin-cli` needs no flag. It needs no block: the PSBT carries the spent outputs, so `walletprocesspsbt` signs without the chain.
-
-The wallet card holds the wallet `signer` in a FAT32 filesystem labelled `WALLET`. `wallet-load` mounts it read-only, checks the SHA-256 of `signer/wallet.dat` against the one built into the ISO, copies the wallet to RAM (into the datadir itself: Bitcoin Core keeps wallets there when it has no `wallets` subdirectory, and it opens them read-write), unmounts the card and loads the wallet. On a mismatch it stops before copying anything. Pass a device when the label is not enough (`lsblk`: a USB card reader shows the card as `/dev/sdX`, a built-in slot as `/dev/mmcblk0`; the boot stick is labelled `SIGNER`):
-
-```sh
-wallet-load
-```
-
-The reference hash lives in iso/wallet.sha256, one lowercase SHA-256 and nothing else (the build fails otherwise). Without the file, `wallet-load` refuses to run. It is not a secret: it is the hash of an encrypted file. Compute it on the offline machine:
-
-```sh
-mount -o ro /dev/disk/by-label/WALLET /mnt
-sha256sum /mnt/signer/wallet.dat
-umount /mnt
-```
-
-Copy it by hand into iso/wallet.sha256, `git add` it (the flake only sees tracked files), then rebuild the ISO. Keep a paper copy too, to check a card with a rebuilt ISO.
-
-The wallet card is never written after its creation, so the hash holds as long as the wallet does. Never copy the RAM wallet back to the card: `loadwallet` already changed it. Once loaded, the wallet card can leave the reader for the transfer card.
-
-Swap the wallet card for the transfer card, holding the PSBT built by the online machine, then mount it:
-
-```sh
-mount /dev/sdX1 /mnt
-```
-
-Check what the PSBT spends and pays before signing. `psbt-show` lists inputs, outputs, fee and fee rate, and flags each output as `mine`, `change (mine)` or `EXTERNAL` against the loaded wallet (pass `--wallet NAME` when several are loaded). A change output shown as `EXTERNAL` means its address was swapped. `-stdinwalletpassphrase` reads the passphrase without echo, so it stays out of the shell history:
-
-```sh
-psbt-show /mnt/tx.psbt
-bitcoin-cli -stdinwalletpassphrase walletpassphrase 60
-bitcoin-cli -stdin walletprocesspsbt < /mnt/tx.psbt | jq -r .psbt > /mnt/signed.psbt
-psbt-show /mnt/signed.psbt
-umount /mnt
-```
-
-The last `psbt-show` must end with `Next step: extractor`: the transaction is complete, the online machine finalizes and broadcasts it.
-
-### New wallet
-
-A descriptor wallet has no seed phrase: its only backup is `wallet.dat` plus its passphrase. Losing every card, or the passphrase, loses the funds. Keep at least two wallet cards, stored apart. A new wallet means new keys: only create one while the old one is empty, then reformat the old cards (they become the new ones).
-
-Boot the stick and check `ip -br link` as for a session (the ISO still holding the old hash is fine: `wallet-load` is not used). Generate the passphrase on the signer (80 bits, 16 characters), write it on paper, then clear the screen:
-
-```sh
-head -c 10 /dev/urandom | base32 | tr A-Z a-z
-clear
-```
-
-Create the wallet, encrypted from the start so its keys are never written in clear. `read -s` and `printf` (a builtin) keep the passphrase off the screen, the history and the process list. Then check the passphrase unlocks it:
-
-```sh
-read -rs pass
-printf 'wallet_name=signer\npassphrase=%s\n' "$pass" | bitcoin-cli -named -stdin createwallet
-unset pass
-bitcoin-cli -stdinwalletpassphrase walletpassphrase 60
-bitcoin-cli walletlock
-```
-
-Unload it (it flushes the file), check it sits in the datadir itself, and write its hash on paper:
-
-```sh
-bitcoin-cli unloadwallet signer
-ls /root/.bitcoin/signer
-sha256sum /root/.bitcoin/signer/wallet.dat
-```
-
-Then, for each card (`lsblk` for the device, the boot stick is labelled `SIGNER`), format it, copy the wallet, read the hash back from the card (it must match the paper), and label the card physically:
-
-```sh
-mkfs.vfat -F 32 -n WALLET /dev/sdX1
-mount /dev/sdX1 /mnt
-cp -r /root/.bitcoin/signer /mnt/
-umount /mnt
-mount -o ro /dev/sdX1 /mnt
-sha256sum /mnt/signer/wallet.dat
-umount /mnt
-```
-
-Copy every card before loading the wallet again: `loadwallet` changes the file in RAM. Once all cards are written, the public descriptors for the watch-only wallet can go to the transfer card in the same session (without `true`, `listdescriptors` prints no private key):
-
-```sh
-bitcoin-cli loadwallet signer
-mount /dev/sdX1 /mnt
-bitcoin-cli listdescriptors > /mnt/descriptors.json
-umount /mnt
-```
-
-On the online machine, write the hash into iso/wallet.sha256, rebuild and rewrite the stick (see above), cross out the old hash on paper. Then test the restore from a card other than the one used daily: boot the new stick, `wallet-load --check` every card, `wallet-load` one of them and unlock it with `walletpassphrase` as in a session. Only then send funds to the wallet.
-
-### Media checks
-
-`wallet-load --check [DEVICE]` only checks a wallet card against the reference hash, without copying or loading anything: run it on every clone during the periodic check.
-
-`device-hash` prints the SHA-256 of a device, or of its first `--size` bytes for an image shorter than the device, and compares it with `--expect` (exit status 1 on mismatch):
-
-```sh
-device-hash --size 550502400 --expect <sha256 from paper> /dev/sdX
-```
-
-It works the same on the online machine with `sudo bash iso/device-hash.sh`.
+Offline signer ISO, wallet cards, watch-only wallet and signing: [iso/README.md](iso/README.md).
 
 ## Server
 
@@ -255,13 +132,7 @@ A kernel update needs a reboot, so someone at the keyboard.
 
 ### Bitcoin
 
-`btc` runs `bitcoin-cli` against the node, no flag needed:
-
-```sh
-btc getblockchaininfo
-```
-
-To reuse a copy of the chain instead of syncing from scratch, stop the node, replace `blocks/` and `chainstate/` (never `settings.json` nor old wallets), fix ownership, start it again:
+`btc` is `bitcoin-cli` for the node (`btc getblockchaininfo`), wallets are in [iso/README.md](iso/README.md). To reuse a chain copy from the same Core version or an older one, replace only `blocks/` and `chainstate/`:
 
 ```sh
 systemctl stop bitcoind-main
@@ -271,8 +142,6 @@ chown -R bitcoind-main:bitcoind-main /var/lib/bitcoind-main/{blocks,chainstate}
 chmod -R u=rwX,go= /var/lib/bitcoind-main/{blocks,chainstate}
 systemctl start bitcoind-main
 ```
-
-The copy must come from the same Bitcoin Core version or an older one, and the node keeps `prune = 2048`: disabling pruning means a full resync.
 
 ### Photos
 
