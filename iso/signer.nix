@@ -8,6 +8,14 @@
   ...
 }:
 
+let
+  walletName = "signer";
+  # SHA-256 of wallet.dat on the wallet card, copied by hand from the offline
+  # machine. Without it, wallet-load refuses to run.
+  walletSha256 =
+    if builtins.pathExists ./wallet.sha256 then lib.fileContents ./wallet.sha256 else "";
+in
+
 {
   imports = [ "${modulesPath}/installer/cd-dvd/iso-image.nix" ];
 
@@ -70,8 +78,29 @@
       ];
       text = builtins.readFile ./psbt-show.sh;
     })
+    (pkgs.writeShellApplication {
+      name = "wallet-load";
+      runtimeInputs = [
+        pkgs.bitcoind
+        pkgs.coreutils
+        pkgs.util-linux
+      ];
+      runtimeEnv = {
+        WALLET_NAME = walletName;
+        WALLET_SHA256 = walletSha256;
+      };
+      text = builtins.readFile ./wallet-load.sh;
+    })
   ];
   documentation.enable = false;
+
+  # A hand-copied hash: catch a dropped or extra character at build time.
+  assertions = [
+    {
+      assertion = walletSha256 == "" || builtins.match "[0-9a-f]{64}" walletSha256 != null;
+      message = "iso/wallet.sha256 must hold one lowercase SHA-256 (64 hex digits), nothing else.";
+    }
+  ];
 
   # Bitcoin Core with no peer: the signer never syncs, the PSBT carries the
   # spent outputs signing needs. The datadir is the default one of root, so

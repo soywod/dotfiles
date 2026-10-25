@@ -92,14 +92,23 @@ Boot the stick from the BIOS boot menu (it may be listed as a hard disk), then c
 
 `bitcoind` already runs, with `networkactive=0`, its datadir in `/root/.bitcoin` (in RAM, like everything else), so `bitcoin-cli` needs no flag. It needs no block: the PSBT carries the spent outputs, so `walletprocesspsbt` signs without the chain.
 
-The wallet card is mounted read-only, but `bitcoind` opens wallets read-write, so copy the wallet to RAM first, into the datadir itself (Bitcoin Core keeps wallets there when it has no `wallets` subdirectory). The card is `/dev/sdX` behind a USB card reader, `/dev/mmcblk0` in a built-in slot: check with `lsblk`, the boot stick is the one labelled `SIGNER`. Once loaded, the wallet card can leave the reader for the transfer card:
+The wallet card holds the wallet `signer` in a FAT32 filesystem labelled `WALLET`. `wallet-load` mounts it read-only, checks the SHA-256 of `signer/wallet.dat` against the one built into the ISO, copies the wallet to RAM (into the datadir itself: Bitcoin Core keeps wallets there when it has no `wallets` subdirectory, and it opens them read-write), unmounts the card and loads the wallet. On a mismatch it stops before copying anything. Pass a device when the label is not enough (`lsblk`: a USB card reader shows the card as `/dev/sdX`, a built-in slot as `/dev/mmcblk0`; the boot stick is labelled `SIGNER`):
 
 ```sh
-mount -o ro /dev/sdX1 /mnt
-cp -r /mnt/signer /root/.bitcoin/
-umount /mnt
-bitcoin-cli loadwallet signer
+wallet-load
 ```
+
+The reference hash lives in iso/wallet.sha256, one lowercase SHA-256 and nothing else (the build fails otherwise). Without the file, `wallet-load` refuses to run. It is not a secret: it is the hash of an encrypted file. Compute it on the offline machine:
+
+```sh
+mount -o ro /dev/disk/by-label/WALLET /mnt
+sha256sum /mnt/signer/wallet.dat
+umount /mnt
+```
+
+Copy it by hand into iso/wallet.sha256, `git add` it (the flake only sees tracked files), then rebuild the ISO. Keep a paper copy too, to check a card with a rebuilt ISO.
+
+The wallet card is never written after its creation, so the hash holds as long as the wallet does. Never copy the RAM wallet back to the card: `loadwallet` already changed it. Once loaded, the wallet card can leave the reader for the transfer card.
 
 Swap the wallet card for the transfer card, holding the PSBT built by the online machine, then mount it:
 
@@ -120,6 +129,8 @@ umount /mnt
 The last `psbt-show` must end with `Next step: extractor`: the transaction is complete, the online machine finalizes and broadcasts it.
 
 ### Media checks
+
+`wallet-load --check [DEVICE]` only checks a wallet card against the reference hash, without copying or loading anything: run it on every clone during the periodic check.
 
 `device-hash` prints the SHA-256 of a device, or of its first `--size` bytes for an image shorter than the device, and compares it with `--expect` (exit status 1 on mismatch):
 
