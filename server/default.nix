@@ -20,6 +20,36 @@ let
     ip saddr { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } tcp dport { ${ports} } accept
     ip6 saddr { fc00::/7, fe80::/10 } tcp dport { ${ports} } accept
   '';
+  # bitcoin-cli on the node datadir, under the name the scripts shared with
+  # the signer call. Root only: it reads the RPC cookie.
+  bitcoinCli = pkgs.writeShellScriptBin "bitcoin-cli" ''
+    exec ${pkgs.bitcoind}/bin/bitcoin-cli -datadir=/var/lib/bitcoind-main "$@"
+  '';
+  psbtShow = pkgs.writeShellApplication {
+    name = "psbt-show";
+    runtimeInputs = [
+      bitcoinCli
+      pkgs.coreutils
+      pkgs.jq
+    ];
+    text = builtins.readFile ../iso/psbt-show.sh;
+  };
+  # Builds and broadcasts the PSBTs the signer signs, from the watch-only
+  # wallet, through the transfer card.
+  btcScript =
+    name:
+    pkgs.writeShellApplication {
+      inherit name;
+      runtimeInputs = [
+        bitcoinCli
+        pkgs.coreutils
+        pkgs.jq
+        pkgs.util-linux
+        psbtShow
+      ];
+      runtimeEnv.WALLET_NAME = "watch";
+      text = builtins.readFile ../iso/transfer.sh + builtins.readFile ./${name}.sh;
+    };
 in
 
 {
@@ -203,8 +233,11 @@ in
     pkgs.restic
     (pkgs.writeShellApplication {
       name = "btc";
-      text = ''exec ${pkgs.bitcoind}/bin/bitcoin-cli -datadir=/var/lib/bitcoind-main "$@"'';
+      text = ''exec ${bitcoinCli}/bin/bitcoin-cli "$@"'';
     })
+    psbtShow
+    (btcScript "btc-send")
+    (btcScript "btc-broadcast")
     (pkgs.writeShellApplication {
       name = "server-backup";
       runtimeInputs = [

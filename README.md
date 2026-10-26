@@ -67,7 +67,7 @@ The password store commits every change automatically. Syncing is manual: `pass 
 
 ## Bitcoin
 
-Offline signer ISO, wallet cards, watch-only wallet and signing: [iso/README.md](iso/README.md).
+Offline signer ISO, wallet and transfer cards, watch-only wallet and sending (`btc-send`, `psbt-sign`, `btc-broadcast`): [iso/README.md](iso/README.md).
 
 ## Server
 
@@ -132,7 +132,7 @@ A kernel update needs a reboot, so someone at the keyboard.
 
 ### Bitcoin
 
-`btc` is `bitcoin-cli` for the node (`btc getblockchaininfo`), wallets are in [iso/README.md](iso/README.md). To reuse a chain copy from the same Core version or an older one, replace only `blocks/` and `chainstate/`:
+`btc` is `bitcoin-cli` for the node (`btc getblockchaininfo`), wallets and sending are in [iso/README.md](iso/README.md). To reuse a chain copy from the same Core version or an older one, replace only `blocks/` and `chainstate/`:
 
 ```sh
 systemctl stop bitcoind-main

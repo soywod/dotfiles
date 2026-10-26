@@ -32,6 +32,16 @@ let
           grep -q "^install $m " $out || { echo "no-net: $m missing" >&2; exit 1; }
         done
       '';
+  # Also called by psbt-sign.
+  psbtShow = pkgs.writeShellApplication {
+    name = "psbt-show";
+    runtimeInputs = [
+      pkgs.bitcoind
+      pkgs.coreutils
+      pkgs.jq
+    ];
+    text = builtins.readFile ./psbt-show.sh;
+  };
 in
 
 {
@@ -72,14 +82,18 @@ in
       runtimeInputs = [ pkgs.coreutils ];
       text = builtins.readFile ./device-hash.sh;
     })
+    psbtShow
     (pkgs.writeShellApplication {
-      name = "psbt-show";
+      name = "psbt-sign";
       runtimeInputs = [
         pkgs.bitcoind
         pkgs.coreutils
         pkgs.jq
+        pkgs.util-linux
+        psbtShow
       ];
-      text = builtins.readFile ./psbt-show.sh;
+      runtimeEnv.WALLET_NAME = walletName;
+      text = builtins.readFile ./transfer.sh + builtins.readFile ./psbt-sign.sh;
     })
     (pkgs.writeShellApplication {
       name = "wallet-load";
