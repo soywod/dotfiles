@@ -4,7 +4,7 @@ Cold storage on two machines: [signer.nix](signer.nix) is a live ISO that signs 
 
 ## Signer ISO
 
-Bitcoin Core with no network stack (wifi, bluetooth and common wired drivers blacklisted), dvorak console with caps lock and ctrl swapped, root auto-login. It runs from the stick, writes go to RAM. Build it, write its size and hash on paper, then write and read back the stick:
+Bitcoin Core with no network stack (every network, wifi, bluetooth and USB modem driver of the kernel refused, in initrd too), dvorak console with caps lock and ctrl swapped, root auto-login. It runs from the stick, writes go to RAM. Build it, write its size and hash on paper, then write and read back the stick:
 
 ```sh
 nix build .#signer-iso
@@ -14,7 +14,7 @@ sudo dd if=result/iso/signer.iso of=/dev/sdX bs=4M status=progress conv=fsync
 sudo head -c "$(stat -c%s result/iso/signer.iso)" /dev/sdX | sha256sum
 ```
 
-The stick touches an online machine only to be rewritten, then its hash is checked again (ideally from a second machine). At each boot, `ip -br link` must list `lo` only, otherwise add the driver from `ls -l /sys/class/net/*/device/driver` to `boot.blacklistedKernelModules`.
+The stick touches an online machine only to be rewritten, then its hash is checked again (ideally from a second machine). At each boot, `ip -br link` must list `lo` only: otherwise `ls -l /sys/class/net/*/device/driver` names a driver outside the directories blocked in signer.nix.
 
 ## Wallet
 

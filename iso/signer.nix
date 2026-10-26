@@ -2,6 +2,7 @@
 # booted on an air-gapped machine to sign PSBTs. Nothing persists: the system
 # runs from the boot medium and writes go to RAM.
 {
+  config,
   lib,
   modulesPath,
   pkgs,
@@ -14,6 +15,23 @@ let
   # machine. Without it, wallet-load refuses to run.
   walletSha256 =
     if builtins.pathExists ./wallet.sha256 then lib.fileContents ./wallet.sha256 else "";
+  # drivers/net holds wired, wifi, USB (phone tethering, LTE modems) and
+  # virtual NICs; staging holds more wifi; usb/serial the modem tty drivers.
+  # The build fails if a known driver is missing, i.e. the layout changed.
+  noNet =
+    pkgs.runCommand "no-net.conf" { modules = config.boot.kernelPackages.kernel.modules; }
+      ''
+        cd $modules/lib/modules/*/kernel
+        find drivers/net drivers/staging drivers/bluetooth drivers/nfc \
+          drivers/firewire drivers/usb/serial net/wireless net/mac80211 \
+          net/bluetooth net/nfc net/ieee802154 net/6lowpan -name '*.ko*' \
+          | sed -E 's|.*/||; s|\.ko(\.[a-z]+)?$||; s|-|_|g' | sort -u \
+          | sed 's|.*|install & exit 1|' > $out
+        for m in e1000e igc r8169 iwlwifi cfg80211 btusb virtio_net rndis_host \
+          cdc_ether cdc_ncm ipheth qmi_wwan cdc_mbim option firewire_net; do
+          grep -q "^install $m " $out || { echo "no-net: $m missing" >&2; exit 1; }
+        done
+      '';
 in
 
 {
@@ -38,28 +56,13 @@ in
   networking.wireless.enable = false;
   networking.networkmanager.enable = false;
   hardware.bluetooth.enable = false;
-  # cfg80211 takes every wifi driver down with it. Wired drivers cover the
-  # usual desktop chips and USB adapters; add the one bound on the signing
-  # machine if it is missing (ls -l /sys/class/net/*/device/driver).
-  boot.blacklistedKernelModules = [
-    "cfg80211"
-    "bluetooth"
-    "btusb"
-    "r8169"
-    "forcedeth"
-    "atl1"
-    "atl1c"
-    "atl1e"
-    "e1000"
-    "e1000e"
-    "igb"
-    "skge"
-    "sky2"
-    "tg3"
-    "r8152"
-    "cdc_ether"
-    "ax88179_178a"
-  ];
+  # Every network, wifi, bluetooth, NFC and USB modem driver of the kernel
+  # refuses to load, explicit modprobe and dependencies included (blacklist
+  # only stops udev). Generated from the module tree, so new drivers are
+  # covered without a hand-kept list.
+  environment.etc."modprobe.d/no-net.conf".source = noNet;
+  # In initrd too: it holds virtio_net and vmxnet3 among its storage drivers.
+  boot.initrd.systemd.contents."/etc/modprobe.d/no-net.conf".source = noNet;
 
   environment.systemPackages = [
     pkgs.bitcoind
