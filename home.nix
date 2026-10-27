@@ -325,7 +325,7 @@ in
     signing = {
       signByDefault = true;
       signer = "${pkgs.gnupg}/bin/gpg";
-      key = "75F0 AB7C FE01 D077 AEE6  CAFD 353E 4A18 EE0F AB72";
+      key = "75F0AB7CFE01D077AEE6CAFD353E4A18EE0FAB72!";
     };
   };
 
